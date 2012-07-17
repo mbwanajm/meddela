@@ -1,9 +1,12 @@
 package com.niafikra.meddela.auth;
 
-import org.apache.log4j.Logger;
-import org.jasypt.util.password.ConfigurablePasswordEncryptor;
+
+import org.apache.log4j.Logger
+import org.jasypt.util.password.ConfigurablePasswordEncryptor
 
 /**
+ * Manage user authentication on using the system
+ *
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
  * Date: 7/17/12
  * Time: 2:28 PM
@@ -13,7 +16,7 @@ class AuthenticationManager {
 
     private ConfigurablePasswordEncryptor passwordEncryptor = new ConfigurablePasswordEncryptor()
 
-    public AuthenticationManager(){
+    public AuthenticationManager() {
         init()
     }
 

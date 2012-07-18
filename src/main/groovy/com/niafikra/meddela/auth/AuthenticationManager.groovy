@@ -3,6 +3,7 @@ package com.niafikra.meddela.auth;
 
 import org.apache.log4j.Logger
 import org.jasypt.util.password.ConfigurablePasswordEncryptor
+import com.niafikra.meddela.data.security.Authentication
 
 /**
  * Manage user authentication on using the system
@@ -20,8 +21,16 @@ class AuthenticationManager {
         init()
     }
 
-    def init() {
+    private def init() {
         passwordEncryptor.setAlgorithm("SHA-1")
         passwordEncryptor.setPlainDigest(true)
+    }
+    
+    def addAuthentication(Authentication auth){
+        
+    }
+
+    def authenticate(String username,String password){
+
     }
 }

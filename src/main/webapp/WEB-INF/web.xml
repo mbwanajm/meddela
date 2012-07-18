@@ -12,11 +12,16 @@
         <init-param>
             <description>Vaadin application class to start</description>
             <param-name>application</param-name>
-            <param-value>com.niafikra.MyVaadinApplication</param-value>
+            <param-value>com.niafikra.meddela.ui.vaadin.meddelaVaadinApplication</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>Vaadin Application Servlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+
+    <listener>
+        <listener-class>com.niafikra.meddela.Controller</listener-class>
+    </listener>
+
 </web-app>

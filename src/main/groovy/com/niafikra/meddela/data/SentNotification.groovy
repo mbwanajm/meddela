@@ -2,7 +2,7 @@ package com.niafikra.meddela.data
 
 /**
  * If a notification is sent out then it is recorded as a sent notification
- * not that sent here simply means it a trigger had occured and an Notification
+ * not that sent here simply means a trigger had occured, a Notification
  * was composed and an order was given to the transport to send it out
  *
  * transport may fail to send out the notification and this can be found out

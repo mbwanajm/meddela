@@ -2,7 +2,7 @@ package com.niafikra.meddela.data
 
 /**
  * A data source specifies the details on the source of data
- * for running the scheduled queries
+ * for running the scheduled queries and getting the notifications from
  *
  * @author mbwana jaffari mbura
  * Date: 18/07/12

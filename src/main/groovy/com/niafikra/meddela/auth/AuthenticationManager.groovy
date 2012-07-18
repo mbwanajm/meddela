@@ -33,4 +33,8 @@ class AuthenticationManager {
     def authenticate(String username,String password){
 
     }
+
+    def updateAuthentication(Authentication authentication){
+
+    }
 }

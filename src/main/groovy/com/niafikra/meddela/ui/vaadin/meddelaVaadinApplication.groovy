@@ -13,35 +13,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.niafikra;
+package com.niafikra.meddela.ui.vaadin;
 
-import com.vaadin.Application;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Window;
+
+import com.vaadin.Application
 
 /**
  * The Application's "main" class
  */
 @SuppressWarnings("serial")
-public class MyVaadinApplication extends Application
-{
-    private Window window;
+public class meddelaVaadinApplication extends Application {
+    private UIManager uiManager
 
     @Override
-    public void init()
-    {
-        window = new Window("My Vaadin Application");
-        setMainWindow(window);
-        Button button = new Button("Click Me");
-        button.addListener(new Button.ClickListener() {
-            public void buttonClick(ClickEvent event) {
-                window.addComponent(new Label("Thank you for clicking"));
-            }
-        });
-        window.addComponent(button);
-        
+    public void init() {
+        uiManager = new UIManager(this);
+        uiManager.showLogin();
     }
-    
+
 }

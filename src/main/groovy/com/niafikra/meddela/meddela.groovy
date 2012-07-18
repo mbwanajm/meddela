@@ -2,7 +2,7 @@ package com.niafikra.meddela
 
 import org.apache.log4j.Logger
 import org.apache.log4j.PropertyConfigurator
-import com.niafikra.meddela.services.Database
+import com.niafikra.meddela.services.ObjectDatabase
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
@@ -12,12 +12,12 @@ import com.niafikra.meddela.services.Database
 
 class meddela {
     private static Logger  log =Logger.getLogger(meddela.class)
-    static Database database
+    static ObjectDatabase database
 
     def init() {
         try{
             initLog()
-            database = new Database();
+            database = new ObjectDatabase();
 
             log.info("meddella successsfully started ")
         } catch (Exception ex){

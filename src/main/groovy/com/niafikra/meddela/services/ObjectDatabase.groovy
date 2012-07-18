@@ -13,23 +13,23 @@ import org.neodatis.odb.core.query.criteria.And
 import org.neodatis.odb.core.query.criteria.Where
 
 /**
- * Database provides a data store for storing and retrieving objects from
+ * ObjectDatabase provides a data store for storing and retrieving objects from
  * the permanent storage
  *
  * @author mbwana jaffari mbura
  * Date: 18/07/12
  * Time: 18:29
  */
-class Database {
+class ObjectDatabase {
     ODBServer odbServer;
-    Logger log = Logger.getLogger(Database)
+    Logger log = Logger.getLogger(ObjectDatabase)
     ThreadLocal odbStore;
 
     /**
      * The constructor when this creates the object database server
      *
      */
-    Database() {
+    ObjectDatabase() {
         init()
     }
 

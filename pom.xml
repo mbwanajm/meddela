@@ -40,16 +40,17 @@
                 </executions>
             </plugin>
 
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
             </plugin>
 
+	
 
             <!-- A simple Jetty test server at http://localhost:8080/meddela can be launched with the Maven goal jetty:run
         and stopped with jetty:stop -->
@@ -196,12 +197,6 @@
             <version>${vaadin.version}</version>
         </dependency>
 
-        <!--neodatis dependency-->
-        <dependency>
-            <groupId>org.neodatis.odb</groupId>
-            <artifactId>neodatis-odb</artifactId>
-            <version>1.9.30.689</version>
-        </dependency>
         <!-- compile widgetset deps -->
         <dependency>
             <groupId>com.google.gwt</groupId>
@@ -239,7 +234,15 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
-            <version>1.8.0</version>
+            <version>1.8.6</version>
+        </dependency>
+
+        <!-- spock testing -->
+        <dependency>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>0.6-groovy-1.8</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

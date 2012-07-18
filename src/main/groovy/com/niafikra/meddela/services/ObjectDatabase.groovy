@@ -47,6 +47,7 @@ class ObjectDatabase {
         OdbConfiguration.autoReconnectObjectsToSession = true;
 
         odbServer.startServer(true)
+        log.info("Succesfully started object database")
 
 
     }
@@ -58,6 +59,7 @@ class ObjectDatabase {
     void close() {
         try {
             odbServer.close()
+            log.info("succesfully closed object database")
 
         } catch (Exception ex) {
             log.error("failed to close server")

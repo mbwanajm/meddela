@@ -14,4 +14,6 @@ class Notification {
     DataSource dataSource   // the data source this notification belongs too
     Trigger trigger         // the trigger to check on the datasource, if it is satisfied then
     SmsTemplate template    // compose a message using this template
+    String schedulerId      // the Task id used for this notification trigger by the scheduler
+
 }

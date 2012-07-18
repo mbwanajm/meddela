@@ -13,4 +13,5 @@ public class Trigger {
     String schedule     // a CRON string describing when to run this trigger
     String sql          // sql to run at the scheduled time
     String groovyCode   // groovyCode to run at the scheduled time, only sql or groovyCode can be specified for a trigger not both
+
 }

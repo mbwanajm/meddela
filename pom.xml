@@ -50,7 +50,6 @@
                 </configuration>
             </plugin>
 
-	
 
             <!-- A simple Jetty test server at http://localhost:8080/meddela can be launched with the Maven goal jetty:run
         and stopped with jetty:stop -->

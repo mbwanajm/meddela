@@ -4,6 +4,8 @@ import it.sauronsoftware.cron4j.Scheduler
 import org.apache.log4j.Logger
 import com.niafikra.meddela.data.Notification
 import it.sauronsoftware.cron4j.InvalidPatternException
+import com.niafikra.meddela.meddela
+import org.neodatis.odb.ODBRuntimeException
 
 /**
  *  This can be used to add notifications so that they are scheduled to be run at sometime specified
@@ -25,7 +27,8 @@ class SchedulerService {
 
     /**
      * Schedule a notification, when the schedule time for the notification reaches
-     * the scheduler will check run a trigger check to see.
+     * the scheduler will check run a trigger check to see it needs to run the scheduler or
+     * not
      *
      * @param notification
      * @return true if succesfull, false otherwise
@@ -38,10 +41,15 @@ class SchedulerService {
             triggerCheckTask.id = id
             notification.schedulerId = id
 
+            updateNotification(notification)
+
             return true;
         } catch (InvalidPatternException ex) {
             log.error("failed to schedule notification ${notification.name}", ex)
             return false
+
+        } catch (ODBRuntimeException){
+            log.info("failed to update the notification with new information", ex)
         }
     }
 
@@ -52,7 +60,8 @@ class SchedulerService {
      */
     void deScheduleNotification(Notification notification){
         scheduler.deschedule(notification.schedulerId)
-
+        notification.schedulerId = null
+        updateNotification(notification)
     }
 
     /**
@@ -70,5 +79,32 @@ class SchedulerService {
     def stop() {
         scheduler.stop()
         log.info("scheduler stopped succesfully")
+    }
+
+    /**
+     * Updates a notification in the database.
+     * It reads a notification with similar name and description as the passed notification
+     * then it updates its schedulerId and saves it.
+     *
+     * this method does not do anything if the notification doesn't exist in the db
+     * @param notification
+     * @return
+     */
+    def updateNotification(Notification notification){
+        try{
+            Notification dbNotification = meddela.database.getObjectsByPropertiesAND(Notification,
+                    [
+                            name:notification.name,
+                            description:notification.description
+                    ])
+
+            if(dbNotification){
+                dbNotification.schedulerId = notification.schedulerId
+                meddela.database.getODB().store(dbNotification)
+            }
+
+        } catch (ODBRuntimeException ex){
+            log.info("failed to update notification in database")
+        }
     }
 }

@@ -18,9 +18,9 @@ import com.niafikra.meddela.services.GStringUtil
  * Date: 18/07/12
  * Time: 20:18
  */
-class TriggerTask implements Runnable {
+class TriggerCheckTask implements Runnable {
     String id                   // the id of the Trigger task , it is assigned by CRON4J
-    static final Logger log = Logger.getLogger(TriggerTask)
+    static final Logger log = Logger.getLogger(TriggerCheckTask)
 
     @Override
     void run() {

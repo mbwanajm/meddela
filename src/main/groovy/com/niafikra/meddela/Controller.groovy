@@ -13,7 +13,7 @@ import javax.servlet.ServletContextListener
  */
 class Controller implements ServletContextListener {
 
-    def static  meddela
+    def static meddela
     def static appPath
     def static appPathExt
 
@@ -21,14 +21,14 @@ class Controller implements ServletContextListener {
     void contextInitialized(javax.servlet.ServletContextEvent servletContextEvent) {
 
         setPath(servletContextEvent.servletContext.getRealPath(""))
-         meddela=new meddela()
+        meddela = new meddela()
         meddela.init()
     }
 
     void setPath(String path) {
-        appPath=path
-        appPathExt=  new StringBuilder(appPath)
-                .append(File.separator).append( "WEB-INF")
+        appPath = path
+        appPathExt = new StringBuilder(appPath)
+                .append(File.separator).append("WEB-INF")
                 .append(File.separator).append("classes")
                 .toString();
     }

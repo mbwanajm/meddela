@@ -4,7 +4,8 @@ import com.niafikra.meddela.data.Notification
 import com.niafikra.meddela.meddela
 import org.apache.log4j.Logger
 import groovy.sql.Sql
-import com.niafikra.meddela.services.GStringUtil
+import com.niafikra.meddela.utilities.GStringUtil
+import com.niafikra.meddela.utilities.SqlUtil
 
 /**
  * Triggers are scheduled to be executed at certain times.
@@ -36,9 +37,9 @@ class TriggerCheckTask implements Runnable {
         // test if the sql or groovy condition is true
         def needToSendNotification = false;
         if (notification.trigger.sql) {
-            needToSendNotification = runWithSqlConnection(notification, checkSQLCondition)
+            needToSendNotification = SqlUtil.runWithSqlConnection(notification, checkSqlCondition)
         } else {
-            needToSendNotification = checkGroovyCondition(notification)
+            needToSendNotification = SqlUtil.runWithSqlConnection(notification, checkGroovyCondition)
         }
 
         // if sql or groovy condition is true go ahead  and tell the composer to compose a message and send it out
@@ -72,38 +73,11 @@ class TriggerCheckTask implements Runnable {
      * @parama sql the sql connection
      * @return true if satisfied false otherwise
      */
-    def checkSQLCondition = { Sql sql, Notification notification ->
+    def checkSqlCondition = { Sql sql, Notification notification ->
         GString query = GStringUtil.evaluateSqlAsGString(notification.trigger.sql)
         sql.rows(query).size() > 0
     }
 
-    /**
-     * Opens an SQL connection and executes the given closure with
-     * passing the sql connection and the notification object
-     *
-     * @param notification
-     * @param closure
-     * @return
-     */
-    def runWithSqlConnection(Notification notification, Closure closure) {
-        Sql sql
-        try {
-            sql = Sql.newInstance(
-                    notification.dataSource.url,
-                    notification.dataSource.username,
-                    notification.dataSource.password,
-                    notification.dataSource.driver,
-            )
 
-            return closure(sql, notification)
-
-        } catch (Exception ex) {
-            log.error("failed to connect to ${notification.dataSource.name} datasource", ex)
-            return false
-
-        } finally {
-            sql?.close()
-        }
-    }
 
 }

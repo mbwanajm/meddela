@@ -293,6 +293,12 @@
             <version>2.2.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.neodatis.odb</groupId>
+            <artifactId>neodatis-odb</artifactId>
+            <version>1.9.30.689</version>
+        </dependency>
+
     </dependencies>
 
 </project>

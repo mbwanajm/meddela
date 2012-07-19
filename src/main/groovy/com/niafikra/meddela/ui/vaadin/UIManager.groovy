@@ -40,7 +40,7 @@ class UIManager implements LoginForm.LoginListener {
      */
     void showLogin() {
         dashboard.removeAllComponents()
-        dashboard.setContent(loginView)
+        dashboard.setContent(new LoginView(this))
     }
 
     /**

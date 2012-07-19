@@ -55,13 +55,13 @@ class NotificationManager {
      * @return
      */
     boolean updateNotification(Notification notification) {
-
-        meddela.database.runDbAction {ODB odb -> odb.store(notification)}
-        if (notification.enabled) {
-            meddela.scheduler.reScheduleNotification(notification)
-        } else {
-            meddela.scheduler.deScheduleNotification(notification)
-
+        meddela.database.runDbAction {ODB odb ->
+            odb.store(notification)
+            if (notification.enabled) {
+                meddela.scheduler.reScheduleNotification(notification)
+            } else {
+                meddela.scheduler.deScheduleNotification(notification)
+            }
         }
     }
 }

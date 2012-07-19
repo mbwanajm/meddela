@@ -3,7 +3,7 @@ package com.niafikra.meddela.services.composer
 import com.niafikra.meddela.data.Notification
 import com.niafikra.meddela.utilities.GStringUtil
 import com.niafikra.meddela.data.SentNotification
-import com.niafikra.meddela.data.Template
+
 import com.niafikra.meddela.utilities.SqlUtil
 import groovy.sql.Sql
 
@@ -29,13 +29,15 @@ class Composer {
         def results
         if (notification.template.sqls) {
             results = evaluateSQL(notification)
-            results = results.values()   // change the returned map into a list
+
         } else {
-            results = evaluateGroovyScript(notification)
+            results = SqlUtil.runWithSqlConnection(notification, runGroovyScript)
         }
 
-        def notificationsToSend = []          // will contain sms to send
+        results = mergeResults(notification.template.joiningProperty, results)
+        results = results.values() // ignore keys and get only values of the returned map
 
+        def notificationsToSend = []          // will contain sms to send
         for (result in results) {
             SentNotification sentNotification = new SentNotification(
                     notification: notification,
@@ -47,6 +49,12 @@ class Composer {
         }
 
         return notificationsToSend
+    }
+
+
+    def evaluateGroovyScript(Notification notification) {
+        def results =
+        mergeResults(notification.template.joiningProperty, results)
     }
 
     /**
@@ -61,18 +69,14 @@ class Composer {
      *
      * @param notification
      */
-    def evaluateGroovyScript(Notification notification) {
-        SqlUtil.runWithSqlConnection(notification, runGroovyScript)
-    }
-
     def runGroovyScript = { Sql sql, Notification notification ->
         def params = GStringUtil.setUpDates()
-        params.put(sql)
+        params['sql'] = sql
 
         Binding binding = new Binding(params)
         GroovyShell shell = new GroovyShell(binding);
 
-        shell.evaluate(notification.trigger.groovyCode)
+        shell.evaluate(notification.template.groovyCode)
     }
 
     /**
@@ -87,7 +91,7 @@ class Composer {
             queryResults << SqlUtil.runWithSqlConnection(notification) { Sql sql -> sql.rows(query) }
         }
 
-        mergeResults(notification.template.joiningProperty, queryResults)
+
     }
 
     /**

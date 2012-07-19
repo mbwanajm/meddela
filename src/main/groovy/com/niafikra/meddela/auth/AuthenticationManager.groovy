@@ -31,7 +31,7 @@ class AuthenticationManager {
     }
 
     def authenticate(String username,String password){
-
+        return true
     }
 
     def updateAuthentication(Authentication authentication){

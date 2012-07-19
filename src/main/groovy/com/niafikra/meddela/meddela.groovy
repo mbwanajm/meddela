@@ -4,6 +4,8 @@ import org.apache.log4j.Logger
 import org.apache.log4j.PropertyConfigurator
 import com.niafikra.meddela.services.ObjectDatabase
 import com.niafikra.meddela.services.scheduler.SchedulerService
+import com.niafikra.meddela.services.scheduler.transport.Transport
+import com.niafikra.meddela.services.scheduler.transport.ConsoleTransport
 
 /**
  * This class provides a facade to  the services that
@@ -17,7 +19,8 @@ import com.niafikra.meddela.services.scheduler.SchedulerService
 class meddela {
     private static Logger log = Logger.getLogger(meddela.class)
     static ObjectDatabase database      // objectdatabase can be used to manipulate meddela's local db
-    static SchedulerService schedulerService   //
+    static SchedulerService schedulerService
+    static Transport transport
 
     static String appPath           // this path is set by the object that initializes medella
     /**
@@ -34,6 +37,7 @@ class meddela {
 
             database = new ObjectDatabase()
             schedulerService = new SchedulerService()
+            transport = new ConsoleTransport()
 
             log.info("meddella successsfully started ")
             return true

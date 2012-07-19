@@ -92,17 +92,19 @@ class ObjectDatabase {
      *
      * note that the closure must accept one parameter which is the ODB it can use
      *
-     * @param the closure to execute
+     * @param the closure to execute the closure should return
      *
      */
-    def runDbAction(Closure dbAction){
+    boolean runDbAction(Closure dbAction){
         ODB odb = getODB()
         try{
             dbAction(odb)
             odb.commit()
+            return true
         } catch (ODBRuntimeException ex){
             odb.rollback()
             log.error("failed to execute a db action", ex)
+            return false
         } finally {
             odb.close()
         }

@@ -4,8 +4,11 @@ import org.apache.log4j.Logger
 import org.apache.log4j.PropertyConfigurator
 import com.niafikra.meddela.services.ObjectDatabase
 import com.niafikra.meddela.services.scheduler.SchedulerService
-import com.niafikra.meddela.services.scheduler.transport.Transport
-import com.niafikra.meddela.services.scheduler.transport.ConsoleTransport
+
+import com.niafikra.meddela.services.transport.ConsoleTransport
+import com.niafikra.meddela.services.TransportManager
+import com.niafikra.meddela.services.composer.Composer
+import com.niafikra.meddela.services.NotificationManager
 
 /**
  * This class provides a facade to  the services that
@@ -18,11 +21,13 @@ import com.niafikra.meddela.services.scheduler.transport.ConsoleTransport
 
 class meddela {
     private static Logger log = Logger.getLogger(meddela.class)
-    static ObjectDatabase database      // objectdatabase can be used to manipulate meddela's local db
-    static SchedulerService schedulerService
-    static Transport transport
+    static ObjectDatabase database                  // used to manipulate meddela's local db
+    static SchedulerService scheduler               // used to schedule tasks
+    static Composer composer;                       // used to compose notification messages
+    static TransportManager transportManager        // used to send out messages
+    static NotificationManager notificationManager  // used for CRUD actions on notifications
+    static String appPath                           // this path must be set by the object that initializes medella
 
-    static String appPath           // this path is set by the object that initializes medella
     /**
      * Initialize medella
      *
@@ -36,11 +41,14 @@ class meddela {
             initLog()
 
             database = new ObjectDatabase()
-            schedulerService = new SchedulerService()
-            transport = new ConsoleTransport()
+            scheduler = new SchedulerService()
+            transportManager = new TransportManager()
+            composer = new Composer()
+            notificationManager = new NotificationManager()
 
             log.info("meddella successsfully started ")
             return true
+
         } catch (Exception ex) {
             log.info("meddella failed to start", ex)
             return false
@@ -63,7 +71,7 @@ class meddela {
      */
     static void stop() {
         database.close()
-        schedulerService.stop()
+        scheduler.stop()
         log.info("meddella successsfully stopped ")
     }
 }

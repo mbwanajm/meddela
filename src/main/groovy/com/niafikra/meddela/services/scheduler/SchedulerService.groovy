@@ -33,7 +33,7 @@ class SchedulerService {
      * @param notification
      * @return true if succesfull, false otherwise
      */
-    def scheduleNotification(Notification notification) {
+    boolean scheduleNotification(Notification notification) {
         try {
             TriggerCheckTask triggerCheckTask = new TriggerCheckTask();
             def id = scheduler.schedule(notification.trigger.schedule, triggerCheckTask)

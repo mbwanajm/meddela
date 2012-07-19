@@ -1,4 +1,4 @@
-package com.niafikra.meddela.services
+package com.niafikra.meddela.utilities
 
 /**
  * This file contains methods that make it easy to convert normal text
@@ -21,17 +21,17 @@ class GStringUtil {
      * the actual value of the dates in the formated yyyy-MM-dd
      *
      * @param text the text to be evaluated
-     * @return  the evaluated text
+     * @return the evaluated text
      */
-    static String evaluateSqlAsGString(String text){
+    static String evaluateSqlAsGString(String text) {
         // setup the dates
         def dates = setUpDates()
 
         // bind the above as variables that can be used in the sql GString template
         def binding = [
-                todaysDate : dates.todaysDate.format('yyyy-MM-dd'),
-                firstDayOfMonth  : dates.firstDayOfMonth.format('yyyy-MM-dd'),
-                lastDayOfMonth : dates.lastDayOfMonth.format('yyyy-MM-dd'),
+                todaysDate: dates.todaysDate.format('yyyy-MM-dd'),
+                firstDayOfMonth: dates.firstDayOfMonth.format('yyyy-MM-dd'),
+                lastDayOfMonth: dates.lastDayOfMonth.format('yyyy-MM-dd'),
         ]
 
         // replace every occurence of the binded variables in text with the values passed
@@ -42,7 +42,21 @@ class GStringUtil {
 
     }
 
-    static def setUpDates(){
+    /**
+     * Text a string and evaluates it as a gstring  using the provided bindings to fill
+     * in
+     * @param text
+     * @param bindings
+     */
+    static def evaluateAsGString(String text, Map bindings) {
+        def engine = new groovy.text.GStringTemplateEngine()
+        engine.createTemplate(text)
+                .make(bindings)
+                .toString()
+    }
+
+
+    static def setUpDates() {
         // evaluate todays date
         def todaysDate = new Date()
         todaysDate.clearTime()

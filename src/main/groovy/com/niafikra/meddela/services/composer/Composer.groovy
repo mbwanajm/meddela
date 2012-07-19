@@ -29,12 +29,12 @@ class Composer {
         def results
         if (notification.template.sqls) {
             results = evaluateSQL(notification)
-
+            results = results.values()   // change the returned map into a list
         } else {
-            // results =
+            results = evaluateGroovyScript(notification)
         }
 
-        def notificationToSend = []          // will contain sms to send
+        def notificationsToSend = []          // will contain sms to send
 
         for (result in results) {
             SentNotification sentNotification = new SentNotification(
@@ -42,9 +42,37 @@ class Composer {
                     receiver: result[notification.template.receiverProperty],
                     content: GStringUtil.evaluateAsGString(notification.template.template, result)
             )
+
+            notificationsToSend << sentNotification
         }
 
-        return notificationToSend
+        return notificationsToSend
+    }
+
+    /**
+     * A groovy script will be given the variables
+     *
+     *  todaysDate
+     *  firstDateOfMonth
+     *  lastDateOfMonth
+     *
+     *  It is expected that it will return a list of resultset,
+     *  a resultset is simply a map
+     *
+     * @param notification
+     */
+    def evaluateGroovyScript(Notification notification) {
+        SqlUtil.runWithSqlConnection(notification, runGroovyScript)
+    }
+
+    def runGroovyScript = { Sql sql, Notification notification ->
+        def params = GStringUtil.setUpDates()
+        params.put(sql)
+
+        Binding binding = new Binding(params)
+        GroovyShell shell = new GroovyShell(binding);
+
+        shell.evaluate(notification.trigger.groovyCode)
     }
 
     /**

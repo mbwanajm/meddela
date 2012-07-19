@@ -44,7 +44,7 @@ class TriggerCheckTask implements Runnable {
 
         // if sql or groovy condition is true go ahead  and tell the composer to compose a message and send it out
         if (needToSendNotification) {
-            //medella.msgComposer.sendOutNotification(notification)
+            meddela.transportManager.sendNotification(notification)
         }
     }
 

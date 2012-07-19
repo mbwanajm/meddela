@@ -1,4 +1,4 @@
-package com.niafikra.meddela.services.scheduler.transport
+package com.niafikra.meddela.services.transport
 
 import org.apache.log4j.Logger
 import com.niafikra.meddela.data.SentNotification

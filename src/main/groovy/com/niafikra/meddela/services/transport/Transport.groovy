@@ -1,4 +1,4 @@
-package com.niafikra.meddela.services.scheduler.transport
+package com.niafikra.meddela.services.transport
 
 import com.niafikra.meddela.data.SentNotification
 

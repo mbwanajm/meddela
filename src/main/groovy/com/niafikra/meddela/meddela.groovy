@@ -14,12 +14,17 @@ class meddela {
 
     def authenticationManager
 
+    /**
+     * start meddela
+     */
     def init() {
         initLog()
         authenticationManager = new AuthenticationManager()
         logger.info("meddella successsfully started ")
     }
-
+    /**
+     * Start sl4j logger for meddela
+     */
     def initLog() {
         String pathToSettings = new StringBuilder(Controller.getAppPathExt())
                 .append(File.separator).append("config")
@@ -27,7 +32,9 @@ class meddela {
                 .toString();
         PropertyConfigurator.configure(pathToSettings);
     }
-
+    /**
+     * stop meddela
+     */
     void stop() {
         logger.info("meddella successsfully stopped ")
     }

@@ -87,6 +87,30 @@ class ObjectDatabase {
     }
 
     /**
+     * This method performs a database action safely making sure
+     * all the clean up is done properly
+     *
+     * note that the closure must accept one parameter which is the ODB it can use
+     *
+     * @param the closure to execute the closure should return
+     *
+     */
+    boolean runDbAction(Closure dbAction){
+        ODB odb = getODB()
+        try{
+            dbAction(odb)
+            odb.commit()
+            return true
+        } catch (ODBRuntimeException ex){
+            odb.rollback()
+            log.error("failed to execute a db action", ex)
+            return false
+        } finally {
+            odb.close()
+        }
+    }
+
+    /**
      * Save each of the objects in the collection
      *
      * @param objects

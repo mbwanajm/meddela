@@ -65,6 +65,7 @@ class GStringUtil {
         def firstDayOfMonth = new Date()
         firstDayOfMonth.year = todaysDate.year
         firstDayOfMonth.month = todaysDate.month
+        firstDayOfMonth.clearTime()
         firstDayOfMonth.date = 1
 
         // evaluate the last date of the month by taking the day before the first day of next month

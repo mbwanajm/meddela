@@ -1,0 +1,56 @@
+ @import url(../reindeer/styles.css);
+
+
+ .toolbar .v-button {
+     display: block;
+     height: 55px;
+     background: transparent;
+     border: none;
+     text-align: center;
+ }
+
+ .toolbar .v-button img {
+     display: block;
+     margin-left: auto;
+     margin-right: auto;
+     margin-bottom: 5px;
+ }
+
+ .toolbar .v-button span {
+     font-size: x-small;
+     text-shadow: #fafafa 1px 1px 0;
+ }
+
+ .toolbar .v-button .v-button-wrap,
+ .toolbar .v-disabled.v-button .v-button-wrap {
+     background: transparent;
+     border: none;
+     -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+     border-radius: 0;
+     -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+     box-shadow: none;
+ }
+
+ .toolbar .v-button:active .v-button-wrap,
+ .toolbar .v-button.v-pressed .v-button-wrap {
+     background: transparent;
+     -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+     box-shadow: none;
+ }
+
+
+ .v-app {
+     font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+     color: #222;
+ }
+
+ .toolbar {
+     background: #ccc url(images/gradient.png) repeat-x bottom left;
+ }
+
+ .view {
+     background: white;
+ }

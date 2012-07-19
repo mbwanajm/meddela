@@ -31,7 +31,6 @@ class SqlUtil {
                     notification.dataSource.password,
                     notification.dataSource.driver,
             )
-
             return closure(sql, notification)
 
         } catch (Exception ex) {

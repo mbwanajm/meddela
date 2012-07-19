@@ -1,6 +1,6 @@
-package com.niafikra.services
+package com.niafikra.meddela.utilities
 
-import com.niafikra.meddela.services.GStringUtil
+import com.niafikra.meddela.utilities.GStringUtil
 import spock.lang.Specification
 
 /**
@@ -16,10 +16,10 @@ class GStringUtilTest extends Specification{
 
         def dates = setUpDates()
 
-        when: "called with text containing todaysDate, firstDayOfMonth and lastDayOfMonth with \$ prefix"
+        when: 'called with text containing todaysDate, firstDayOfMonth and lastDayOfMonth with a $ prefix'
         def result = GStringUtil.evaluateSqlAsGString('$todaysDate, $firstDayOfMonth, $lastDayOfMonth')
 
-        then: "occurences of the above variables are replaced with their values"
+        then: 'occurences of the above variables are replaced with their values'
         result == "$dates.todaysDate, $dates.firstDayOfMonth, $dates.lastDayOfMonth"
 
     }

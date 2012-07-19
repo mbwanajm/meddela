@@ -48,7 +48,7 @@ class SchedulerService {
             log.error("failed to schedule notification ${notification.name}", ex)
             return false
 
-        } catch (ODBRuntimeException){
+        } catch (ODBRuntimeException ex){
             log.info("failed to update the notification with new information", ex)
         }
     }
@@ -92,11 +92,7 @@ class SchedulerService {
      */
     def updateNotification(Notification notification){
         try{
-            Notification dbNotification = meddela.database.getObjectsByPropertiesAND(Notification,
-                    [
-                            name:notification.name,
-                            description:notification.description
-                    ])
+            Notification dbNotification = meddela.database.getObjectByProperty(Notification, 'name', notification.name)
 
             if(dbNotification){
                 dbNotification.schedulerId = notification.schedulerId

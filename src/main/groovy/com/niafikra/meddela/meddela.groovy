@@ -3,6 +3,7 @@ package com.niafikra.meddela
 import org.apache.log4j.Logger
 import org.apache.log4j.PropertyConfigurator
 import com.niafikra.meddela.services.ObjectDatabase
+import com.niafikra.meddela.services.scheduler.SchedulerService
 
 /**
  * This class provides a facade to  the services that
@@ -15,9 +16,10 @@ import com.niafikra.meddela.services.ObjectDatabase
 
 class meddela {
     private static Logger log = Logger.getLogger(meddela.class)
-    static ObjectDatabase database  // objectdatabase can be used to manipulate meddela's local db
-    static String appPath           // this path is set by the object that initializes medella
+    static ObjectDatabase database      // objectdatabase can be used to manipulate meddela's local db
+    static SchedulerService schedulerService   //
 
+    static String appPath           // this path is set by the object that initializes medella
     /**
      * Initialize medella
      *
@@ -29,7 +31,9 @@ class meddela {
 
         try {
             initLog()
-            database = new ObjectDatabase();
+
+            database = new ObjectDatabase()
+            schedulerService = new SchedulerService()
 
             log.info("meddella successsfully started ")
             return true
@@ -55,6 +59,7 @@ class meddela {
      */
     static void stop() {
         database.close()
+        schedulerService.stop()
         log.info("meddella successsfully stopped ")
     }
 }

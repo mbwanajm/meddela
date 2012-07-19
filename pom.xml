@@ -50,7 +50,6 @@
                 </configuration>
             </plugin>
 
-	
 
             <!-- A simple Jetty test server at http://localhost:8080/meddela can be launched with the Maven goal jetty:run
         and stopped with jetty:stop -->
@@ -295,6 +294,12 @@
             <groupId>net.sf.cron4j</groupId>
             <artifactId>cron4j</artifactId>
             <version>2.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.neodatis.odb</groupId>
+            <artifactId>neodatis-odb</artifactId>
+            <version>1.9.30.689</version>
         </dependency>
 
     </dependencies>

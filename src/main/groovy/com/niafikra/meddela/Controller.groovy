@@ -22,7 +22,7 @@ class Controller implements ServletContextListener {
 
         setPath(servletContextEvent.servletContext.getRealPath(""))
         meddela = new meddela()
-        meddela.init()
+        meddela.init(appPath)
     }
 
     void setPath(String path) {

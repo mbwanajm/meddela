@@ -80,7 +80,7 @@ class Composer {
     }
 
     /**
-     * Evaluate all the template sql's and merge its results
+     * Evaluate all the template
      *
      * @param notification
      * @return

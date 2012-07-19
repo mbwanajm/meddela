@@ -37,12 +37,7 @@ class NotificationManager {
     boolean deleteNotification(Notification notification) {
         meddela.scheduler.deScheduleNotification(notification)
         meddela.database.runDbAction {ODB odb ->
-            def readNotification = meddela.database.getObjectsByPropertiesAND(Notification,
-                    [
-                            name: notification.name,
-                            description: notification.description
-                    ])
-
+            def readNotification = meddela.database.getObjectByProperty(Notification, "name", notification.name)
             odb.delete(readNotification)
         }
     }
@@ -56,6 +51,7 @@ class NotificationManager {
      */
     boolean updateNotification(Notification notification) {
         meddela.database.runDbAction {ODB odb ->
+            meddela.database.getObjectByProperty(Notification, )
             odb.store(notification)
             if (notification.enabled) {
                 meddela.scheduler.reScheduleNotification(notification)

@@ -63,6 +63,7 @@ class Composer {
      *  todaysDate
      *  firstDateOfMonth
      *  lastDateOfMonth
+     *  sql
      *
      *  It is expected that it will return a list of resultset,
      *  a resultset is simply a map
@@ -91,7 +92,7 @@ class Composer {
             queryResults << SqlUtil.runWithSqlConnection(notification) { Sql sql -> sql.rows(query) }
         }
 
-
+        queryResults
     }
 
     /**

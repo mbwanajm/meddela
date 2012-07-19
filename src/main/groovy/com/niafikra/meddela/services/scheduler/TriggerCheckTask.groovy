@@ -42,7 +42,7 @@ class TriggerCheckTask implements Runnable {
             needToSendNotification = SqlUtil.runWithSqlConnection(notification, checkGroovyCondition)
         }
 
-        // if sql or groovy condition is true go ahead  and tell the composer to compose a message and send it out
+        // if sql or groovy condition is true tell the transport manager to send out notification
         if (needToSendNotification) {
             meddela.transportManager.sendNotification(notification)
         }

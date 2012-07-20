@@ -49,7 +49,7 @@ class ObjectDatabase {
         odbServer.startServer(true)
         log.info("Succesfully started object database")
 
-
+        odbStore = new ThreadLocal()
     }
 
     /**

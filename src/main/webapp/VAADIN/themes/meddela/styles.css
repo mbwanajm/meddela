@@ -56,3 +56,31 @@
  .view {
      background: white;
  }
+
+ .loginForm{
+     border-color: #222222;
+     border-width: 1px;
+
+     border-color: #CCCCCC #EEEEEE;
+     border-style: solid;
+     border-width: 1px;
+     box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+ }
+
+ .loginBox{
+     width: 250px;
+     border-color: #00adee ;
+     text-align: center
+
+ }
+
+ .loginLabel{
+     width: 100px;
+     font-size: 14px;
+     text-shadow: #fafafa 1px 1px 0;
+ }
+
+ .loginButton{
+     font-size: small;
+     text-shadow: #fafafa 1px 1px 0
+ }

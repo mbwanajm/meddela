@@ -15,7 +15,7 @@ import com.vaadin.ui.LoginForm
  * Date: 7/18/12
  * Time: 8:29 AM
  */
-class UIManager implements LoginForm.LoginListener {
+class UIManager {
 
     Application application
     Dashboard dashboard
@@ -52,10 +52,9 @@ class UIManager implements LoginForm.LoginListener {
     }
 
 
-    @Override
-    void onLogin(LoginForm.LoginEvent event) {
+    void login(String username,String password) {
         def result = Controller.meddela.getAuthenticationManager()
-                .authenticate(event.getLoginParameter("username"), event.getLoginParameter("password"))
+                .authenticate(username,password)
         if (result) {
             showDashBoard()
         }

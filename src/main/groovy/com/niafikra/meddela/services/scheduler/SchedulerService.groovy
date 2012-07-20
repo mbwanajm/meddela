@@ -45,11 +45,9 @@ class SchedulerService {
 
             return true;
         } catch (InvalidPatternException ex) {
-            log.error("failed to schedule notification ${notification.name}", ex)
+            log.error("failed to schedule notification ${notification.name}, invalid cron pattern", ex)
             return false
 
-        } catch (ODBRuntimeException ex){
-            log.info("failed to update the notification with new information", ex)
         }
     }
 

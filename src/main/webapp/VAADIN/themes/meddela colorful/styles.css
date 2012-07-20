@@ -3,7 +3,7 @@
 
  .toolbar .v-button {
      display: block;
-     height: 60px;
+     height: 63px;
      background: transparent;
      border: none;
      text-align: center;
@@ -13,7 +13,7 @@
      display: block;
      margin-left: auto;
      margin-right: auto;
-     margin-bottom: 4px;
+     margin-bottom: 2px;
 
  }
 

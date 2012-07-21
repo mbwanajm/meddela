@@ -37,7 +37,9 @@ class NotificationManager {
     boolean deleteNotification(Notification notification) {
         meddela.scheduler.deScheduleNotification(notification)
         meddela.database.runDbAction {ODB odb ->
-            def readNotification = meddela.database.getObjectByProperty(Notification, "name", notification.name)
+            Notification  readNotification = meddela.database.getObjectByProperty(Notification, "name", notification.name)
+            odb.delete(readNotification.template)
+            odb.delete(readNotification.trigger)
             odb.delete(readNotification)
         }
     }
@@ -51,7 +53,10 @@ class NotificationManager {
      */
     boolean updateNotification(Notification notification) {
         meddela.database.runDbAction {ODB odb ->
-            meddela.database.getObjectByProperty(Notification, )
+            // Manually copy each of the property from the new notification to the one in the db
+            def dbNotification = meddela.database.getObjectByProperty(Notification, 'name', notification.name)
+            notification = copy(notification, dbNotification)
+
             odb.store(notification)
             if (notification.enabled) {
                 meddela.scheduler.reScheduleNotification(notification)
@@ -60,4 +65,26 @@ class NotificationManager {
             }
         }
     }
+
+    /**
+     * Copies properties from src to dest
+     * @param src
+     * @param dest
+     */
+    private def copy(Notification src, Notification dest) {
+        dest.description = src.description
+        dest.enabled = src.enabled
+        dest.schedulerId = src.schedulerId
+        dest.template.template = src.template.template
+        dest.template.joiningProperty = src.template.joiningProperty
+        dest.template.groovyCode = src.template.groovyCode
+        dest.template.receiverProperty = src.template.receiverProperty
+        dest.template.sqls = src.template.sqls
+        dest.trigger.groovyCode = src.trigger.groovyCode
+        dest.trigger.schedule = src.trigger.schedule
+        dest.trigger.sql = src.trigger.sql
+
+        return dest
+    }
 }
+

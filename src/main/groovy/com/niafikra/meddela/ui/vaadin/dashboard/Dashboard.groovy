@@ -2,9 +2,10 @@ package com.niafikra.meddela.ui.vaadin.dashboard
 
 import com.vaadin.ui.Window
 import com.vaadin.ui.VerticalLayout
-import com.vaadin.ui.TabSheet
+
 import com.vaadin.ui.Component
 import com.niafikra.meddela.ui.vaadin.UIManager
+import com.niafikra.meddela.ui.vaadin.dashboard.reports.ReportView
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>

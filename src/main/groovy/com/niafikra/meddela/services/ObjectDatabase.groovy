@@ -62,7 +62,7 @@ class ObjectDatabase {
             log.info("succesfully closed object database")
 
         } catch (Exception ex) {
-            log.error("failed to close server")
+            log.error("failed to close server", ex)
 
         }
     }
@@ -132,6 +132,7 @@ class ObjectDatabase {
      * @return
      */
     def deleteEach(Collection objects) {
+        ODB  odb = getODB()
         for (Object object : objects) {
             odb.delete(object);
         }

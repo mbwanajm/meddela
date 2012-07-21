@@ -6,6 +6,7 @@ import com.vaadin.ui.VerticalLayout
 import com.vaadin.ui.Component
 import com.niafikra.meddela.ui.vaadin.UIManager
 import com.niafikra.meddela.ui.vaadin.dashboard.reports.ReportView
+import com.niafikra.meddela.ui.vaadin.dashboard.settings.SettingsView
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>

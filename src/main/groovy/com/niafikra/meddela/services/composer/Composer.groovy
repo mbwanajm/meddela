@@ -51,12 +51,6 @@ class Composer {
         return notificationsToSend
     }
 
-
-    def evaluateGroovyScript(Notification notification) {
-        def results =
-        mergeResults(notification.template.joiningProperty, results)
-    }
-
     /**
      * A groovy script will be given the variables
      *

@@ -6,6 +6,7 @@ import com.niafikra.meddela.services.transport.ConsoleTransport
 import com.niafikra.meddela.meddela
 import org.neodatis.odb.ODB
 import com.niafikra.meddela.data.Notification
+import com.niafikra.meddela.data.UniqueRecepient
 
 /**
  * This class coordinates the delivering of notifications and saves
@@ -30,13 +31,25 @@ class TransportManager {
      *
      * @param notification
      */
-    def sendNotification(Notification notification){
+    def sendNotification(Notification notification) {
         def notificationsToSend = meddela.composer.compose(Notification)
 
-        for(SentNotification sentNotification in notificationsToSend){
+        for (SentNotification sentNotification in notificationsToSend) {
             sentNotification.timeSent = new Date()
             sentNotification.sentSuccesfully = transport.sendNotification(sentNotification)
-            meddela.database.runDbAction {ODB odb -> odb.store(sentNotification)}
+
+            meddela.database.runDbAction { ODB odb ->
+                // store the sent notification
+                odb.store(sentNotification)
+
+                // if the recepient is not in the unique recepients list add him
+                def recepients = meddela.database.getObjectsByProperty(UniqueRecepient, 'recepient', sentNotification.receiver)
+
+                if(recepients?.isEmpty()){
+                    odb.store(new UniqueRecepient(sentNotification.receiver))
+                }
+            }
+
         }
     }
 }

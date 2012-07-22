@@ -30,7 +30,7 @@ class UIManager {
      * Start different views for the app
      */
     def start() {
-        application.setTheme("meddela")
+        application.setTheme("meddela_dark")
         dashboard = new Dashboard(this)
         loginView = new LoginView(this)
         application.setMainWindow(dashboard)

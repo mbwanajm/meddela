@@ -84,3 +84,10 @@
      font-size: small;
      text-shadow: #fafafa 1px 1px 0
  }
+
+ .reportsLabel {
+     color : #9999cc;
+     text-align: center;
+     border: #888888 thin 1px;
+     padding-top: 10px
+ }

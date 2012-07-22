@@ -15,5 +15,10 @@ class DataSource {
     String password
     String url              // the url to use for the jdbc connection
     String driver           // the name of the driver to use for the connection
+    @Override
+    public String toString() {
+        return "$name [$url]"
+    }
+
 
 }

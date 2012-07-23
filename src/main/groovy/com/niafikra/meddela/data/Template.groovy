@@ -1,8 +1,5 @@
 package com.niafikra.meddela.data;
 
-import java.util.Set
-import com.niafikra.meddela.ui.vaadin.dashboard.settings.helper.SQL;
-
 /**
  * An sms template describes how the SMS should be composed
  *

@@ -35,15 +35,9 @@ class ScheduleField extends ListSelect implements Property.ValueChangeListener{
         currentValues.each {
             counter++
             if(counter!=1) value.append(",")
-            value.append(getCRONValue(it))
+            value.append(it)
         }
 
         values.put(getCaption(),value)
-    }
-
-    Object getCRONValue(Object val) {
-       if (val instanceof Integer)
-           return (val-1)
-       else return val
     }
 }

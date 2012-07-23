@@ -6,6 +6,9 @@ import com.vaadin.data.Property
 import com.vaadin.data.util.BeanItemContainer
 import com.vaadin.ui.*
 import com.niafikra.meddela.meddela
+import org.vaadin.aceeditor.AceEditor
+import org.vaadin.aceeditor.gwt.ace.AceMode
+import org.vaadin.aceeditor.gwt.ace.AceTheme
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
@@ -16,14 +19,15 @@ class TemplateSQLUI extends HorizontalLayout implements NotificationCodeArea, Bu
 
     ListSelect sqlSelect
     Template template
-    TextArea codeArea
+    AceEditor codeArea
     Button add, delete, save
     TextField SQLNameField
     HashMap SQLSet = new HashMap()
 
     TemplateSQLUI() {
         sqlSelect = new ListSelect("SQL")
-        codeArea = new TextArea("SQL Code")
+        codeArea = new AceEditor()   //SQL Code
+        codeArea.setCaption("SQL Code")
         SQLNameField = new TextField()
         SQLNameField.setInputPrompt("Enter Name of SQL")
         //SQLNameField.setWidth("150px")
@@ -61,8 +65,10 @@ class TemplateSQLUI extends HorizontalLayout implements NotificationCodeArea, Bu
         //  Panel panel = new Panel("SQL Code")
         rightLay.setHeight("100%")
         //panel.addComponent(codeArea)
-        codeArea.setRows(5)
+        codeArea.setMode(AceMode.sql)
         codeArea.setWidth("100%")
+        codeArea.setHeight("100px")
+      //  codeArea.setTheme(AceTheme.tomorrow_night_eighties)
         rightLay.addComponent(codeArea)
         HorizontalLayout rightFooter = new HorizontalLayout()
         rightFooter.addComponent(SQLNameField)

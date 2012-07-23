@@ -127,10 +127,14 @@
                         <groupId>com.vaadin</groupId>
                         <artifactId>vaadin-maven-plugin</artifactId>
                         <version>1.0.2</version>
+                        <configuration>
+                            <modules>
+                                <module>com.niafikra.meddela.ui.vaadin.widgetset.MeddelaWidgetset</module>
+                            </modules>
+                        </configuration>
                         <executions>
                             <execution>
-                                <configuration>
-                                </configuration>
+
                                 <goals>
                                     <goal>update-widgetset</goal>
                                 </goals>
@@ -285,10 +289,17 @@
         </dependency>
 
         <dependency>
-            <groupId>org.vaadin.addons</groupId>
-            <artifactId>notifique</artifactId>
-            <version>1.0.5</version>
+            <groupId>org.vaadin</groupId>
+            <artifactId>aceeditor</artifactId>
+            <version>0.2.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.vaadin.addons</groupId>
+            <artifactId>buttongroup</artifactId>
+            <version>1.2</version>
+        </dependency>
+
 
         <dependency>
             <groupId>net.sf.cron4j</groupId>

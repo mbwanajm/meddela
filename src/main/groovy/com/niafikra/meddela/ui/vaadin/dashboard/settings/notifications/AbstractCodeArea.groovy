@@ -2,6 +2,8 @@ package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
 
 import com.vaadin.ui.VerticalLayout
 import com.vaadin.ui.TextArea
+import org.vaadin.aceeditor.AceEditor
+import org.vaadin.aceeditor.gwt.ace.AceMode
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
@@ -10,13 +12,13 @@ import com.vaadin.ui.TextArea
  */
 abstract class AbstractCodeArea extends VerticalLayout implements NotificationCodeArea{
 
-    TextArea codeArea
+    AceEditor codeArea
     String type
 
     AbstractCodeArea(String type){
         super()
         this.type=type
-        codeArea=new TextArea()
+        codeArea=new AceEditor()
         build()
     }
 
@@ -25,6 +27,12 @@ abstract class AbstractCodeArea extends VerticalLayout implements NotificationCo
         setMargin(true)
         codeArea.setWidth("100%")
         codeArea.setHeight("500px")
+
+        if(type.equalsIgnoreCase("SQL"))
+            codeArea.setMode(AceMode.sql)
+        else if(type.equalsIgnoreCase("GROOVY"))
+            codeArea.setMode(AceMode.groovy)
+
         addComponent(codeArea)
         // setComponentAlignment(testButton,Alignment.MIDDLE_RIGHT)
     }

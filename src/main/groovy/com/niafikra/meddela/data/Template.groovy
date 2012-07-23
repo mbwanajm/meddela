@@ -1,6 +1,7 @@
 package com.niafikra.meddela.data;
 
-import java.util.Set;
+import java.util.Set
+import com.niafikra.meddela.ui.vaadin.dashboard.settings.helper.SQL;
 
 /**
  * An sms template describes how the SMS should be composed
@@ -10,7 +11,7 @@ import java.util.Set;
  *         Time: 17:34
  */
 public class Template {
-    Set<String> sqls             // the set of SQL to use to get the data
+    Set<SQL> sqls             // the set of SQL to use to get the data
     String groovyCode           // groovy code that returns a collection of the required data
     String joiningProperty      // the common property used for joining results returned by different groovy or sql
     String receiverProperty     // the property to use as a phone number

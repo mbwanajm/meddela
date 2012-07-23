@@ -50,12 +50,15 @@ class Composer {
         return notificationsToSend
     }
 
+<<<<<<< HEAD
 
     def evaluateGroovyScript(Notification notification) {
         def results =
             mergeResults(notification.template.joiningProperty, results)
     }
 
+=======
+>>>>>>> origin/master
     /**
      * A groovy script will be given the variables
      *

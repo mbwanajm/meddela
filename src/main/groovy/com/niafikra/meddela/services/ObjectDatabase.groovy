@@ -51,6 +51,7 @@ class ObjectDatabase {
         log.info("Succesfully started object database")
 
         odbStore = new ThreadLocal()
+        dbActionCounts = new ThreadLocal()
     }
 
     /**
@@ -110,7 +111,7 @@ class ObjectDatabase {
 
         } finally {
             actionCount --
-            if(actionCount == 0)  odb.close()
+            if(actionCount == 0 && !odb?.isClosed())  odb.close()
 
         }
     }
@@ -139,7 +140,7 @@ class ObjectDatabase {
             return false
         } finally {
             actionCount --
-            if(actionCount == 0) odb.close()
+            if(actionCount == 0 && !odb?.isClosed()) odb.close()
         }
     }
 

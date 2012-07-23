@@ -28,7 +28,7 @@ class SchedulerService {
 
     def scheduleEnabledNotifications() {
         meddela.database.runDbQuery {
-            Collection notifications = meddela.database.getObjectsByProperty(Notification, 'enabled', true)
+            def notifications = meddela.database.getObjectsByProperty(Notification, 'enabled', true)
 
             if(!notifications) return
 

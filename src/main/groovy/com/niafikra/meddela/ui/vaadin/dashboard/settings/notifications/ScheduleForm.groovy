@@ -62,12 +62,12 @@ class ScheduleForm extends VerticalLayout implements Property.ValueChangeListene
 
         hour.addListener(this)
         hour.addItem("*")
-        (1..24).each {hour.addItem(it) }
+        (0..23).each {hour.addItem(it) }
         fieldsLayout.addComponent(hour)
 
         minute.addListener(this)
         minute.addItem("*")
-        (1..60).each {minute.addItem(it)}
+        (0..59).each {minute.addItem(it)}
         fieldsLayout.addComponent(minute)
         fieldsLayout.setSpacing(true)
         fieldsLayout.setMargin(true)

@@ -5,6 +5,7 @@ import com.niafikra.meddela.ui.vaadin.dashboard.Dashboard
 import com.niafikra.meddela.ui.vaadin.login.LoginView
 import com.vaadin.Application
 import com.vaadin.ui.LoginForm
+import com.vaadin.ui.Window
 
 //import com.vaadin.addon.toolbar.CssToolbar
 
@@ -57,6 +58,8 @@ class UIManager {
                 .authenticate(username,password)
         if (result) {
             showDashBoard()
+        } else{
+            dashboard.showNotification("Incorrect Username or Password!",Window.Notification.TYPE_WARNING_MESSAGE)
         }
     }
 

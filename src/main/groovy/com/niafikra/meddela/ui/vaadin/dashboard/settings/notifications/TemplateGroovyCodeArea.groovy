@@ -14,6 +14,6 @@ class TemplateGroovyCodeArea extends AbstractCodeArea{
     @Override
     def execute(com.niafikra.meddela.data.Notification notification) {
          notification.template.groovyCode=getCode()
-         meddela.composer.evaluateGroovyScript(notification)
+         meddela.composer.runGroovyScript(notification)
     }
 }

@@ -1,9 +1,8 @@
 package com.niafikra.meddela.services.composer
 
 import com.niafikra.meddela.data.Notification
-import com.niafikra.meddela.utilities.GStringUtil
 import com.niafikra.meddela.data.SentNotification
-
+import com.niafikra.meddela.utilities.GStringUtil
 import com.niafikra.meddela.utilities.SqlUtil
 import groovy.sql.Sql
 
@@ -54,7 +53,7 @@ class Composer {
 
     def evaluateGroovyScript(Notification notification) {
         def results =
-        mergeResults(notification.template.joiningProperty, results)
+            mergeResults(notification.template.joiningProperty, results)
     }
 
     /**
@@ -89,7 +88,7 @@ class Composer {
     def evaluateSQL(Notification notification) {
         def queryResults = []
         for (query in notification.template.sqls) {
-            queryResults << SqlUtil.runWithSqlConnection(notification) { Sql sql -> sql.rows(query) }
+            queryResults << SqlUtil.runWithSqlConnection(notification) { Sql sql, Notification notif -> sql.rows(query.SQL) }
         }
 
         queryResults
@@ -107,16 +106,20 @@ class Composer {
         // Collect all the unique joining properties in the resultset
         def joiningPropertyValues = [] as Set
         for (result in results) {
-            joiningPropertyValues << result[joiningProperty]
+            for (innerResult in result) {
+                joiningPropertyValues << innerResult[joiningProperty]
+            }
         }
 
         // Group the results according to joining property values
         def mergedResults = [:]
         for (joinValue in joiningPropertyValues) {
             for (result in results) {
-                if (result[joiningProperty].equals(joinValue)) {
-                    if (!mergedResults[joinValue])  mergedResults[joinValue] = [:]
-                    mergedResults[joinValue] << result
+                for (innerResult in result) {
+                    if (innerResult[joiningProperty].equals(joinValue)) {
+                        if (!mergedResults[joinValue]) mergedResults[joinValue] = [:]
+                        mergedResults[joinValue] << innerResult
+                    }
                 }
             }
         }

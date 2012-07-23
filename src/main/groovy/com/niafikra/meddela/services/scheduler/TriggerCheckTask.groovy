@@ -38,11 +38,9 @@ class TriggerCheckTask implements Runnable {
         // test if the sql or groovy condition is true
         def needToSendNotification = false;
         if (notification.trigger.sql) {
-          //  needToSendNotification = SqlUtil.runWithSqlConnection(notification, checkSqlCondition)
-            needToSendNotification=meddela.triggerCheck.checkWithSQL(notification)
+            needToSendNotification = meddela.triggerCheck.checkWithSQL(notification)
         } else {
-          //  needToSendNotification = SqlUtil.runWithSqlConnection(notification, checkGroovyCondition)
-            needToSendNotification=meddela.triggerCheck.checkWithGroovy(notification)
+            needToSendNotification = meddela.triggerCheck.checkWithGroovy(notification)
         }
 
         // if sql or groovy condition is true tell the transport manager to send out notification
@@ -50,37 +48,5 @@ class TriggerCheckTask implements Runnable {
             meddela.transportManager.sendNotification(notification)
         }
     }
-
-    /**
-     * Check to see if the groovy condition in the notification is satisfied
-     * the groovy condition is basically groovy code which when evaluated
-     * returns true or false
-     *
-     * @param notification
-     * @param sql the sql connection to use
-     * @return true if satisfied false otherwise
-     */
-    def checkGroovyCondition =  { Sql sql, Notification notification ->
-        def params = GStringUtil.setUpDates()
-        params['sql'] = sql
-
-        Binding binding = new Binding(params)
-        GroovyShell shell = new GroovyShell(binding)
-
-        shell.evaluate(notification.trigger.groovyCode)
-    }
-
-    /**
-     * Check to see if the sql condition in the notification is satisfied
-     * @param notification
-     * @parama sql the sql connection
-     * @return true if satisfied false otherwise
-     */
-    def checkSqlCondition = { Sql sql, Notification notification ->
-        GString query = GStringUtil.evaluateSqlAsGString(notification.trigger.sql)
-        sql.rows(query).size() > 0
-    }
-
-
 
 }

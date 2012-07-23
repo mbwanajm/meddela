@@ -185,9 +185,10 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
 
         // Query db using the given filters
         And andCriteria = Where.and()
+        def endDate = endDateField.value + 1
         andCriteria
                 .add(Where.ge('time', startDateField.getValue().clearTime()))
-                .add(Where.le('time', endDateField.getValue().clearTime()))
+                .add(Where.lt('time', endDate.clearTime()))
 
         if (!notificationComboBox.getValue().equals('all'))
             andCriteria.add(Where.equal('notification.name', notificationComboBox.getValue()))

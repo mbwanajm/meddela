@@ -1,18 +1,19 @@
 package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
 
 import com.niafikra.meddela.data.Notification
+import com.niafikra.meddela.meddela
 import com.vaadin.ui.Button
 import com.vaadin.ui.HorizontalLayout
 import com.vaadin.ui.TabSheet
 import com.vaadin.ui.VerticalLayout
-import com.niafikra.meddela.meddela
 import org.neodatis.odb.ODB
+
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
  * Date: 7/21/12
  * Time: 4:18 PM
  */
-class NotificationUI extends VerticalLayout implements Button.ClickListener{
+class NotificationUI extends VerticalLayout implements Button.ClickListener {
 
     NotificationBasicUI basicUI
     NotificationTrigerUI trigerUI
@@ -23,10 +24,10 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener{
 
     NotificationUI(Notification notification, boolean isNew) {
         this.isNew = isNew
-        this.notification=notification
+        this.notification = notification
         basicUI = new NotificationBasicUI(notification)
         trigerUI = new NotificationTrigerUI(notification)
-        templateUI = new NotificationTemplateUI(notification)
+        templateUI = new NotificationTemplateUI(notification, isNew)
 
         save = new Button("Save")
         delete = new Button("Delete")
@@ -59,7 +60,7 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener{
         setExpandRatio(uiHolder, 1)
     }
 
-    def commit(){
+    def commit() {
         basicUI.commit()
         trigerUI.commit()
         templateUI.commit()
@@ -67,19 +68,21 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener{
 
     @Override
     void buttonClick(Button.ClickEvent event) {
-        if(event.getButton().equals(save)){
+        if (event.getButton().equals(save)) {
             saveNotification()
-        } else if (event.getButton().equals(delete)){
+        } else if (event.getButton().equals(delete)) {
             deleteNotification()
         }
     }
 
     void deleteNotification() {
-        meddela.database.runDbAction {ODB odb -> odb.delete(notification)}
+        meddela.notificationManager.deleteNotification(notification)
     }
 
     void saveNotification() {
-
-        meddela.database.runDbAction {ODB odb -> odb.store(notification)}
+        commit()
+        if (isNew)
+            meddela.notificationManager.addNotification(notification)
+        else meddela.notificationManager.updateNotification(notification)
     }
 }

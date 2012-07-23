@@ -4,13 +4,14 @@ package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications;
 import com.niafikra.meddela.data.Notification
 import com.vaadin.ui.Button
 import com.vaadin.ui.VerticalLayout
+import com.vaadin.ui.Window
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
  * Date: 7/20/12
  * Time: 9:42 PM
  */
-class NotificationTrigerUI extends VerticalLayout {
+class NotificationTrigerUI extends VerticalLayout implements Button.ClickListener{
 
     ScheduleForm scheduleForm
     TrigerSetup trigerSetup
@@ -31,6 +32,7 @@ class NotificationTrigerUI extends VerticalLayout {
         addComponent(scheduleForm)
         addComponent(trigerSetup)
         addComponent(testButton)
+        testButton.addListener(this)
         setSizeFull()
         setExpandRatio(trigerSetup, 1)
     }
@@ -40,4 +42,19 @@ class NotificationTrigerUI extends VerticalLayout {
         trigerSetup.commit()
     }
 
+    def execute(){
+        def result;
+        result=trigerSetup.sqlSetupView.execute(notification)
+        if(!result)
+            result=trigerSetup.groovySetupView.execute(notification)
+        return result
+    }
+
+    @Override
+    void buttonClick(Button.ClickEvent event) {
+        if (execute())
+            getWindow().showNotification("Code Executes Well",Window.Notification.TYPE_HUMANIZED_MESSAGE)
+        else
+            getWindow().showNotification("Code Fails to execute",Window.Notification.TYPE_WARNING_MESSAGE)
+    }
 }

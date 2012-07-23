@@ -9,12 +9,13 @@ import com.niafikra.meddela.data.Notification
 import com.niafikra.meddela.meddela
 import com.niafikra.meddela.data.DataSource
 import com.vaadin.data.util.BeanItemContainer
+import com.vaadin.data.Property
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
  * Date: 7/21/12
  * Time: 3:31 PM
  */
-class NotificationBasicUI extends FormLayout{
+class NotificationBasicUI extends FormLayout implements Property.ValueChangeListener{
     TextField nameField
     ComboBox datasourceSelect
     CheckBox enableSelect
@@ -35,7 +36,13 @@ class NotificationBasicUI extends FormLayout{
         setMargin(true)
         setSpacing(true)
         setSizeFull()
+        datasourceSelect.setImmediate(true)
+        datasourceSelect.addListener(this)
         descriptionArea.setWidth("70%")
+
+        nameField.setWidth("70%")
+        datasourceSelect.setWidth("70%")
+        descriptionArea.setRows(15)
         addComponent(nameField)
         addComponent(datasourceSelect)
         addComponent(enableSelect)
@@ -56,5 +63,12 @@ class NotificationBasicUI extends FormLayout{
        notification.setDataSource(datasourceSelect.getValue())
        notification.setName(nameField.getValue())
        notification.setEnabled(enableSelect.getValue())
+    }
+
+    @Override
+    void valueChange(Property.ValueChangeEvent event) {
+        DataSource dataSource=event.property.getValue() as DataSource
+        if(dataSource)
+            datasourceSelect.setValue(dataSource)
     }
 }

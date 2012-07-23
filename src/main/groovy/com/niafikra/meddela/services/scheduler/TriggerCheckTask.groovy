@@ -26,20 +26,23 @@ class TriggerCheckTask implements Runnable {
     @Override
     void run() {
         // Get the notification info from the object database
-        Notification notification = meddela.database.getObjectByProperty(Notification, "schedulerId", id)
+        Collection notifications = meddela.database.getObjectsByProperty(Notification, "schedulerId", id)
 
         // if for some reason the read notification is null log and leave immediately
-        if (!notification) {
+        if (!notifications || notifications?.isEmpty()) {
             log.warn("we have a scheduled trigger check but no trigger information in db, panicking!")
             return
         }
 
+        def notification = notifications.iterator().next()
         // test if the sql or groovy condition is true
         def needToSendNotification = false;
         if (notification.trigger.sql) {
-            needToSendNotification = SqlUtil.runWithSqlConnection(notification, checkSqlCondition)
+          //  needToSendNotification = SqlUtil.runWithSqlConnection(notification, checkSqlCondition)
+            needToSendNotification=meddela.triggerCheck.checkWithSQL(notification)
         } else {
-            needToSendNotification = SqlUtil.runWithSqlConnection(notification, checkGroovyCondition)
+          //  needToSendNotification = SqlUtil.runWithSqlConnection(notification, checkGroovyCondition)
+            needToSendNotification=meddela.triggerCheck.checkWithGroovy(notification)
         }
 
         // if sql or groovy condition is true tell the transport manager to send out notification

@@ -32,11 +32,11 @@ class TransportManager {
      * @param notification
      */
     def sendNotification(Notification notification) {
-        def notificationsToSend = meddela.composer.compose(Notification)
+        def notificationsToSend = meddela.composer.compose(notification)
 
         for (SentNotification sentNotification in notificationsToSend) {
-            sentNotification.timeSent = new Date()
-            sentNotification.sentSuccesfully = transport.sendNotification(sentNotification)
+            sentNotification.time= new Date()
+            sentNotification.delivered = transport.sendNotification(sentNotification)
 
             meddela.database.runDbAction { ODB odb ->
                 // store the sent notification

@@ -34,6 +34,7 @@ class NotificationList extends VerticalLayout implements Property.ValueChangeLis
         setMargin(true)
         notificationList.setSizeFull()
         notificationList.selectable = true
+        notificationList.setImmediate(true)
         notificationList.addListener(this)
         addComponent(notificationList)
         HorizontalLayout footer = new HorizontalLayout()

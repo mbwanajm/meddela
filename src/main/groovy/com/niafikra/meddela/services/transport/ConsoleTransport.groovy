@@ -23,6 +23,7 @@ class ConsoleTransport implements Transport {
         """
 
         log.info(msg)
+        return true
 
     }
 }

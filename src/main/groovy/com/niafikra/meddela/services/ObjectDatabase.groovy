@@ -95,17 +95,18 @@ class ObjectDatabase {
      * @param the closure to execute the closure should return
      *
      */
-    boolean runDbQuery(Closure dbAction){
+    boolean runDbQuery(Closure dbAction) {
         ODB odb = getODB()
-        try{
-            dbAction(odb)
-            odb.commit()
-            return true
-        } catch (ODBRuntimeException ex){
+        try {
+            return dbAction(odb)
+
+        } catch (ODBRuntimeException ex) {
             log.error("failed to execute a db action", ex)
-            return false
+            return null
+
         } finally {
             odb.close()
+
         }
     }
 
@@ -118,13 +119,13 @@ class ObjectDatabase {
      * @param the closure to execute the closure should return
      *
      */
-    boolean runDbAction(Closure dbAction){
+    boolean runDbAction(Closure dbAction) {
         ODB odb = getODB()
-        try{
+        try {
             dbAction(odb)
             odb.commit()
             return true
-        } catch (ODBRuntimeException ex){
+        } catch (ODBRuntimeException ex) {
             odb.rollback()
             log.error("failed to execute a db action", ex)
             return false
@@ -144,7 +145,6 @@ class ObjectDatabase {
         for (Object object : objects) {
             odb.store(object);
         }
-
     }
 
     /**
@@ -155,194 +155,135 @@ class ObjectDatabase {
      * @return
      */
     def deleteEach(Collection objects) {
-        ODB  odb = getODB()
+        ODB odb = getODB()
         for (Object object : objects) {
             odb.delete(object);
         }
     }
 
     /**
-     * Get object as per provided query
-     *
-     * @param query a query to read objects
-     * @return a collection of Objects
-     */
-    public Collection getObjectsExt(IQuery query) {
-        ODB odb = getODB();
-        try {
-            Collection results = odb.getObjects(query);
-            return results;
-        } catch (ODBRuntimeException ex) {
-            log.error("Couldnt read objects", ex);
-            return null;
-        }
-    }
-
-    /**
-     * Returns the first object which has the given value for the selected property
-     *
-     * @param objectClass the class of the object
-     * @param property the property to check
-     * @param value the value of the property to match
-     * @return
-     */
+    * Returns the first object which has the given value for the selected property
+    *
+    * @param objectClass the class of the object
+    * @param property the property to check
+    * @param value the value of the property to match
+    * @return
+    */
     public Object getObjectByProperty(Class objectClass, String property, Object value) {
-        ODB odb = getODB();
-        try {
-            IQuery query = new CriteriaQuery(objectClass, Where.equal(property, value));
-            query.setPolymorphic(true);
+        IQuery query = new CriteriaQuery(objectClass, Where.equal(property, value));
+        query.setPolymorphic(true);
 
-            return odb.getObjects(query).getFirst();
-
-        } catch (ODBRuntimeException ex) {
-            log.error("Couldnt read object by property ", ex);
-            return null;
-
-        }
+        return getODB().getObjects(query).getFirst();
     }
 
-    /**
-     * Returns a collection of objects which have the given value for the selected property
-     *
-     * @param objectClass the class of the object
-     * @param property the property to check
-     * @param value the value of the property to match
-     * @return
-     */
+   /**
+    * Returns a collection of objects which have the given value for the selected property
+    *
+    * @param objectClass the class of the object
+    * @param property the property to check
+    * @param value the value of the property to match
+    * @return
+    */
     public Collection getObjectsByProperty(Class objectClass, String property, Object value) {
-        ODB odb = getODB();
 
-        try {
-            return odb.getObjects(new CriteriaQuery(objectClass,
-                    Where.equal(property, value)));
+        return getODB().getObjects(new CriteriaQuery(objectClass,
+                Where.equal(property, value)));
 
-        } catch (ODBRuntimeException ex) {
-            log.error("Couldnt read objects by property ", ex);
-            return null;
-        }
     }
 
-    /**
-     * Similar to SQL "in" statement, it returns all objects that have the given property
-     * with the value equal to atleast one of the objects in the collection in
-     *
-     * @param objectsClass
-     * @param property the properyt name
-     * @param inValues the possible values for an object
-     * @return
-     */
+   /**
+    * Similar to SQL "in" statement, it returns all objects that have the given property
+    * with the value equal to atleast one of the objects in the collection in
+    *
+    * @param objectsClass
+    * @param property the property name
+    * @param inValues the possible values for an object
+    * @return
+    */
     public Collection getObjectsWithPropertyIn(Class objectsClass, String property, Collection inValues) {
-        ODB odb = getODB();
-        try {
-            Or orCriteria = Where.or();
-            for (Object object : inValues) {
-                orCriteria.add(Where.equal(property, object));
-            }
-
-            Objects results = odb.getObjects(new CriteriaQuery(objectsClass, orCriteria));
-            return results;
-
-        } catch (ODBRuntimeException ex) {
-            log.error("Couldnt read objects by property using ", ex);
-            return new ArrayList();
-
+        Or orCriteria = Where.or();
+        for (Object object : inValues) {
+            orCriteria.add(Where.equal(property, object));
         }
+
+        return getODB().getObjects(new CriteriaQuery(objectsClass, orCriteria));
+
     }
 
-    /**
-     * Returns a collection of objects that have all the given properties with the
-     * specified values,
-     * the properties and values are specified as a map where
-     * key-> property
-     * value -> the value the property should have
-     * The query is performed using AND, thus the returned collection
-     * has objects which have all the properties
-     *
-     * @param objectsClass
-     * @param propertiesToCheck
-     * @return
-     */
+   /**
+    * Returns a collection of objects that have all the given properties with the
+    * specified values,
+    * the properties and values are specified as a map where
+    * key-> property
+    * value -> the value the property should have
+    * The query is performed using AND, thus the returned collection
+    * has objects which have all the properties
+    *
+    * @param objectsClass
+    * @param propertiesToCheck
+    * @return
+    */
     public Collection getObjectsByPropertiesAND(Class objectsClass, Map<String, Object> propertiesToCheck) {
-        ODB odb = getODB();
 
-        try {
-            And criteria = Where.and();
-            Collection<String> properties = propertiesToCheck.keySet();
-            for (String property : properties) {
-                criteria.add(Where.equal(property, propertiesToCheck.get(property)));
-            }
-
-            return odb.getObjects(new CriteriaQuery(objectsClass, criteria));
-
-        } catch (ODBRuntimeException ex) {
-            log.error("Couldnt read objects by properties ", ex);
-            return null;
+        And criteria = Where.and();
+        Collection<String> properties = propertiesToCheck.keySet();
+        for (String property : properties) {
+            criteria.add(Where.equal(property, propertiesToCheck.get(property)));
         }
+
+        return getODB().getObjects(new CriteriaQuery(objectsClass, criteria));
+
     }
 
-    /**
-     * Returns a collection of objects that have on of the given properties with the
-     * specified values,
-     * the properties and values are specified as a map where
-     * key-> property
-     * value -> the value the property should have
-     * The query is performed using OR, thus the returned collection
-     * has objects which have at least on of the properties with the given value
-     *
-     * @param objectsClass
-     * @param propertiesToCheck
-     * @return
-     */
+   /**
+    * Returns a collection of objects that have on of the given properties with the
+    * specified values,
+    * the properties and values are specified as a map where
+    * key-> property
+    * value -> the value the property should have
+    * The query is performed using OR, thus the returned collection
+    * has objects which have at least on of the properties with the given value
+    *
+    * @param objectsClass
+    * @param propertiesToCheck
+    * @return
+    */
     public Collection getObjectsByPropertiesOR(Class objectsClass, Map<String, Object> propertiesToCheck) {
-        ODB odb = getODB();
 
-        try {
-            And criteria = Where.and();
-            Collection<String> properties = propertiesToCheck.keySet();
-            for (String property : properties) {
-                criteria.add(Where.equal(property, propertiesToCheck.get(property)));
-            }
-
-            return odb.getObjects(new CriteriaQuery(objectsClass, criteria));
-
-        } catch (ODBRuntimeException ex) {
-            log.error("Couldnt read objects by properties ", ex);
-            return null;
+        And criteria = Where.and();
+        Collection<String> properties = propertiesToCheck.keySet();
+        for (String property : properties) {
+            criteria.add(Where.equal(property, propertiesToCheck.get(property)));
         }
+
+        return getODB().getObjects(new CriteriaQuery(objectsClass, criteria));
     }
 
-    /**
-     * Use this method to get objects which contain other objects stored in neodatis
-     * and the comparison object is another object stored in neodatis
-     *
-     * @param objectClass
-     * @param property
-     * @param value
-     * @return
-     */
+   /**
+    * Use this method to get objects which contain other objects stored in neodatis
+    * and the comparison object is another object stored in neodatis
+    *
+    * @param objectClass
+    * @param property
+    * @param value
+    * @return
+    */
     public Collection getObjectsByPropertyExt(Class objectClass, String property, Object value) {
-        ODB odb = getODB();
 
-        try {
-            IQuery query = odb.criteriaQuery(objectClass, Where.equal(property, value));
-            return odb.getObjects(query);
-
-        } catch (ODBRuntimeException ex) {
-            log.error("Couldnt read objects by properties ", ex);
-            return null;
-        }
+        IQuery query = getODB().criteriaQuery(objectClass, Where.equal(property, value));
+        return getODB().getObjects(query);
 
     }
 
-    /**
-     * Get a list of all object for a class strored in a DB
-     * @param clazz
-     * @return
-     */
-    public Collection getAll(Class clazz){
-        ODB odb=getODB()
-        try{
-             return odb.getObjects(clazz)
+   /**
+    * Get a list of all object for a class strored in a DB
+    * @param clazz
+    * @return
+    */
+    public Collection getAll(Class clazz) {
+        ODB odb = getODB()
+        try {
+            return odb.getObjects(clazz)
         }
         finally {
             odb.close()

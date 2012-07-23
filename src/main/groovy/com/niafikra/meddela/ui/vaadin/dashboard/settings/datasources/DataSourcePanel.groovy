@@ -33,6 +33,7 @@ class DataSourcePanel extends HorizontalLayout implements Button.ClickListener, 
     private Button newButton
     private Button deleteButton
     private static final visibleFields = ['name', 'description', 'url', 'username', 'password', 'driver'].toArray()
+    private boolean newMode = true;
 
     DataSourcePanel() {
         setSizeFull()
@@ -101,22 +102,43 @@ class DataSourcePanel extends HorizontalLayout implements Button.ClickListener, 
             case newButton:
                 dataSourceForm.setItemDataSource(new BeanItem<DataSource>(new DataSource()))
                 dataSourceForm.setVisibleItemProperties(visibleFields)
+                newMode = true
+                dataSourceForm.getField('name').setReadOnly(false)
                 break
 
             case deleteButton:
-                if(list.value) runDbAction {odb -> odb.delete(list.value)}
+                if (list.value) runDbAction {odb -> odb.delete(list.value)}
                 break
 
             case saveButton:
-                runDbAction {odb ->
-                    dataSourceForm.commit()
-                    odb.store(dataSourceForm.getItemDataSource().bean)
-                }
+                saveDataSource()
                 break
 
             case testButton:
                 testDataSource()
                 break
+        }
+    }
+
+    def saveDataSource() {
+        dataSourceForm.commit()
+        DataSource dataSource = dataSourceForm.getItemDataSource().getBean()
+        runDbAction {odb ->
+            if (newMode) {
+                odb.store(dataSource)
+                newMode = false
+                dataSourceForm.getField('name').setReadOnly(true)
+
+            } else {
+                DataSource dbDatasource=  meddela.getDatabase().getObjectByProperty(DataSource, 'name', dataSource.name)
+
+                dbDatasource.description = dataSource.description
+                dbDatasource.driver = dataSource.driver
+                dbDatasource.password = dataSource.password
+                dbDatasource.url = dbDatasource.url
+
+                odb.store(dbDatasource)
+            }
         }
     }
 
@@ -158,9 +180,11 @@ class DataSourcePanel extends HorizontalLayout implements Button.ClickListener, 
      */
     @Override
     void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-        if(list.value){
+        if (list.value) {
             dataSourceForm.setItemDataSource(new BeanItem(list.value))
             dataSourceForm.setVisibleItemProperties(visibleFields)
+            newMode = false
+            dataSourceForm.getField('name').setReadOnly(true)
 
         }
     }

@@ -19,6 +19,7 @@ class TriggerCheck {
     def checkWithSQL(Notification notification){
         SqlUtil.runWithSqlConnection(notification, checkSqlCondition)
     }
+
     /**
      * Check to see if the groovy condition in the notification is satisfied
      * the groovy condition is basically groovy code which when evaluated

@@ -22,7 +22,20 @@ class SchedulerService {
     SchedulerService() {
         scheduler = new Scheduler()
         scheduler.start()
+        scheduleEnabledNotifications()
         log.info("scheduler started succesfully")
+    }
+
+    def scheduleEnabledNotifications() {
+        meddela.database.runDbQuery {
+            Collection notifications = meddela.database.getObjectsByProperty(Notification, 'enabled', true)
+
+            if(!notifications) return
+
+            for (notification in notifications){
+                scheduleNotification(notification)
+            }
+        }
     }
 
     /**
@@ -56,7 +69,7 @@ class SchedulerService {
      *
      * @param notification
      */
-    void deScheduleNotification(Notification notification){
+    void deScheduleNotification(Notification notification) {
         scheduler.deschedule(notification.schedulerId)
         notification.schedulerId = null
         updateNotification(notification)
@@ -67,7 +80,7 @@ class SchedulerService {
      * was once scheduled before, therefore it has schedulerId
      * @param notification
      */
-    void reScheduleNotification(Notification notification){
+    void reScheduleNotification(Notification notification) {
         scheduler.reschedule(notification.schedulerId, notification.trigger.schedule)
     }
 
@@ -88,17 +101,16 @@ class SchedulerService {
      * @param notification
      * @return
      */
-    def updateNotification(Notification notification){
-        try{
+    def updateNotification(Notification notification) {
+
+        meddela.database.runDbAction { odb ->
             Notification dbNotification = meddela.database.getObjectByProperty(Notification, 'name', notification.name)
 
-            if(dbNotification){
+            if (dbNotification) {
                 dbNotification.schedulerId = notification.schedulerId
-                meddela.database.runDbAction {odb -> odb.store(dbNotification)}
+                odb.store(dbNotification)
             }
-
-        } catch (ODBRuntimeException ex){
-            log.info("failed to update notification in database")
         }
     }
+
 }

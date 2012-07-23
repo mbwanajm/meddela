@@ -43,7 +43,8 @@ class TransportManager {
                 odb.store(sentNotification)
 
                 // if the recepient is not in the unique recepients list add him
-                def recepients = meddela.database.getObjectsByProperty(UniqueRecepient, 'recepient', sentNotification.receiver)
+                def recepients = meddela.database
+                        .getObjectsByProperty(UniqueRecepient, 'recepient', sentNotification.receiver)
 
                 if(recepients?.isEmpty()){
                     odb.store(new UniqueRecepient(sentNotification.receiver))

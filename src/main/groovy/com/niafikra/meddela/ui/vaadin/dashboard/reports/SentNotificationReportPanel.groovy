@@ -20,6 +20,7 @@ import org.neodatis.odb.ODB
 import org.neodatis.odb.core.query.criteria.Where
 import org.neodatis.odb.core.query.criteria.And
 import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery
+import com.vaadin.ui.Window
 
 /**
  * This class allows the use to view the sent out notifications
@@ -37,7 +38,7 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
     private ComboBox recepientComboBox;
     private Table resultsTable;
     private Label spacer
-    private static final def visibleProperties = ['time', 'notification', 'receiver', 'content', 'delivered'].toArray()
+    private static final def visibleProperties = ['time', 'notification', 'receiver', 'delivered'].toArray()
 
     SentNotificationReportPanel() {
         setSizeFull()
@@ -89,11 +90,15 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
 
     }
 
-    void buildResultsTable(){
+    void buildResultsTable() {
         resultsTable = new Table()
         resultsTable.setContainerDataSource(new BeanItemContainer(SentNotification))
         resultsTable.setVisibleColumns(visibleProperties)
         resultsTable.setSizeFull()
+        resultsTable.setSelectable(true)
+        resultsTable.setImmediate(true)
+        resultsTable.addListener(this)
+
         addComponent(resultsTable)
         setExpandRatio(resultsTable, 1)
 
@@ -115,9 +120,9 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
 
         // load the recepients combobox
         def recepientsInDb = meddela.database.getODB().getObjects(UniqueRecepient)
-        def recepients  = ['all']
-        if (recepientsInDb){
-            for (recepient in recepientsInDb){
+        def recepients = ['all']
+        if (recepientsInDb) {
+            for (recepient in recepientsInDb) {
                 recepients << recepient.recepient
             }
         }
@@ -142,38 +147,67 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
 
     @Override
     void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-        reload()
+        if (valueChangeEvent.property != resultsTable) {
+            reload()
+        } else {
+            showSentNotificationDetails(valueChangeEvent.property.value)
+        }
     }
 
-    void reload(){
-        if(!endDateField.getValue() || !startDateField.getValue()){
+    void showSentNotificationDetails(SentNotification sentNotification) {
+        if(!sentNotification) return
+
+        Window notificationDetailsWindow = new Window("Sent Notification: $sentNotification.notification.name")
+        notificationDetailsWindow.setModal(true)
+        notificationDetailsWindow.setWidth("400px")
+
+        Label detailsLabel = new Label()
+        detailsLabel.setContentMode(Label.CONTENT_XHTML)
+        detailsLabel.setValue("""
+        <b>recepient:</b> ${sentNotification.receiver}<br>
+        <b>time sent:</b> ${sentNotification.time.format('dd-MMM-yyyy hh:mm')}<br>
+        <b>delivered:</b> ${sentNotification.delivered? 'yes' : 'failed'}
+        <br><hr><br>
+        ${sentNotification.content.replace('\n', '<br>')}
+
+        """)
+        notificationDetailsWindow.content.setMargin(true)
+        notificationDetailsWindow.addComponent(detailsLabel)
+        getWindow().addWindow(notificationDetailsWindow)
+
+    }
+
+    void reload() {
+        if (!endDateField.getValue() || !startDateField.getValue()) {
             spacer.setValue('please select a date range')
             return
         }
 
         // Query db using the given filters
         And andCriteria = Where.and()
+        def endDate = endDateField.value + 1
         andCriteria
                 .add(Where.ge('time', startDateField.getValue().clearTime()))
-                .add(Where.le('time', endDateField.getValue().clearTime()))
+                .add(Where.lt('time', endDate.clearTime()))
 
-        if(!notificationComboBox.getValue().equals('all'))
+        if (!notificationComboBox.getValue().equals('all'))
             andCriteria.add(Where.equal('notification.name', notificationComboBox.getValue()))
 
-        if(!recepientComboBox.getValue().equals('all'))
+        if (!recepientComboBox.getValue().equals('all'))
             andCriteria.add(Where.equal('receiver', recepientComboBox.getValue()))
 
-        if(!statusComboBox.getValue().equals('all'))
-            andCriteria.add(Where.equal('delivered', statusComboBox.getValue().equals('delivered') ? true: false))
+        if (!statusComboBox.getValue().equals('all'))
+            andCriteria.add(Where.equal('delivered', statusComboBox.getValue().equals('delivered') ? true : false))
 
-        ODB odb = meddela.database.getODB()
-        Collection results = odb.getObjects(new CriteriaQuery(SentNotification, andCriteria))
-
+        Collection results
+        meddela.database.runDbAction {odb ->
+            results = odb.getObjects(new CriteriaQuery(SentNotification, andCriteria))
+        }
 
         // reload the table
         BeanItemContainer container = resultsTable.containerDataSource
         container.removeAllItems()
-        if(results?.isEmpty()){
+        if (!results?.isEmpty()) {
             container.addAll(results)
             spacer.setValue("${results.size()} notifications found")
         } else {

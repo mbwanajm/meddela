@@ -30,6 +30,7 @@ class meddela {
     static String appPath                           // this path must be set by the object that initializes medella
     static AuthenticationManager authenticationManager
     static TriggerCheck triggerCheck                //used to check if the notification should be triggered
+
     /**
      * Initialize medella
      *

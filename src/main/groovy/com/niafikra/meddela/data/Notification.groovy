@@ -9,13 +9,13 @@ package com.niafikra.meddela.data
  * Time: 17:41
  */
 class Notification {
-    String name
-    String description
-    DataSource dataSource = new DataSource()  // the data source this notification belongs too
-    Trigger trigger = new Trigger()        // the trigger to check on the datasource, if it is satisfied then
-    Template template =new Template()       // compose a message using this template
-    String schedulerId      // the Task id used for this notification trigger by the scheduler
-    boolean enabled         // the status of the notification if its enabled or disabled
+    String name = ''
+    String description = ''
+    DataSource dataSource = new DataSource()    // the data source this notification belongs too.
+    Trigger trigger = new Trigger()             // the trigger to check on the datasource, if it is satisfied then
+    Template template = new Template()          // compose a message using this template.
+    String schedulerId = ''                     // the Task id used for this notification trigger by the scheduler.
+    boolean enabled                             // the status of the notification if its enabled or disabled.
 
     boolean equals(Notification notification) {
         if (this.is(notification)) return true
@@ -32,5 +32,8 @@ class Notification {
         return (name != null ? name.hashCode() : 0)
     }
 
-
+    @Override
+    public String toString() {
+        return name
+    }
 }

@@ -1,12 +1,6 @@
 package com.niafikra.meddela.services.composer
 
 import spock.lang.Specification
-import com.niafikra.meddela.data.Template
-
-import com.niafikra.meddela.data.Notification
-import com.niafikra.meddela.services.transport.Transport
-import com.niafikra.meddela.services.transport.ConsoleTransport
-import com.niafikra.meddela.data.SentNotification
 
 /**
  * The composer specification
@@ -20,12 +14,9 @@ class ComposerTest extends Specification {
 
         given:
         def composer = new Composer()
-        def results = [
-                [name: 'mbwana', id: 1],
-                [hobby: 'programming', id: 1],
-                [name: 'boniface', id: 2],
-                [hobby: 'coding', id: 2]
-        ]
+        def query1 = [[name: 'mbwana', id: 1], [name: 'boniface', id: 2]]
+        def query2 = [[hobby: 'programming', id: 1], [hobby: 'coding', id: 2]]
+        def results = [query1, query2]
 
         when: 'composer is called with an array of maps and given the key to use as the merging value'
         def mergedResult = composer.mergeResults('id', results)

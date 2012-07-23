@@ -22,6 +22,7 @@ class ScheduleField extends ListSelect implements Property.ValueChangeListener{
     def build() {
         setImmediate(true)
         setMultiSelect(true)
+        setNullSelectionAllowed(false)
         setHeight("150px")
         setWidth("100px")
         addListener((Property.ValueChangeListener)this)

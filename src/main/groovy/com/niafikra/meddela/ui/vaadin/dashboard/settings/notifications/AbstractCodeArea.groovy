@@ -2,19 +2,18 @@ package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
 
 import com.vaadin.ui.VerticalLayout
 import com.vaadin.ui.TextArea
-import com.vaadin.ui.Button
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
  * Date: 7/21/12
  * Time: 6:10 PM
  */
-class DefaultCodeArea extends VerticalLayout implements CodeArea{
+abstract class AbstractCodeArea extends VerticalLayout implements NotificationCodeArea{
 
     TextArea codeArea
     String type
 
-    DefaultCodeArea(String type){
+    AbstractCodeArea(String type){
         super()
         this.type=type
         codeArea=new TextArea()
@@ -45,5 +44,8 @@ class DefaultCodeArea extends VerticalLayout implements CodeArea{
     void setCode(Object code) {
         codeArea.setValue(code)
     }
+
+
+
 
 }

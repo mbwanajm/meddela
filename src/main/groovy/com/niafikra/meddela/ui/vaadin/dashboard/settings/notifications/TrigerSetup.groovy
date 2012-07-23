@@ -10,13 +10,13 @@ import com.niafikra.meddela.data.Trigger
  */
 class TrigerSetup extends TabSheet{
 
-    CodeArea sqlSetupView,groovySetupView
+    NotificationCodeArea sqlSetupView,groovySetupView
     Trigger trigger
 
     TrigerSetup(Trigger trigger){
         this.trigger=trigger
-        sqlSetupView=new DefaultCodeArea("SQL")
-        groovySetupView=new DefaultCodeArea("GROOVY")
+        sqlSetupView=new TriggerCodeArea("SQL")
+        groovySetupView=new TriggerCodeArea("GROOVY")
         build()
         load()
     }

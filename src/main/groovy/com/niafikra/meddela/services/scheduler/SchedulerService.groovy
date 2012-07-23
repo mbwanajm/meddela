@@ -94,7 +94,7 @@ class SchedulerService {
 
             if(dbNotification){
                 dbNotification.schedulerId = notification.schedulerId
-                meddela.database.getODB().store(dbNotification)
+                meddela.database.runDbAction {odb -> odb.store(dbNotification)}
             }
 
         } catch (ODBRuntimeException ex){

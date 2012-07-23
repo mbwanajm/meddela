@@ -87,6 +87,29 @@ class ObjectDatabase {
     }
 
     /**
+     * This method performs a database queries for data retrieval safely making sure
+     * all the clean up is done properly
+     *
+     * note that the closure must accept one parameter which is the ODB it can use
+     * and there is no roll back, incase you need to rollback on failure use runDbAction
+     * @param the closure to execute the closure should return
+     *
+     */
+    boolean runDbQuery(Closure dbAction){
+        ODB odb = getODB()
+        try{
+            dbAction(odb)
+            odb.commit()
+            return true
+        } catch (ODBRuntimeException ex){
+            log.error("failed to execute a db action", ex)
+            return false
+        } finally {
+            odb.close()
+        }
+    }
+
+    /**
      * This method performs a database action safely making sure
      * all the clean up is done properly
      *

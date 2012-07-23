@@ -69,6 +69,6 @@ class NotificationBasicUI extends FormLayout implements Property.ValueChangeList
     void valueChange(Property.ValueChangeEvent event) {
         DataSource dataSource=event.property.getValue() as DataSource
         if(dataSource)
-            datasourceSelect.setValue(dataSource)
+            notification.setDataSource(dataSource)
     }
 }

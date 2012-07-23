@@ -14,12 +14,14 @@ import com.vaadin.terminal.ThemeResource
 class SettingsView extends TabSheet{
     private ThemesPanel themes = new ThemesPanel()
     private DataSourcePanel dataSourcePanel= new DataSourcePanel()
+    private NotificationManagementUI notificationManagementUI = new NotificationManagementUI();
 
     SettingsView() {
         setSizeFull()
 
         addTab(dataSourcePanel, 'data sources')
-        addTab(new NotificationManagementUI(),"Notification Setup",new ThemeResource("notset.png"))
+        addTab(notificationManagementUI,"Notification Setup",new ThemeResource("notset.png"))
+        addTab(themes, 'themes')
     }
 
 

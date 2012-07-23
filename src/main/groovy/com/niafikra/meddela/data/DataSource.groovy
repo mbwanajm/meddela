@@ -33,6 +33,6 @@ class DataSource {
 
     @Override
     public String toString() {
-        return "$name: $url"
+        return name
     }
 }

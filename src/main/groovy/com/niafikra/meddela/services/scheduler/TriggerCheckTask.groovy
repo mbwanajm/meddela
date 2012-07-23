@@ -26,7 +26,9 @@ class TriggerCheckTask implements Runnable {
     @Override
     void run() {
         // Get the notification info from the object database
-        Collection notifications = meddela.database.getObjectsByProperty(Notification, "schedulerId", id)
+        Collection notifications = meddela.database.runDbQuery { odb ->
+            meddela.database.getObjectsByProperty(Notification, "schedulerId", id)
+        }
 
         // if for some reason the read notification is null log and leave immediately
         if (!notifications || notifications?.isEmpty()) {

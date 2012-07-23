@@ -311,5 +311,20 @@ class ObjectDatabase {
 
     }
 
+    /**
+     * Get a list of all object for a class strored in a DB
+     * @param clazz
+     * @return
+     */
+    public Collection getAll(Class clazz){
+        ODB odb=getODB()
+        try{
+             return odb.getObjects(clazz)
+        }
+        finally {
+            odb.close()
+        }
+    }
+
 
 }

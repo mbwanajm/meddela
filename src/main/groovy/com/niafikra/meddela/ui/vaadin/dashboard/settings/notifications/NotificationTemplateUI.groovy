@@ -106,6 +106,7 @@ class NotificationTemplateUI extends VerticalLayout implements Button.ClickListe
 
     Collection getColumns(Object results) {
         def columns = []
+
         for (Object result in results) {
             // columns << result[0].keySet()
             for (Object column in result[0].keySet()) {

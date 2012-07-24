@@ -24,6 +24,7 @@ class ObjectDatabase {
     ODBServer odbServer;
     Logger log = Logger.getLogger(ObjectDatabase)
     ThreadLocal odbStore;
+    ThreadLocal dbActionCounts; // can be used to check if its ok to close/commit odb
 
     /**
      * The constructor when this creates the object database server
@@ -50,6 +51,7 @@ class ObjectDatabase {
         log.info("Succesfully started object database")
 
         odbStore = new ThreadLocal()
+        dbActionCounts = new ThreadLocal()
     }
 
     /**
@@ -97,6 +99,9 @@ class ObjectDatabase {
      */
     boolean runDbQuery(Closure dbAction) {
         ODB odb = getODB()
+        def actionCount = dbActionCounts.get()
+        if (!actionCount) actionCount = 0
+        actionCount ++
         try {
             return dbAction(odb)
 
@@ -105,7 +110,8 @@ class ObjectDatabase {
             return null
 
         } finally {
-            odb.close()
+            actionCount --
+            if(actionCount == 0 && !odb?.isClosed())  odb.close()
 
         }
     }
@@ -121,16 +127,20 @@ class ObjectDatabase {
      */
     boolean runDbAction(Closure dbAction) {
         ODB odb = getODB()
+        def actionCount = dbActionCounts.get()
+        if (!actionCount) actionCount = 0
+        actionCount ++
         try {
             dbAction(odb)
-            odb.commit()
+            if(actionCount == 1) odb.commit()
             return true
         } catch (ODBRuntimeException ex) {
             odb.rollback()
             log.error("failed to execute a db action", ex)
             return false
         } finally {
-            odb.close()
+            actionCount --
+            if(actionCount == 0 && !odb?.isClosed()) odb.close()
         }
     }
 

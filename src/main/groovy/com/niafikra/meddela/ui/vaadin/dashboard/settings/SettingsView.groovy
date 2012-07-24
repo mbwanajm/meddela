@@ -20,7 +20,7 @@ class SettingsView extends TabSheet{
         setSizeFull()
 
         addTab(dataSourcePanel, 'data sources')
-        addTab(notificationManagementUI,"Notification Setup",new ThemeResource("notset.png"))
+        addTab(notificationManagementUI,"notifications",new ThemeResource("notset.png"))
         addTab(themes, 'themes')
     }
 

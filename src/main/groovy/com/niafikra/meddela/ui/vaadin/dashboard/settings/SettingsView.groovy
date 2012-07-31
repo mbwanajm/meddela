@@ -25,8 +25,6 @@ class SettingsView extends TabSheet{
     }
 
 
-
-
     def build() {
         setSizeFull()
     }

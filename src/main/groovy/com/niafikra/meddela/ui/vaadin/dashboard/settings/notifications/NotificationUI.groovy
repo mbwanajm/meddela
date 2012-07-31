@@ -7,6 +7,7 @@ import com.vaadin.ui.HorizontalLayout
 import com.vaadin.ui.TabSheet
 import com.vaadin.ui.VerticalLayout
 import org.neodatis.odb.ODB
+import com.vaadin.ui.Window
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
@@ -69,20 +70,25 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
     @Override
     void buttonClick(Button.ClickEvent event) {
         if (event.getButton().equals(save)) {
-            saveNotification()
+            if(saveNotification())
+                getWindow().showNotification("notificaton save successfully",Window.Notification.TYPE_HUMANIZED_MESSAGE)
+            else getWindow().showNotification("notification failed to be saved",Window.Notification.TYPE_ERROR_MESSAGE)
         } else if (event.getButton().equals(delete)) {
-            deleteNotification()
+            if(deleteNotification())
+                getWindow().showNotification("notificaton deleted successfully",Window.Notification.TYPE_HUMANIZED_MESSAGE)
+            else getWindow().showNotification("notification failed to be deleted",Window.Notification.TYPE_ERROR_MESSAGE)
         }
     }
 
-    void deleteNotification() {
-        meddela.notificationManager.deleteNotification(notification)
+    def deleteNotification() {
+       return meddela.notificationManager.deleteNotification(notification)
     }
 
-    void saveNotification() {
+    def saveNotification() {
         commit()
         if (isNew)
-            meddela.notificationManager.addNotification(notification)
-        else meddela.notificationManager.updateNotification(notification)
+           return meddela.notificationManager.addNotification(notification)
+        else
+            return meddela.notificationManager.updateNotification(notification)
     }
 }

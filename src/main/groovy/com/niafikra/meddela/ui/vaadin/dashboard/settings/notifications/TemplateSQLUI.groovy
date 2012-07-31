@@ -46,7 +46,7 @@ class TemplateSQLUI extends HorizontalLayout implements NotificationCodeArea, Bu
         leftLay.setSpacing(true)
         sqlSelect.setWidth("100px")
         sqlSelect.setImmediate(true)
-        sqlSelect.setRows(7)
+        sqlSelect.setRows(6)
         leftLay.addComponent(sqlSelect)
         HorizontalLayout footer = new HorizontalLayout()
         footer.addComponent(add)

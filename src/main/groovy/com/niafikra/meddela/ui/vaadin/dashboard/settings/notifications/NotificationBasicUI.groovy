@@ -21,8 +21,9 @@ class NotificationBasicUI extends FormLayout implements Property.ValueChangeList
     CheckBox enableSelect
     TextArea descriptionArea
     Notification notification
-
-    NotificationBasicUI(Notification notification){
+    boolean isNew
+    NotificationBasicUI(Notification notification,isNew){
+        this.isNew=isNew
         this.notification=notification
         nameField=new TextField("Name")
         datasourceSelect=new ComboBox("Data Source")
@@ -56,6 +57,8 @@ class NotificationBasicUI extends FormLayout implements Property.ValueChangeList
         datasourceSelect.setValue(notification.getDataSource())
         enableSelect.setValue(notification.isEnabled())
         descriptionArea.setValue(notification.getDescription())
+        nameField.setReadOnly(!isNew)     //read only set after setting the value to be shown
+                                            //prevent exception
     }
 
     void commit(){

@@ -71,11 +71,11 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
     void buttonClick(Button.ClickEvent event) {
         if (event.getButton().equals(save)) {
             if(saveNotification())
-                getWindow().showNotification("notificaton save successfully",Window.Notification.TYPE_HUMANIZED_MESSAGE)
+                getWindow().showNotification("notification saved successfully",Window.Notification.TYPE_HUMANIZED_MESSAGE)
             else getWindow().showNotification("notification failed to be saved",Window.Notification.TYPE_ERROR_MESSAGE)
         } else if (event.getButton().equals(delete)) {
             if(deleteNotification())
-                getWindow().showNotification("notificaton deleted successfully",Window.Notification.TYPE_HUMANIZED_MESSAGE)
+                getWindow().showNotification("notification deleted successfully",Window.Notification.TYPE_HUMANIZED_MESSAGE)
             else getWindow().showNotification("notification failed to be deleted",Window.Notification.TYPE_ERROR_MESSAGE)
         }
     }

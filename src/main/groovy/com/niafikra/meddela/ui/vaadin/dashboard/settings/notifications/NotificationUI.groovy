@@ -25,7 +25,7 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
     NotificationUI(Notification notification, boolean isNew) {
         this.isNew = isNew
         this.notification = notification
-        basicUI = new NotificationBasicUI(notification)
+        basicUI = new NotificationBasicUI(notification,isNew)
         trigerUI = new NotificationTrigerUI(notification)
         templateUI = new NotificationTemplateUI(notification, isNew)
 

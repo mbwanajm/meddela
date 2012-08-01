@@ -2,13 +2,13 @@ package com.niafikra.meddela.services
 
 import com.niafikra.meddela.data.SentNotification
 import com.niafikra.meddela.services.transport.Transport
-import com.niafikra.meddela.services.transport.ConsoleTransport
+
 import com.niafikra.meddela.meddela
 import org.neodatis.odb.ODB
 import com.niafikra.meddela.data.Notification
 import com.niafikra.meddela.data.UniqueRecepient
 import groovy.io.FileType
-import com.niafikra.meddela.services.transport.TransportLoader
+import com.niafikra.meddela.services.transport.TransporClasstLoader
 
 /**
  * This class coordinates the delivering of notifications and saves
@@ -20,7 +20,7 @@ import com.niafikra.meddela.services.transport.TransportLoader
  */
 class TransportManager {
     HashMap loadedTransport = new HashMap()
-    TransportLoader transClassLoader
+    TransporClasstLoader transClassLoader
     String transportsPath
 
     TransportManager() {
@@ -38,7 +38,7 @@ class TransportManager {
         else transDir.mkdir()
 
         urls << transDir.toURL()      //a little hack to initia a URL array
-        transClassLoader=new TransportLoader(urls.toArray(new URL[1]),this.class.classLoader)
+        transClassLoader=new TransporClasstLoader(urls.toArray(new URL[1]),this.class.classLoader)
 
     }
 

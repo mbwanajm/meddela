@@ -46,27 +46,29 @@ class ScheduleForm extends VerticalLayout implements Property.ValueChangeListene
         scheduleStringField.setWidth("100%")
 
         month.addListener(this)
-        month.addItem("*")
+        month.addItem("every")
         new DateFormatSymbols().shortMonths.each {month.addItem(it)}
         fieldsLayout.addComponent(month)
 
         day.addListener(this)
-        day.addItem("*")
+        day.addItem("every")
+        day.addItem("last")
         (1..31).each {day.addItem(it)}
         fieldsLayout.addComponent(day)
 
+
         dayOfWeek.addListener(this)
-        dayOfWeek.addItem("*")
+        dayOfWeek.addItem("every")
         new DateFormatSymbols().shortWeekdays.each {dayOfWeek.addItem(it)}
         fieldsLayout.addComponent(dayOfWeek)
 
         hour.addListener(this)
-        hour.addItem("*")
+        hour.addItem("every")
         (0..23).each {hour.addItem(it) }
         fieldsLayout.addComponent(hour)
 
         minute.addListener(this)
-        minute.addItem("*")
+        minute.addItem("every")
         (0..59).each {minute.addItem(it)}
         fieldsLayout.addComponent(minute)
         fieldsLayout.setSpacing(true)

@@ -35,9 +35,22 @@ class ScheduleField extends ListSelect implements Property.ValueChangeListener{
         currentValues.each {
             counter++
             if(counter!=1) value.append(",")
-            value.append(it)
+            value.append(getCRONValue(it))
         }
 
         values.put(getCaption(),value)
+    }
+
+    /**
+     * CRON have defined a set of symbols
+     * The symbols have been transformed in the Human readable text for readal=bility
+     * This method does the conversion back to CRON text
+     * @param value
+     * @return
+     */
+    Object getCRONValue(Object value) {
+        if(value.toString().equalsIgnoreCase("last")) return "L"
+        if(value.toString().equalsIgnoreCase("every")) return "*"
+        else return value
     }
 }

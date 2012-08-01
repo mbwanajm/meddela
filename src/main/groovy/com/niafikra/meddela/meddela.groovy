@@ -6,11 +6,11 @@ import org.apache.log4j.PropertyConfigurator
 import com.niafikra.meddela.services.ObjectDatabase
 import com.niafikra.meddela.services.scheduler.SchedulerService
 
-import com.niafikra.meddela.services.transport.ConsoleTransport
 import com.niafikra.meddela.services.TransportManager
 import com.niafikra.meddela.services.composer.Composer
 import com.niafikra.meddela.services.NotificationManager
 import com.niafikra.meddela.services.scheduler.TriggerCheck
+import com.niafikra.meddela.ui.vaadin.Controller
 
 /**
  * This class provides a facade to  the services that
@@ -59,7 +59,7 @@ class meddela {
 
     static def initLog() {
 
-        String pathToSettings = new StringBuilder(Controller.getAppPathExt())
+        String pathToSettings = new StringBuilder(appPath)
                 .append(File.separator).append("config")
                 .append(File.separator).append("log4j.properties")
                 .toString();

@@ -7,11 +7,10 @@ package com.niafikra.meddela.services.transport
  * Date: 8/1/12
  * Time: 6:34 AM
  */
-class TransportLoader extends URLClassLoader{
+class TransporClasstLoader extends URLClassLoader{
 
-    TransportLoader(URL[] urls,ClassLoader classLoader) {
+    TransporClasstLoader(URL[] urls,ClassLoader classLoader) {
         super(urls,classLoader)
-
     }
 
     def addTransportURL(URL url){

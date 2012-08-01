@@ -1,10 +1,11 @@
-package com.niafikra.meddela
+package com.niafikra.meddela.ui.vaadin
 
 import com.niafikra.meddela.meddela as Meddela
 
 import com.niafikra.meddela.data.security.Authentication
 import javax.servlet.ServletContextListener
 import org.apache.log4j.Logger
+import com.niafikra.meddela.meddela
 
 /**
  *
@@ -27,7 +28,7 @@ class Controller implements ServletContextListener {
 
         setPath(servletContextEvent.servletContext.getRealPath(""))
         meddela = new meddela()
-        meddela.init(appPath)
+        meddela.init(appPathExt)
         addDefaultUsers()
     }
 

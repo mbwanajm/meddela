@@ -71,7 +71,7 @@ class DataSourcePanel extends HorizontalLayout implements Button.ClickListener, 
         addComponent(formPanel)
 
         ButtonGroup buttonGroup = new ButtonGroup()
-        newButton = new Button("create new")
+        newButton = new Button("create")
         newButton.setWidth("100px")
         newButton.addListener((Button.ClickListener) this)
         buttonGroup.addButton(newButton)

@@ -11,6 +11,7 @@ package com.niafikra.meddela.data
 class Notification {
     String name = ''
     String description = ''
+    String transport
     DataSource dataSource = new DataSource()    // the data source this notification belongs too.
     Trigger trigger = new Trigger()             // the trigger to check on the datasource, if it is satisfied then
     Template template = new Template()          // compose a message using this template.

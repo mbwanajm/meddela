@@ -9,6 +9,7 @@ import com.niafikra.meddela.meddela
 import org.vaadin.aceeditor.AceEditor
 import org.vaadin.aceeditor.gwt.ace.AceMode
 import org.vaadin.aceeditor.gwt.ace.AceTheme
+import org.vaadin.peter.buttongroup.ButtonGroup
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
@@ -48,9 +49,9 @@ class TemplateSQLUI extends HorizontalLayout implements NotificationCodeArea, Bu
         sqlSelect.setImmediate(true)
         sqlSelect.setRows(6)
         leftLay.addComponent(sqlSelect)
-        HorizontalLayout footer = new HorizontalLayout()
-        footer.addComponent(add)
-        footer.addComponent(delete)
+        ButtonGroup footer = new ButtonGroup()
+        footer.addButton(add)
+        footer.addButton(delete)
         leftLay.addComponent(footer)
         sqlSelect.setItemCaptionMode(ListSelect.ITEM_CAPTION_MODE_EXPLICIT)
         sqlSelect.setNullSelectionAllowed(false)

@@ -5,6 +5,7 @@ import com.niafikra.meddela.ui.vaadin.dashboard.settings.themes.ThemesPanel
 import com.niafikra.meddela.ui.vaadin.dashboard.settings.datasources.DataSourcePanel
 import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.NotificationManagementUI
 import com.vaadin.terminal.ThemeResource
+import com.niafikra.meddela.ui.vaadin.dashboard.settings.transport.TransportUploadPanel
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
@@ -15,12 +16,14 @@ class SettingsView extends TabSheet{
     private ThemesPanel themes = new ThemesPanel()
     private DataSourcePanel dataSourcePanel= new DataSourcePanel()
     private NotificationManagementUI notificationManagementUI = new NotificationManagementUI();
+    private TransportUploadPanel transportUploadPanel=new TransportUploadPanel()
 
     SettingsView() {
         setSizeFull()
 
+        addTab(notificationManagementUI,"notifications")
         addTab(dataSourcePanel, 'data sources')
-        addTab(notificationManagementUI,"notifications",new ThemeResource("notset.png"))
+        addTab(transportUploadPanel,"transport")
         addTab(themes, 'themes')
     }
 

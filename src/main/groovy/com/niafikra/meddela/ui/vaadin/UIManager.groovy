@@ -1,10 +1,9 @@
 package com.niafikra.meddela.ui.vaadin
 
-import com.niafikra.meddela.Controller
 import com.niafikra.meddela.ui.vaadin.dashboard.Dashboard
 import com.niafikra.meddela.ui.vaadin.login.LoginView
 import com.vaadin.Application
-import com.vaadin.ui.LoginForm
+
 import com.vaadin.ui.Window
 
 //import com.vaadin.addon.toolbar.CssToolbar

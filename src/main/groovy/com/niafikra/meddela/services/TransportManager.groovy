@@ -37,6 +37,7 @@ class TransportManager {
         }
         else transDir.mkdir()
 
+        urls << transDir.toURL()      //a little hack to initia a URL array
         transClassLoader=new TransportLoader(urls.toArray(new URL[1]),this.class.classLoader)
 
     }

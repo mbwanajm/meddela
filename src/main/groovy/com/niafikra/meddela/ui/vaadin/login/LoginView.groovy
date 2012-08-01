@@ -39,7 +39,7 @@ class LoginView extends VerticalLayout implements Button.ClickListener {
     def getLoginForm() {
         VerticalLayout loginForm = new VerticalLayout()
         loginForm.setWidth("400px")
-        loginForm.setHeight("120px")
+        loginForm.setHeight("140px")
         loginForm.setStyleName("loginForm")
         loginForm.setSpacing(true)
         loginForm.setMargin(true)
@@ -64,11 +64,11 @@ class LoginView extends VerticalLayout implements Button.ClickListener {
 
         loginButton = new Button("login")
         loginButton.setWidth("130px")
-        loginButton.setHeight("35px")
-        loginButton.setStyleName("loginButton")
+      //  loginButton.setHeight("35px")
+      //  loginButton.setStyleName("loginButton")
         loginButton.addListener(this)
         loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER)
-        loginButton.addStyleName("primary")
+      //  loginButton.addStyleName("primary")
 
         loginForm.addComponent(userBoxLay)
         loginForm.addComponent(passBoxLay)

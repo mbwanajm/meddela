@@ -5,6 +5,7 @@ import com.vaadin.ui.VerticalLayout
 import com.vaadin.data.Property
 import com.niafikra.meddela.meddela
 import com.vaadin.data.util.IndexedContainer
+import com.niafikra.meddela.ui.vaadin.Controller
 
 /**
  * This class allows the user to change the themes
@@ -36,7 +37,7 @@ class ThemesPanel extends VerticalLayout implements Property.ValueChangeListener
      */
     void loadThemes() {
         def sep = File.separator
-        def path = meddela.appPath + sep + 'VAADIN' + sep + 'themes'
+        def path = Controller.appPath + sep + 'VAADIN' + sep + 'themes'
         File file = new File(path)
 
         def themes = []

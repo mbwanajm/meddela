@@ -8,6 +8,7 @@ import com.vaadin.ui.HorizontalLayout
 import com.vaadin.ui.Table
 import com.vaadin.ui.VerticalLayout
 import com.vaadin.data.Property
+import org.vaadin.peter.buttongroup.ButtonGroup
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
@@ -37,14 +38,13 @@ class NotificationList extends VerticalLayout implements Property.ValueChangeLis
         notificationList.setImmediate(true)
         notificationList.addListener(this)
         addComponent(notificationList)
-        HorizontalLayout footer = new HorizontalLayout()
-        footer.setSpacing(true)
+        ButtonGroup footer = new ButtonGroup()
         addButton.setWidth("150px")
         reloadButton.setWidth("150px")
         addButton.addListener(this as Button.ClickListener)
         reloadButton.addListener(this as Button.ClickListener)
-        footer.addComponent(addButton)
-        footer.addComponent(reloadButton)
+        footer.addButton(addButton)
+        footer.addButton(reloadButton)
         addComponent(footer)
         setExpandRatio(notificationList, 1)
     }

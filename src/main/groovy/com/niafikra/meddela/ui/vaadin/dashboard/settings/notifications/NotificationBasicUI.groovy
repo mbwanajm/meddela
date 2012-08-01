@@ -18,6 +18,7 @@ import com.vaadin.data.Property
 class NotificationBasicUI extends FormLayout implements Property.ValueChangeListener{
     TextField nameField
     ComboBox datasourceSelect
+    ComboBox transportSelect
     CheckBox enableSelect
     TextArea descriptionArea
     Notification notification
@@ -27,6 +28,7 @@ class NotificationBasicUI extends FormLayout implements Property.ValueChangeList
         this.notification=notification
         nameField=new TextField("Name")
         datasourceSelect=new ComboBox("Data Source")
+        transportSelect=new ComboBox("Transport")
         enableSelect=new CheckBox("Enable")
         descriptionArea=new TextArea("Description")
         build()
@@ -43,9 +45,11 @@ class NotificationBasicUI extends FormLayout implements Property.ValueChangeList
 
         nameField.setWidth("70%")
         datasourceSelect.setWidth("70%")
+        transportSelect.setWidth("70%")
         descriptionArea.setRows(15)
         addComponent(nameField)
         addComponent(datasourceSelect)
+        addComponent(transportSelect)
         addComponent(enableSelect)
         addComponent(descriptionArea)
     }
@@ -53,8 +57,14 @@ class NotificationBasicUI extends FormLayout implements Property.ValueChangeList
     def load(){
         Collection datasources=meddela.database.getAll(DataSource.class)
         datasourceSelect.setContainerDataSource(new BeanItemContainer(DataSource.class,datasources))
+
+        meddela.transportManager.listAvailableTransport().each {
+            transportSelect.addItem(it)
+        }
+
         nameField.setValue(notification.getName())
         datasourceSelect.setValue(notification.getDataSource())
+        transportSelect.setValue(notification.transport)
         enableSelect.setValue(notification.isEnabled())
         descriptionArea.setValue(notification.getDescription())
         nameField.setReadOnly(!isNew)     //read only set after setting the value to be shown
@@ -65,6 +75,7 @@ class NotificationBasicUI extends FormLayout implements Property.ValueChangeList
        notification.setDescription(descriptionArea.getValue())
        notification.setDataSource(datasourceSelect.getValue())
        notification.setName(nameField.getValue())
+       notification.setTransport(transportSelect.getValue())
        notification.setEnabled(enableSelect.getValue())
     }
 

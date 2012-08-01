@@ -22,7 +22,7 @@ class NotificationTrigerUI extends VerticalLayout implements Button.ClickListene
         this.notification = notification
         scheduleForm = new ScheduleForm(notification.trigger)
         trigerSetup = new TrigerSetup(notification.trigger)
-        testButton = new Button("TEST")
+        testButton = new Button("Test")
         build()
     }
 

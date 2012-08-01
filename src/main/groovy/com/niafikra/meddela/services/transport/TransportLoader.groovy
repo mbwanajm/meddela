@@ -11,7 +11,6 @@ class TransportLoader extends URLClassLoader{
 
     TransportLoader(URL[] urls,ClassLoader classLoader) {
         super(urls,classLoader)
-
     }
 
     def addTransportURL(URL url){

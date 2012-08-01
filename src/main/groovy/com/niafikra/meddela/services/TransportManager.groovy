@@ -7,6 +7,8 @@ import com.niafikra.meddela.meddela
 import org.neodatis.odb.ODB
 import com.niafikra.meddela.data.Notification
 import com.niafikra.meddela.data.UniqueRecepient
+import groovy.io.FileType
+import com.niafikra.meddela.services.transport.TransportLoader
 
 /**
  * This class coordinates the delivering of notifications and saves
@@ -17,10 +19,26 @@ import com.niafikra.meddela.data.UniqueRecepient
  * Time: 15:52
  */
 class TransportManager {
-    Transport transport;
+    HashMap loadedTransport = new HashMap()
+    TransportLoader transClassLoader
+    String transportsPath
 
     TransportManager() {
-        transport = new ConsoleTransport()
+        transportsPath=meddela.appPath+File.separator+"transport"
+        initTransportLoader()
+    }
+
+    private def initTransportLoader() {
+        ArrayList<URL> urls = []
+
+        File transDir = new File(transportsPath)
+        if (transDir.exists()) {
+            transDir.eachFile(FileType.FILES,{ urls << it.toURL() })
+        }
+        else transDir.mkdir()
+
+        transClassLoader=new TransportLoader(urls.toArray(new URL[1]),this.class.classLoader)
+
     }
 
     /**
@@ -32,10 +50,11 @@ class TransportManager {
      * @param notification
      */
     def sendNotification(Notification notification) {
+        Transport transport = getTransport("com.niafikra.meddela.services.transport.ConsoleTransport")
         def notificationsToSend = meddela.composer.compose(notification)
 
         for (SentNotification sentNotification in notificationsToSend) {
-            sentNotification.time= new Date()
+            sentNotification.time = new Date()
             sentNotification.delivered = transport.sendNotification(sentNotification)
 
             meddela.database.runDbAction { ODB odb ->
@@ -46,11 +65,52 @@ class TransportManager {
                 def recepients = meddela.database
                         .getObjectsByProperty(UniqueRecepient, 'recepient', sentNotification.receiver)
 
-                if(recepients?.isEmpty()){
+                if (recepients?.isEmpty()) {
                     odb.store(new UniqueRecepient(sentNotification.receiver))
                 }
             }
 
         }
+    }
+
+
+    def getTransport(String name) {
+        Transport transport = loadedTransport.get(name)
+        if (!transport) {
+            transport=loadTransport(name)
+        }
+        return transport
+    }
+
+    Transport loadTransport(String name) {
+        Class clazz = transClassLoader.loadClass(name);
+        Transport transport = clazz.newInstance();
+        loadedTransport.put(name, transport)
+        return transport
+    }
+
+    def testTransport(String name){
+        try{
+            return transClassLoader.loadClass(name).newInstance()      //groovy truth
+        }catch(Exception e){
+            e.printStackTrace()
+            return false
+        }
+    }
+
+    def addTransport(File transportJar) {
+        transClassLoader.addTransportURL(transportJar.toURL())
+      //  Transport transport=transClassLoader.loadClass()
+    }
+    
+    Set listAvailableTransport(){
+        def trans=[] as Set
+        File transDir = new File(transportsPath)
+        if (transDir.exists()) {
+            transDir.eachFile(FileType.FILES,{
+                trans<< it.name.replace(".jar","")
+            })
+        }
+        return trans
     }
 }

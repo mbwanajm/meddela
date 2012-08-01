@@ -8,6 +8,8 @@ import com.vaadin.ui.TabSheet
 import com.vaadin.ui.VerticalLayout
 import org.neodatis.odb.ODB
 import com.vaadin.ui.Window
+import org.neodatis.odb.impl.core.query.values.GroupByValuesQueryResultAction
+import org.vaadin.peter.buttongroup.ButtonGroup
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
@@ -45,16 +47,16 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
         uiHolder.addTab(templateUI, "Template")
         uiHolder.setSizeFull()
 
-        HorizontalLayout footer = new HorizontalLayout()
+        ButtonGroup footer = new ButtonGroup()
         save.setWidth("150px")
         delete.setWidth("150px")
         delete.setVisible(!isNew)
         save.addListener(this)
         delete.addListener(this)
 
-        footer.addComponent(save)
-        footer.addComponent(delete)
-        footer.setSpacing(true)
+        footer.addButton(save)
+        footer.addButton(delete)
+      //  footer.setSpacing(true)
 
         addComponent(uiHolder)
         addComponent(footer)

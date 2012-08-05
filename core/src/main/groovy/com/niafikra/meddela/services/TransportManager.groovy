@@ -53,7 +53,7 @@ class TransportManager {
      * @param notification
      */
     def sendNotification(Notification notification) {
-        Transport transport = getTransport("com.niafikra.meddela.services.transport.ConsoleTransport")
+        Transport transport = getTransport(notification.transport.name)
         def notificationsToSend = meddela.composer.compose(notification)
 
         for (SentNotification sentNotification in notificationsToSend) {

@@ -13,5 +13,6 @@ class MiscPanel extends Panel{
         setSizeFull()
 
         addComponent(new ThemesPanel())
+        addComponent(new XchangePanel())
     }
 }

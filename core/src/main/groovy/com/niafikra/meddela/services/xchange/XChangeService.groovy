@@ -57,7 +57,7 @@ class XChangeService {
             def dataSources = []
 
             for (notification in notifications) {
-                if (!dataSources.contains(notification.dataSource)) dataSources << dataSources
+                if (!dataSources.contains(notification.dataSource)) dataSources << notification.dataSource
             }
 
             meddela.database.runDbAction {ODB odb ->
@@ -84,7 +84,7 @@ class XChangeService {
                 // if a notification already exists then update it instead.
                 for (notification in notifications){
                     def results = meddela.database.getObjectsByProperty(Notification, 'name', notification.name)
-                    if(!results?.isEmpty()){
+                    if(results?.isEmpty()){
                         meddela.notificationManager.addNotification(notification)
                     } else {
                         meddela.notificationManager.updateNotification(notification)

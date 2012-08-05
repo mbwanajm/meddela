@@ -10,6 +10,7 @@ import com.niafikra.meddela.services.TransportManager
 import com.niafikra.meddela.services.composer.Composer
 import com.niafikra.meddela.services.NotificationManager
 import com.niafikra.meddela.services.scheduler.TriggerCheck
+import com.niafikra.meddela.services.xchange.XChangeService
 
 /**
  * This class provides a facade to  the services that
@@ -29,7 +30,7 @@ class meddela {
     static String appPath                           // this path must be set by the object that initializes medella
     static AuthenticationManager authenticationManager
     static TriggerCheck triggerCheck                //used to check if the notification should be triggered
-
+    static XChangeService xChangeService            // used to export and import notifications
     /**
      * Initialize medella
      *
@@ -48,6 +49,8 @@ class meddela {
             notificationManager = new NotificationManager()
             authenticationManager=new AuthenticationManager()
             triggerCheck=new TriggerCheck()
+            xChangeService = new XChangeService();
+
             log.info("meddella successsfully started ")
             return true
         } catch (Exception ex) {

@@ -15,7 +15,7 @@ import com.vaadin.ui.Panel
  * Date: 21/07/12
  * Time: 12:26
  */
-class ThemesPanel extends Panel implements Property.ValueChangeListener {
+class ThemesPanel extends Panel {
     ComboBox themeComboBox
 
     ThemesPanel() {
@@ -24,7 +24,7 @@ class ThemesPanel extends Panel implements Property.ValueChangeListener {
 
     void buildUI() {
         themeComboBox = new ComboBox('theme')
-        themeComboBox.addListener(this)
+        themeComboBox.addListener({getApplication().setTheme(themeComboBox.value)} as Property.ValueChangeListener)
         themeComboBox.setImmediate(true)
         addComponent(themeComboBox)
 
@@ -46,12 +46,5 @@ class ThemesPanel extends Panel implements Property.ValueChangeListener {
 
         themeComboBox.setContainerDataSource(new IndexedContainer(themes))
         //   themeComboBox.setValue(Controller.getApplication().getTheme())
-    }
-
-    @Override
-    void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-        if (valueChangeEvent.property.value) {
-            getApplication().setTheme(themeComboBox.value)
-        }
     }
 }

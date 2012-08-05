@@ -15,6 +15,9 @@ import com.vaadin.ui.themes.Reindeer
 import com.vaadin.ui.Button
 import org.vaadin.peter.buttongroup.ButtonGroup
 import com.vaadin.ui.Alignment
+import com.vaadin.data.Property
+import com.vaadin.data.util.BeanItemContainer
+import com.niafikra.meddela.data.TransportInfo
 
 /**
  * niafikra engineering
@@ -23,7 +26,7 @@ import com.vaadin.ui.Alignment
  * Date: 8/1/12
  * Time: 6:47 AM
  */
-class TransportUploadPanel extends HorizontalLayout implements Upload.FailedListener, Upload.SucceededListener {
+class TransportUploadPanel extends HorizontalLayout implements Upload.FailedListener, Upload.SucceededListener,Property.ValueChangeListener {
     Upload transportUpload;
     ListSelect transportList;
     ConfigurationList transportConfigs
@@ -53,7 +56,12 @@ class TransportUploadPanel extends HorizontalLayout implements Upload.FailedList
         footer.addButton(remove)
         transListLay.addComponent(footer)
         transListLay.setComponentAlignment(footer,Alignment.BOTTOM_CENTER)
+        BeanItemContainer container=new BeanItemContainer(TransportInfo)
+        transportList.setContainerDataSource(container)
         transportList.setSizeFull()
+        transportList.setNullSelectionAllowed(false)
+        transportList.addListener(this)
+        transportList.setImmediate(true)
         transListLay.setSizeFull()
         transListLay.setExpandRatio(transportList,1)
         addComponent(transListLay)
@@ -81,9 +89,13 @@ class TransportUploadPanel extends HorizontalLayout implements Upload.FailedList
     }
 
     def load() {
-        meddela.transportManager.listAvailableTransport().each {
-            transportList.addItem(it)
-        }
+       Collection transports= meddela.transportManager.listAvailableTransport()
+       BeanItemContainer container = transportList.getContainerDataSource()
+       container.removeAllItems()
+       container.addAll(transports)
+       TransportInfo info=new TransportInfo()
+       info.setName("test")
+       container.addBean(info)
     }
 
     @Override
@@ -105,5 +117,11 @@ class TransportUploadPanel extends HorizontalLayout implements Upload.FailedList
             getWindow().showNotification("Transport Plugin Failed to be installed!", "File is not a valid meddela transport jar", Window.Notification.TYPE_ERROR_MESSAGE)
             FileUtils.deleteQuietly(new File(transportManager.transportsPath + File.separator + event.filename))
         }
+    }
+
+    @Override
+    void valueChange(Property.ValueChangeEvent event) {
+          TransportInfo transportInfo = event.getProperty().value
+          transportConfigs.setConfigurations(transportInfo.configurations)
     }
 }

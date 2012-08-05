@@ -36,7 +36,7 @@ class ThemesPanel extends Panel implements Property.ValueChangeListener {
      */
     void loadThemes() {
         def sep = File.separator
-        def path = Controller.appPath + sep + 'VAADIN' + sep + 'misc'
+        def path = Controller.appPath + sep + 'VAADIN' + sep + 'themes'
         File file = new File(path)
 
         def themes = []

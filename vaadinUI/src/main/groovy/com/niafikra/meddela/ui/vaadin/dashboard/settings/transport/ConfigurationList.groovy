@@ -101,7 +101,7 @@ class ConfigurationList extends VerticalLayout implements Button.ClickListener, 
 
     void applyConf() {
         if (confField.getValue()) {
-            configurations.put(confField.getValue(), valueField.getValue())
+            configurations?.put(confField.getValue(), valueField.getValue())
             load()
             clear()
         }
@@ -109,7 +109,7 @@ class ConfigurationList extends VerticalLayout implements Button.ClickListener, 
 
     void removeConf() {
         if (currentConf) {
-            configurations.remove(currentConf)
+            configurations?.remove(currentConf)
             load()
             clear()
         }
@@ -132,6 +132,11 @@ class ConfigurationList extends VerticalLayout implements Button.ClickListener, 
             item.getItemProperty("configuration").setValue(key)
             item.getItemProperty("value").setValue(configurations.get(key))
         }
+    }
+
+    def setConfigurations(HashMap configurations){
+        this.configurations=configurations
+        load()
     }
 
     @Override

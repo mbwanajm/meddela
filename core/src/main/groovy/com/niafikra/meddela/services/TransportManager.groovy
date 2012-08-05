@@ -112,6 +112,12 @@ class TransportManager {
         meddela.database.runDbAction {ODB odb -> odb.store(transportInfo)}
     }
 
+    def removeTransport(TransportInfo transportInfo){
+        meddela.database.runDbAction {ODB odb -> odb.delete(transportInfo)}
+        File pluginjar=new File(transportsPath + File.separator + transportInfo.name+".jar")
+        FileUtils.deleteQuietly(pluginjar)
+    }
+
     /**
      * installs a transport plugin uploaded to a meddelea transport plugin directory
      * @param filename name of the file containing the plugin

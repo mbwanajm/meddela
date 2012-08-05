@@ -1,11 +1,12 @@
 package com.niafikra.meddela.ui.vaadin.dashboard.settings
 
 import com.vaadin.ui.TabSheet
-import com.niafikra.meddela.ui.vaadin.dashboard.settings.themes.ThemesPanel
+
 import com.niafikra.meddela.ui.vaadin.dashboard.settings.datasources.DataSourcePanel
 import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.NotificationManagementUI
-import com.vaadin.terminal.ThemeResource
+
 import com.niafikra.meddela.ui.vaadin.dashboard.settings.transport.TransportUploadPanel
+import com.niafikra.meddela.ui.vaadin.dashboard.settings.misc.MiscPanel
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
@@ -13,7 +14,7 @@ import com.niafikra.meddela.ui.vaadin.dashboard.settings.transport.TransportUplo
  * Time: 5:30 PM
  */
 class SettingsView extends TabSheet{
-    private ThemesPanel themes = new ThemesPanel()
+    private MiscPanel miscPanel = new MiscPanel()
     private DataSourcePanel dataSourcePanel= new DataSourcePanel()
     private NotificationManagementUI notificationManagementUI = new NotificationManagementUI();
     private TransportUploadPanel transportUploadPanel=new TransportUploadPanel()
@@ -24,7 +25,7 @@ class SettingsView extends TabSheet{
         addTab(notificationManagementUI,"notifications")
         addTab(dataSourcePanel, 'data sources')
         addTab(transportUploadPanel,"transport")
-        addTab(themes, 'themes')
+        addTab(miscPanel, 'misc')
     }
 
 

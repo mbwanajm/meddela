@@ -11,7 +11,9 @@ package com.niafikra.meddela.data
 class Notification {
     String name = ''
     String description = ''
-    String transport
+    TransportInfo transport
+    HashMap<String,HashMap> transportConfigurations  =new HashMap()    //contains configurations for the transport it uses
+                                                                       //key is the name of the transport and the map is the configurations for that transport as per this notification
     DataSource dataSource = new DataSource()    // the data source this notification belongs too.
     Trigger trigger = new Trigger()             // the trigger to check on the datasource, if it is satisfied then
     Template template = new Template()          // compose a message using this template.
@@ -34,7 +36,16 @@ class Notification {
     }
 
     @Override
-    public String toString() {
+    String toString() {
         return name
+    }
+
+    HashMap getTansportCofiguration(String transport){
+        HashMap confs= transportConfigurations.get(transport)
+        if(!confs){
+            confs = new HashMap<String,HashMap>()
+            transportConfigurations.put(transport,confs)
+        }
+        return confs
     }
 }

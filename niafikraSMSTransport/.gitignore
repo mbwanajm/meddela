@@ -1,0 +1,13 @@
+/target/
+/.idea
+/.settings/
+/.classpaths/
+/nbproject/
+/nbbuild/
+/conf/
+/generated/
+/metamodel/
+/out
+*.iml
+*~
+

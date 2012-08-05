@@ -11,6 +11,7 @@
 	<modules>
 		<module>core</module>
 		<module>vaadinUI</module>
+        <module>niafikraSMSTransport</module>
 	</modules>
 
     <properties>

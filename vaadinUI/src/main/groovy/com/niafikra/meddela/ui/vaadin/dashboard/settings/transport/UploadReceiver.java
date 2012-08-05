@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
  * folder. You can change this behaviour by using the constructor that specifies
  * where to upload the file to
  *
- * inpired by inaya receiver
+ * inspired by inaya receiver
  *
  * @author mbwana jaffari mbura
  */

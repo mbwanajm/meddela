@@ -33,6 +33,7 @@ Property.ValueChangeListener, Button.ClickListener {
     ListSelect transportList;
     ConfigurationList transportConfigs
     Button save, remove
+    Panel configPanel
 
     public TransportUploadPanel() {
         transportUpload = new Upload("Upload Transport Plugin jar", new UploadReceiver(meddela.transportManager.transportsPath))
@@ -73,7 +74,7 @@ Property.ValueChangeListener, Button.ClickListener {
         VerticalLayout transportInfoLay = new VerticalLayout()
         transportInfoLay.setSizeFull()
         transportInfoLay.setSpacing(true)
-        Panel configPanel = new Panel("Transport Plugin Configurations")
+        configPanel = new Panel("Transport Plugin Configurations")
         configPanel.setContent(transportConfigs)
         configPanel.setStyleName(Reindeer.PANEL_LIGHT)
         configPanel.setSizeFull()
@@ -125,24 +126,46 @@ Property.ValueChangeListener, Button.ClickListener {
     @Override
     void valueChange(Property.ValueChangeEvent event) {
         TransportInfo transportInfo = event.getProperty().value
+        configPanel.setCaption(transportInfo.toString()+" ,"+"Transport Plugin Configurations")
         transportConfigs.setConfigurations(transportInfo.configurations)
     }
 
     @Override
     void buttonClick(Button.ClickEvent event) {
-        TransportManager transportManager = meddela.transportManager
         TransportInfo transportInfo = transportList.getValue();
         Button pressedButton = event.getButton()
         if (pressedButton.equals(save)) {
             if (transportInfo)
-                transportManager.saveTransportInfo(transportInfo)
-        } else if (pressedButton.equals(remove)) {
-            if (transportInfo) {
-                transportManager.removeTransport(transportInfo)
-                load()
+                saveTransportInfo(transportInfo)
+        } else {
+            if (pressedButton.equals(remove)) {
+                if (transportInfo) {
+                    removeTransportInfo(transportInfo)
+                }
             }
         }
 
 
+    }
+
+    void removeTransportInfo(TransportInfo transportInfo) {
+        TransportManager transportManager = meddela.transportManager
+        if (transportManager.removeTransport(transportInfo)) {
+            load()
+            getWindow().showNotification("Transport Plugin Configuration removed successfully")
+        } else {
+            getWindow().showNotification("Transport Plugin Configuration Failed to be removed",
+                    Window.Notification.TYPE_ERROR_MESSAGE)
+        }
+
+    }
+
+    void saveTransportInfo(TransportInfo transportInfo) {
+        TransportManager transportManager = meddela.transportManager
+        if (transportManager.saveTransportInfo(transportInfo))
+            getWindow().showNotification("Transport Plugin Configuration saved successfully")
+        else
+            getWindow().showNotification("Transport Plugin Configuration Failed to be saved",
+                    Window.Notification.TYPE_ERROR_MESSAGE)
     }
 }

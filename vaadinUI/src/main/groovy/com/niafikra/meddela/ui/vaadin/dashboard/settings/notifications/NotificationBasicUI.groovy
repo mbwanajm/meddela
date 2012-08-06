@@ -78,11 +78,10 @@ Property.ValueChangeListener, Button.ClickListener {
 
     def load() {
         Collection datasources = meddela.database.getAll(DataSource.class)
-        datasourceSelect.setContainerDataSource(new BeanItemContainer(DataSource.class, datasources))
+        datasourceSelect.setContainerDataSource(new BeanItemContainer(DataSource, datasources))
 
-        meddela.transportManager.listAvailableTransport().each {
-            transportSelect.addItem(it)
-        }
+        transportSelect.setContainerDataSource(
+                new BeanItemContainer(TransportInfo,meddela.transportManager.listAvailableTransport()))
 
         nameField.setValue(notification.getName())
         datasourceSelect.setValue(notification.getDataSource())

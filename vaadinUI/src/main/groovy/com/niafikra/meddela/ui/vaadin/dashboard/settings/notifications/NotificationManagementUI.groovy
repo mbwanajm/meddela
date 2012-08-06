@@ -27,7 +27,11 @@ class NotificationManagementUI extends HorizontalSplitPanel{
     }
 
     def showNotificationDetails(Notification notification,boolean isNew){
-        NotificationUI notificationUI = new NotificationUI(notification,isNew)
+        NotificationUI notificationUI = new NotificationUI(notification,isNew,this)
         setSecondComponent(notificationUI)
+    }
+
+    void loadNotificationList() {
+        notificationList.load()
     }
 }

@@ -21,13 +21,15 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
     NotificationBasicUI basicUI
     NotificationTrigerUI trigerUI
     NotificationTemplateUI templateUI
+    NotificationManagementUI managementUI
     Button save, delete
     boolean isNew
     Notification notification
 
-    NotificationUI(Notification notification, boolean isNew) {
+    NotificationUI(Notification notification, boolean isNew,NotificationManagementUI managementUI) {
         this.isNew = isNew
         this.notification = notification
+        this.managementUI=managementUI
         basicUI = new NotificationBasicUI(notification,isNew)
         trigerUI = new NotificationTrigerUI(notification)
         templateUI = new NotificationTemplateUI(notification, isNew)
@@ -80,6 +82,7 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
                 getWindow().showNotification("notification deleted successfully",Window.Notification.TYPE_HUMANIZED_MESSAGE)
             else getWindow().showNotification("notification failed to be deleted",Window.Notification.TYPE_ERROR_MESSAGE)
         }
+        managementUI.loadNotificationList()
     }
 
     def deleteNotification() {

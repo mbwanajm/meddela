@@ -3,6 +3,7 @@ package com.niafikra.meddela.ui.vaadin
 import com.niafikra.meddela.ui.vaadin.dashboard.Dashboard
 import com.niafikra.meddela.ui.vaadin.login.LoginView
 import com.vaadin.Application
+import com.niafikra.meddela.ui.vaadin.meddelaVaadinApplication  as MeddelaVaadinApplication
 
 import com.vaadin.ui.Window
 
@@ -17,11 +18,11 @@ import com.vaadin.ui.Window
  */
 class UIManager {
 
-    Application application
+    MeddelaVaadinApplication application
     Dashboard dashboard
     LoginView loginView
 
-    public UIManager(Application app) {
+    public UIManager(MeddelaVaadinApplication app) {
         application = app
         start();
     }
@@ -56,6 +57,8 @@ class UIManager {
         def result = Controller.meddela.getAuthenticationManager()
                 .authenticate(username,password)
         if (result) {
+            //set as current user
+            application.currentUser = Controller.meddela.getAuthenticationManager().authExist(username)
             showDashBoard()
         } else{
             dashboard.showNotification("Incorrect Username or Password!",Window.Notification.TYPE_WARNING_MESSAGE)

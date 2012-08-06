@@ -5,6 +5,7 @@ import com.vaadin.Application
 import com.vaadin.terminal.Terminal
 import com.vaadin.ui.Window
 import org.apache.log4j.Logger
+import com.niafikra.meddela.data.security.Authentication
 
 /**
  * The Application's "main" class
@@ -13,6 +14,7 @@ import org.apache.log4j.Logger
 public class meddelaVaadinApplication extends Application {
     private UIManager uiManager
     private Logger logger=Logger.getLogger(meddelaVaadinApplication)
+    Authentication currentUser
 
     @Override
     public void init() {
@@ -26,5 +28,7 @@ public class meddelaVaadinApplication extends Application {
                                         Window.Notification.TYPE_ERROR_MESSAGE)
         logger.error("meddela has uncaught exception",event.throwable)
     }
+    
+    
 
 }

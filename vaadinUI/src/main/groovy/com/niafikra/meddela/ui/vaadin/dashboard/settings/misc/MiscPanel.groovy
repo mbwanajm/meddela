@@ -1,6 +1,7 @@
 package com.niafikra.meddela.ui.vaadin.dashboard.settings.misc
 
 import com.vaadin.ui.Panel
+import com.vaadin.ui.VerticalLayout
 
 /**
  * @author mbwana jaffari mbura
@@ -10,9 +11,14 @@ import com.vaadin.ui.Panel
 class MiscPanel extends Panel{
 
     MiscPanel() {
+        VerticalLayout content = new VerticalLayout()
+        content.setSpacing(true)
+        content.setMargin(true)
+        setContent(content)
         setSizeFull()
 
-        addComponent(new ThemesPanel())
-        addComponent(new XchangePanel())
+        content.addComponent(new ThemesPanel())
+        content.addComponent(new XchangePanel())
+        content.addComponent(new PasswordPanel())
     }
 }

@@ -26,21 +26,25 @@ class TransportManager {
     String transportsPath
 
     TransportManager() {
-        transportsPath=meddela.appPath+File.separator+"transport"
+        transportsPath = meddela.appPath + File.separator + "transport"
         initTransportLoader()
     }
 
+    /**
+     * initiate transport plugin for the meddela to be loaded dynamically per need
+     * @return
+     */
     private def initTransportLoader() {
         ArrayList<URL> urls = []
 
         File transDir = new File(transportsPath)
         if (transDir.exists()) {
-            transDir.eachFile(FileType.FILES,{ urls << it.toURL() })
+            transDir.eachFile(FileType.FILES, { urls << it.toURL() })
         }
         else transDir.mkdir()
 
         urls << transDir.toURL()      //a little hack to initia a URL array
-        transClassLoader=new TransporClasstLoader(urls.toArray(new URL[1]),this.class.classLoader)
+        transClassLoader = new TransporClasstLoader(urls.toArray(new URL[1]), this.class.classLoader)
 
     }
 
@@ -76,15 +80,24 @@ class TransportManager {
         }
     }
 
-
+    /**
+     * Get a transport identified by the name
+     * @param name name of the transport to be loaded which is also the name of the Transport class
+     * @return
+     */
     def getTransport(String name) {
         Transport transport = loadedTransport.get(name)
         if (!transport) {
-            transport=loadTransport(name)
+            transport = loadTransport(name)
         }
         return transport
     }
 
+    /**
+     * Load a requested trandport plugin
+     * @param name name of the plugin to be loaded
+     * @return
+     */
     Transport loadTransport(String name) {
         Class clazz = transClassLoader.loadClass(name);
         Transport transport = clazz.newInstance();
@@ -92,30 +105,52 @@ class TransportManager {
         return transport
     }
 
-    def testTransport(String name){
-        try{
-            Class clazz= transClassLoader.loadClass(name)
-            Transport transport= clazz.newInstance()
+    /**
+     * test a a plugin if follows meddela transport plugin convention
+     * @param name name of the plugin
+     * @return
+     */
+    def testTransport(String name) {
+        try {
+            Class clazz = transClassLoader.loadClass(name)
+            Transport transport = clazz.newInstance()
             return true//groovy truth
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace()
             return false
         }
     }
 
+    /**
+     * Add a transport plugin to running meddela  (hot install)
+     * @param transportJar
+     */
     def addTransport(File transportJar) {
         transClassLoader.addTransportURL(transportJar.toURL())
-      //  TransportInfo transport=transClassLoader.loadClass()
+        //  TransportInfo transport=transClassLoader.loadClass()
     }
 
-    def saveTransportInfo(TransportInfo transportInfo){
-        meddela.database.runDbAction {ODB odb -> odb.store(transportInfo)}
+    /**
+     * Save global info on the Transport plugin
+     * @param transportInfo
+     * @return
+     */
+    def saveTransportInfo(TransportInfo transportInfo) {
+        return meddela.database.runDbAction {ODB odb -> odb.store(transportInfo)}
     }
 
-    def removeTransport(TransportInfo transportInfo){
-        meddela.database.runDbAction {ODB odb -> odb.delete(transportInfo)}
-        File pluginjar=new File(transportsPath + File.separator + transportInfo.name+".jar")
-        FileUtils.deleteQuietly(pluginjar)
+    /**
+     * Remove installed Transport plugin
+     * @param transportInfo
+     * @return
+     */
+    def removeTransport(TransportInfo transportInfo) {
+
+        if (meddela.database.runDbAction {ODB odb -> odb.delete(transportInfo)}) {
+            File pluginjar = new File(transportsPath + File.separator + transportInfo.name + ".jar")
+            return FileUtils.deleteQuietly(pluginjar)
+        }
+        return false
     }
 
     /**
@@ -124,31 +159,31 @@ class TransportManager {
      * @return true if installation is successfully, i.e the file is a jar and contains java classes following the pattern of
      *                                                     meddela plugins
      */
-    boolean installTransportPlugin(String filename){
-        File pluginjar=new File(transportsPath + File.separator + filename)
+    boolean installTransportPlugin(String filename) {
+        File pluginjar = new File(transportsPath + File.separator + filename)
         addTransport(pluginjar)
-        if(testTransport(filename.replace(".jar", ""))){  //test if contain a meddela plugin
-          TransportInfo transportinfo=new TransportInfo()
-          transportinfo.name = filename.replace(".jar", "")
-          saveTransportInfo(transportinfo)
-          return true
-        }else{
+        if (testTransport(filename.replace(".jar", ""))) {  //test if contain a meddela plugin
+            TransportInfo transportinfo = new TransportInfo()
+            transportinfo.name = filename.replace(".jar", "")
+            saveTransportInfo(transportinfo)
+            return true
+        } else {
             FileUtils.deleteQuietly(pluginjar)
             return false
         }
     }
-    
-    Collection listAvailableTransport(){
-         /*   def trans=[] as Set
 
-        File transDir = new File(transportsPath)
-        if (transDir.exists()) {
-            transDir.eachFile(FileType.FILES,{
-                trans<< it.name.replace(".jar","")
-            })
-        }
+    Collection listAvailableTransport() {
+        /*   def trans=[] as Set
 
-        return trans       */
+File transDir = new File(transportsPath)
+if (transDir.exists()) {
+    transDir.eachFile(FileType.FILES,{
+        trans<< it.name.replace(".jar","")
+    })
+}
+
+return trans       */
 
         return meddela.database.getAll(TransportInfo)
     }

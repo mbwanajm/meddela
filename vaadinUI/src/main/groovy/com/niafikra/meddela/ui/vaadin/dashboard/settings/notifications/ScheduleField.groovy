@@ -33,7 +33,7 @@ class ScheduleField extends ListSelect implements Property.ValueChangeListener {
         StringBuffer value = new StringBuffer()
         int counter = 0;
         currentValues.each {
-            if (it) {
+            if (it!=null) {
                 counter++
                 if (counter != 1) value.append(",")
                 value.append(getCRONValue(it))

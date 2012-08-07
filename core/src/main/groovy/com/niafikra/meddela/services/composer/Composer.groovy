@@ -86,7 +86,7 @@ class Composer {
             if (result) {
                 queryResults << result
             } else {
-                return queryResults
+               // return queryResults
             }
         }
 

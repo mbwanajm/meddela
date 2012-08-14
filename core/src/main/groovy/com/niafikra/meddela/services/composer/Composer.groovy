@@ -34,17 +34,29 @@ class Composer {
         }
 
         results = mergeResults(notification.template.joiningProperty, notification.template.receiverProperty, results)
-        results = results.values() // ignore keys and get only values of the returned map
+        results = results.values()      // ignore keys and get only values of the returned map
 
-        def notificationsToSend = []          // will contain sms to send
+        def notificationsToSend = []    // will contain sms to send
         for (result in results) {
-            SentNotification sentNotification = new SentNotification(
-                    notification: notification,
-                    receiver: result[notification.template.receiverProperty],
-                    content: GStringUtil.evaluateAsGString(notification.template.template, result)
-            )
-
-            notificationsToSend << sentNotification
+            // handle multiple receivers separated by commas
+            def receivers = result[notification.template.receiverProperty]?.split(',')
+            if (receivers) {
+               for (receiver in receivers) {
+                    SentNotification sentNotification = new SentNotification(
+                            notification: notification,
+                            receiver: receiver,
+                            content: GStringUtil.evaluateAsGString(notification.template.template, result)
+                    )
+                    notificationsToSend << sentNotification
+                }
+            } else {
+                SentNotification sentNotification = new SentNotification(
+                        notification: notification,
+                        receiver: null,
+                        content: GStringUtil.evaluateAsGString(notification.template.template, result)
+                )
+                notificationsToSend << sentNotification
+            }
         }
 
         return notificationsToSend
@@ -123,7 +135,7 @@ class Composer {
                         // then put them in one field as comma separated values
                         def existingReceiverProperty = mergedResults[joinValue]?."$receiverProperty"
                         if (row[receiverProperty] && existingReceiverProperty) {
-                            mergedResults[joinValue ][receiverProperty ] =
+                            mergedResults[joinValue][receiverProperty] =
                                 "$existingReceiverProperty,${row[receiverProperty]}"
 
                             row.remove(receiverProperty)

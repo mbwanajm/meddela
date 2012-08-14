@@ -24,7 +24,7 @@ import com.vaadin.ui.VerticalLayout
  * Date: 14/08/12
  * Time: 14:44
  */
-class CodeAreaPopupWindow extends Window implements Button.ClickListener, CloseListener{
+class CodeAreaPopupWindow extends Window implements Button.ClickListener, CloseListener {
     private AceEditor aceEditor;
     private Button testButton
     private Label resultsLabel;
@@ -77,22 +77,24 @@ class CodeAreaPopupWindow extends Window implements Button.ClickListener, CloseL
                     results = sql.rows(aceEditor.value)
 
                 } else {
-                    def bindings =  GStringUtil.setUpDates()
+                    def bindings = GStringUtil.setUpDates()
                     bindings[sql] = sql
-                    results = GStringUtil.evaluateAsGString(aceEditor.value, bindings)
 
+                    GroovyShell shell = new GroovyShell(new Binding(bindings))
+                    results = shell.evaluate(aceEditor.value)
                 }
                 renderResults(results)
 
             } catch (Exception e) {
                 resultsLabel.setContentMode(Label.CONTENT_PREFORMATTED)
-                resultsLabel.setValue(e)
+                resultsLabel.setValue(e.printStackTrace())
             }
         }
 
     }
 
     def renderResults(results) {
+        resultsLabel.setContentMode(Label.CONTENT_XHTML)
         if (results instanceof Collection && results) {
             def content = "<table><tr>"
             def columnNames = results[0].keySet()
@@ -110,10 +112,10 @@ class CodeAreaPopupWindow extends Window implements Button.ClickListener, CloseL
             }
             content += "</table>"
 
-            resultsLabel.setContentMode(Label.CONTENT_XHTML)
+
             resultsLabel.setValue(content)
         } else {
-            resultsLabel.setValue("Executed well!\nempty result set returned")
+            resultsLabel.setValue("Executed well!<br>result:<br>$results")
         }
     }
 

@@ -6,7 +6,7 @@
     <artifactId>niafikraSMSTransport</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
-    <name>niafikraSMSTransport</name>
+    <name>niafikra SMS Transport</name>
 
 	<parent>
 		<groupId>com.niafikra.meddela</groupId>

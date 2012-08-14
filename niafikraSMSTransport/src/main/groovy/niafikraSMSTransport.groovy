@@ -62,7 +62,7 @@ class niafikraSMSTransport implements Transport {
     String cleanPhoneNumber(String phoneNumber) {
         phoneNumber = phoneNumber.trim()
         if (phoneNumber.startsWith('+')) return phoneNumber.replace('+', '')
-        if (phoneNumber.startsWith('0')) return phoneNumber.replace('0', '255')
+        if (phoneNumber.startsWith('0')) return phoneNumber.replaceFirst('0', '255')
 
         phoneNumber
     }

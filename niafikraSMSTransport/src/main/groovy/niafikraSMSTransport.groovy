@@ -24,16 +24,22 @@ class niafikraSMSTransport implements Transport {
      */
     @Override
     boolean sendNotification(SentNotification sentNotification) {
-        def smsURL = getSendSMSURL( 'niafikra', sentNotification.receiver, sentNotification.content)
+        if (sentNotification.receiver == null) {
+            log.warn("Can't send SMS \n$sentNotification.content\n receiver phone is not specified")
+            return false
+        }
+
+        def smsURL = getSendSMSURL('niafikra', sentNotification.receiver, sentNotification.content)
         def connection = new URL(smsURL).openConnection();
 
         if (connection.responseCode == 200) {
             def responseTerms = connection.content.text.tokenize('|')
-            if (responseTerms[0] == '1701'){
+            if (responseTerms[0] == '1701') {
                 return true
 
             } else {
-                log.warn("failed to send \n$content to $phoneNumber\ngateway response:${responseTerms[0]}")
+                log.warn("failed to send \n$sentNotification.content\n"
+                        + "to $sentNotification.receiver\ngateway response:${responseTerms[0]}")
                 return false
 
             }

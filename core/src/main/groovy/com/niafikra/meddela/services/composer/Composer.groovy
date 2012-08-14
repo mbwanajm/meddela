@@ -33,7 +33,7 @@ class Composer {
             results = SqlUtil.runWithSqlConnection(notification, runGroovyScript)
         }
 
-        results = mergeResults(notification.template.joiningProperty, results)
+        results = mergeResults(notification.template.joiningProperty, notification.template.receiverProperty, results)
         results = results.values() // ignore keys and get only values of the returned map
 
         def notificationsToSend = []          // will contain sms to send
@@ -86,7 +86,7 @@ class Composer {
             if (result) {
                 queryResults << result
             } else {
-               // return queryResults
+                // return queryResults
             }
         }
 
@@ -99,9 +99,10 @@ class Composer {
      *
      *
      * @param joiningProperty
+     * @param receiverProperty
      * @param results
      */
-    def mergeResults(String joiningProperty, List results) {
+    def mergeResults(String joiningProperty, String receiverProperty, List results) {
         // Collect all the unique joining properties in the resultset
         def joiningPropertyValues = [] as Set
         for (result in results) {
@@ -113,11 +114,21 @@ class Composer {
         // Group the results according to joining property values
         def mergedResults = [:]
         for (joinValue in joiningPropertyValues) {
-            for (result in results) {
-                for (innerResult in result) {
-                    if (innerResult[joiningProperty].equals(joinValue)) {
+            for (rows in results) {
+                for (row in rows) {
+                    if (row[joiningProperty].equals(joinValue)) {
                         if (!mergedResults[joinValue]) mergedResults[joinValue] = [:]
-                        mergedResults[joinValue] << innerResult
+
+                        // if a certain merged result has more than one receiver
+                        // then put them in one field as comma separated values
+                        def existingReceiverProperty = mergedResults[joinValue]?."$receiverProperty"
+                        if (row[receiverProperty] && existingReceiverProperty) {
+                            mergedResults[joinValue ][receiverProperty ] =
+                                "$existingReceiverProperty,${row[receiverProperty]}"
+
+                            row.remove(receiverProperty)
+                        }
+                        mergedResults[joinValue] << row
                     }
                 }
             }

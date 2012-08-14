@@ -26,11 +26,11 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
     boolean isNew
     Notification notification
 
-    NotificationUI(Notification notification, boolean isNew,NotificationManagementUI managementUI) {
+    NotificationUI(Notification notification, boolean isNew, NotificationManagementUI managementUI) {
         this.isNew = isNew
         this.notification = notification
-        this.managementUI=managementUI
-        basicUI = new NotificationBasicUI(notification,isNew)
+        this.managementUI = managementUI
+        basicUI = new NotificationBasicUI(notification, isNew)
         trigerUI = new NotificationTrigerUI(notification)
         templateUI = new NotificationTemplateUI(notification, isNew)
 
@@ -58,7 +58,7 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
 
         footer.addButton(save)
         footer.addButton(delete)
-      //  footer.setSpacing(true)
+        //  footer.setSpacing(true)
 
         addComponent(uiHolder)
         addComponent(footer)
@@ -74,25 +74,25 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
     @Override
     void buttonClick(Button.ClickEvent event) {
         if (event.getButton().equals(save)) {
-            if(saveNotification())
-                getWindow().showNotification("notification saved successfully",Window.Notification.TYPE_HUMANIZED_MESSAGE)
-            else getWindow().showNotification("notification failed to be saved",Window.Notification.TYPE_ERROR_MESSAGE)
+            if (saveNotification())
+                getWindow().showNotification("notification saved successfully", Window.Notification.TYPE_HUMANIZED_MESSAGE)
+            else getWindow().showNotification("notification failed to be saved", Window.Notification.TYPE_ERROR_MESSAGE)
         } else if (event.getButton().equals(delete)) {
-            if(deleteNotification())
-                getWindow().showNotification("notification deleted successfully",Window.Notification.TYPE_HUMANIZED_MESSAGE)
-            else getWindow().showNotification("notification failed to be deleted",Window.Notification.TYPE_ERROR_MESSAGE)
+            if (deleteNotification())
+                getWindow().showNotification("notification deleted successfully", Window.Notification.TYPE_HUMANIZED_MESSAGE)
+            else getWindow().showNotification("notification failed to be deleted", Window.Notification.TYPE_ERROR_MESSAGE)
         }
         managementUI.loadNotificationList()
     }
 
     def deleteNotification() {
-       return meddela.notificationManager.deleteNotification(notification)
+        return meddela.notificationManager.deleteNotification(notification)
     }
 
     def saveNotification() {
         commit()
         if (isNew)
-           return meddela.notificationManager.addNotification(notification)
+            return meddela.notificationManager.addNotification(notification)
         else
             return meddela.notificationManager.updateNotification(notification)
     }

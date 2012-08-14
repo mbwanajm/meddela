@@ -8,26 +8,26 @@ import com.niafikra.meddela.data.Notification
  * Date: 7/21/12
  * Time: 2:17 PM
  */
-class NotificationManagementUI extends HorizontalSplitPanel{
+class NotificationManagementUI extends HorizontalSplitPanel {
     NotificationList notificationList
 
 
-    NotificationManagementUI(){
-        notificationList=new NotificationList(this)
+    NotificationManagementUI() {
+        notificationList = new NotificationList(this)
         build()
     }
 
     def build() {
         setFirstComponent(notificationList)
-        showNotificationDetails(new Notification(),true)
-        setSplitPosition(50)
+        showNotificationDetails(new Notification(), true)
+        setSplitPosition(45)
         setLocked(true)
         setSizeFull()
         setMargin(true)
     }
 
-    def showNotificationDetails(Notification notification,boolean isNew){
-        NotificationUI notificationUI = new NotificationUI(notification,isNew,this)
+    def showNotificationDetails(Notification notification, boolean isNew) {
+        NotificationUI notificationUI = new NotificationUI(notification, isNew, this)
         setSecondComponent(notificationUI)
     }
 

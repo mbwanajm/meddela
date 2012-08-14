@@ -7,9 +7,9 @@ import com.niafikra.meddela.meddela
  * Date: 7/22/12
  * Time: 8:13 PM
  */
-class TriggerCodeArea extends AbstractCodeArea{
+class CodeArea extends AbstractCodeArea{
 
-    TriggerCodeArea(String type) {
+    CodeArea(String type) {
         super(type)
     }
 

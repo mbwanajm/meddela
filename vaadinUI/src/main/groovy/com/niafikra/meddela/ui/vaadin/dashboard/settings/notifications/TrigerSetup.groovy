@@ -2,6 +2,7 @@ package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
 
 import com.vaadin.ui.TabSheet
 import com.niafikra.meddela.data.Trigger
+import com.niafikra.meddela.data.Notification
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
@@ -13,10 +14,14 @@ class TrigerSetup extends TabSheet{
     NotificationCodeArea sqlSetupView,groovySetupView
     Trigger trigger
 
-    TrigerSetup(Trigger trigger){
-        this.trigger=trigger
-        sqlSetupView=new TriggerCodeArea("SQL")
-        groovySetupView=new TriggerCodeArea("GROOVY")
+    TrigerSetup(Notification notification){
+        trigger= notification.trigger
+        sqlSetupView=new CodeArea("SQL")
+        sqlSetupView.notification = notification
+
+        groovySetupView=new CodeArea("GROOVY")
+        groovySetupView.notification = notification
+
         build()
         load()
     }

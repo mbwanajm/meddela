@@ -11,7 +11,7 @@ import com.vaadin.ui.Window
  * Date: 7/20/12
  * Time: 9:42 PM
  */
-class NotificationTrigerUI extends VerticalLayout implements Button.ClickListener{
+class NotificationTrigerUI extends VerticalLayout implements Button.ClickListener {
 
     ScheduleForm scheduleForm
     TrigerSetup trigerSetup
@@ -21,7 +21,7 @@ class NotificationTrigerUI extends VerticalLayout implements Button.ClickListene
     NotificationTrigerUI(Notification notification) {
         this.notification = notification
         scheduleForm = new ScheduleForm(notification.trigger)
-        trigerSetup = new TrigerSetup(notification.trigger)
+        trigerSetup = new TrigerSetup(notification)
         testButton = new Button("Test")
         build()
     }
@@ -42,19 +42,19 @@ class NotificationTrigerUI extends VerticalLayout implements Button.ClickListene
         trigerSetup.commit()
     }
 
-    def execute(){
+    def execute() {
         def result;
-        result=trigerSetup.sqlSetupView.execute(notification)
-        if(!result)
-            result=trigerSetup.groovySetupView.execute(notification)
+        result = trigerSetup.sqlSetupView.execute(notification)
+        if (!result)
+            result = trigerSetup.groovySetupView.execute(notification)
         return result
     }
 
     @Override
     void buttonClick(Button.ClickEvent event) {
         if (execute())
-            getWindow().showNotification("Code Executes Well",Window.Notification.TYPE_HUMANIZED_MESSAGE)
+            getWindow().showNotification("Code Executes Well", Window.Notification.TYPE_HUMANIZED_MESSAGE)
         else
-            getWindow().showNotification("Code Fails to execute",Window.Notification.TYPE_WARNING_MESSAGE)
+            getWindow().showNotification("Code Fails to execute", Window.Notification.TYPE_WARNING_MESSAGE)
     }
 }

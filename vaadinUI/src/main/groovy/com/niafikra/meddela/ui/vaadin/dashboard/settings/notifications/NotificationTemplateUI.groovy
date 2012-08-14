@@ -20,9 +20,14 @@ class NotificationTemplateUI extends VerticalLayout implements Button.ClickListe
         joiningBox = new ComboBox("Joining Property")
         receiverBox = new ComboBox("Receiver Field")
         messageBox = new TextArea("Message Template")
+
         test = new Button("Test")
-        sqlArea = new TemplateSQLUI()
+
+        sqlArea = new TemplateSQLUI(notification)
+
         groovyArea = new TemplateGroovyCodeArea()
+        groovyArea.notification = notification
+
         build()
         load()//fill the required values eg SQL code for test
         if (!isNew) {
@@ -57,6 +62,7 @@ class NotificationTemplateUI extends VerticalLayout implements Button.ClickListe
         joiningBox.setWidth("80%")
         receiverBox.setWidth("80%")
         messageBox.setWidth("80%")
+        messageBox.rows = 4
         formLayout.addComponent(messageBox)
         formLayout.setSpacing(true)
         addComponent(formLayout)

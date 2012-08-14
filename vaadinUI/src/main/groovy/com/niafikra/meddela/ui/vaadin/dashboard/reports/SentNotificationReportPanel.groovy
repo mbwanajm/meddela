@@ -115,7 +115,8 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
             }
         }
 
-        notificationComboBox.setContainerDataSource(new IndexedContainer(notifications))
+        def notificationsContainer = notifications? new IndexedContainer(notifications): notifications
+        notificationComboBox.setContainerDataSource(notificationsContainer )
         notificationComboBox.setValue('all')
 
         // load the recepients combobox
@@ -127,7 +128,8 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
             }
         }
 
-        recepientComboBox.setContainerDataSource(new IndexedContainer(recepients))
+//        def recepientsContainer = recepients? new IndexedContainer(recepients): new IndexedContainer()
+//        recepientComboBox.setContainerDataSource(recepientsContainer)
         recepientComboBox.setValue('all')
 
         // load the status combobox

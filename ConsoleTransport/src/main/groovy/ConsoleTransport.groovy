@@ -19,6 +19,7 @@ class ConsoleTransport implements Transport {
 
     @Override
     boolean sendNotification(SentNotification sentNotification) {
+        if(sentNotification.receiver == null)   return false
         def msg = """
         #### notification sent #############################
             receiver: $sentNotification.receiver

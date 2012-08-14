@@ -12,6 +12,7 @@
 		<module>core</module>
 		<module>vaadinUI</module>
         <module>niafikraSMSTransport</module>
+		<module>ConsoleTransport</module>
 	</modules>
 
     <properties>

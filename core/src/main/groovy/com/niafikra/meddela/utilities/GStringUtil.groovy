@@ -9,6 +9,7 @@ package com.niafikra.meddela.utilities
  * Time: 10:16
  */
 class GStringUtil {
+    static argsExtractor = /\$([\w]*)/
 
     /**
      * This methods evaluates the given text as a GString passing the variables
@@ -49,10 +50,13 @@ class GStringUtil {
      * @param bindings
      */
     static def evaluateAsGString(String text, Map bindings) {
+        def binds = extractBindings(text)
+        binds.putAll(bindings)
         def engine = new groovy.text.GStringTemplateEngine()
         engine.createTemplate(text)
-                .make(bindings)
+                .make(binds)
                 .toString()
+
     }
 
 
@@ -79,5 +83,21 @@ class GStringUtil {
 
         return [todaysDate: todaysDate, firstDayOfMonth: firstDayOfMonth, lastDayOfMonth: lastDayOfMonth]
 
+    }
+
+    /**
+     * Extract all variables in a gstring an return them as keys to a map whose values are
+     * empty strings
+     *
+     */
+    static def extractBindings(String text){
+        def matched = text =~ argsExtractor
+
+        def args = [:]
+        for (match in matched){
+            if(!match[1].isEmpty()) args[match[1]] = ''
+        }
+
+        args
     }
 }

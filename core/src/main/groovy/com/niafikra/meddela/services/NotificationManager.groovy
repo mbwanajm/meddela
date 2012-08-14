@@ -41,6 +41,9 @@ class NotificationManager {
             odb.delete(readNotification.template)
             odb.delete(readNotification.trigger)
             odb.delete(readNotification)
+            odb.delete(readNotification.transport)
+            odb.delete(readNotification.transportConfigurations)
+            odb.delete(readNotification)
         }
     }
 
@@ -83,6 +86,8 @@ class NotificationManager {
         dest.trigger.groovyCode = src.trigger.groovyCode
         dest.trigger.schedule = src.trigger.schedule
         dest.trigger.sql = src.trigger.sql
+        dest.transport = src.transport
+        dest.transportConfigurations = src.transportConfigurations
 
         return dest
     }

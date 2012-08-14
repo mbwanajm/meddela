@@ -1,17 +1,21 @@
-package com.niafikra.meddela.services.transport
+/**
+ * copyright niafikra engineering
+ */
 
-import org.apache.log4j.Logger
+import com.niafikra.meddela.services.transport.Transport
 import com.niafikra.meddela.data.SentNotification
+import org.apache.log4j.Logger
 
 /**
  * The console transport simply prints the notification to send out
  * on the console or log file
+ *
  * @author mbwana jaffari mbura
- * Date: 19/07/12
- * Time: 15:40
+ * Date: 05/08/12
+ * Time: 23:06
  */
 class ConsoleTransport implements Transport {
-    private static final Logger log = Logger.getLogger(ConsoleTransport)
+    Logger log = Logger.getLogger(ConsoleTransport.class)
 
     @Override
     boolean sendNotification(SentNotification sentNotification) {

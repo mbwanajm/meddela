@@ -41,7 +41,7 @@ class Composer {
             // handle multiple receivers separated by commas
             def receivers = result[notification.template.receiverProperty]?.split(',')
             if (receivers) {
-               for (receiver in receivers) {
+                for (receiver in receivers) {
                     SentNotification sentNotification = new SentNotification(
                             notification: notification,
                             receiver: receiver,
@@ -133,12 +133,13 @@ class Composer {
 
                         // if a certain merged result has more than one receiver
                         // then put them in one field as comma separated values
-                        def existingReceiverProperty = mergedResults[joinValue]?."$receiverProperty"
-                        if (row[receiverProperty] && existingReceiverProperty) {
-                            mergedResults[joinValue][receiverProperty] =
-                                "$existingReceiverProperty,${row[receiverProperty]}"
-
-                            row.remove(receiverProperty)
+                        if (row.keySet().contains(receiverProperty) && mergedResults[joinValue]) {
+                            def existingReceiverProperty = mergedResults[joinValue][receiverProperty]
+                            if (existingReceiverProperty) {
+                                mergedResults[joinValue][receiverProperty] =
+                                    "$existingReceiverProperty,${row[receiverProperty]}"
+                                row.remove(receiverProperty)
+                            }
                         }
                         mergedResults[joinValue] << row
                     }

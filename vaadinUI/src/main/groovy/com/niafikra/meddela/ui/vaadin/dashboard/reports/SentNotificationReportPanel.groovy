@@ -82,7 +82,7 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
 
         statusComboBox = new ComboBox("status")
         statusComboBox.setImmediate(true)
-        statusComboBox.addListener(this)
+
         filterPanel.addComponent(statusComboBox)
 
         buildResultsTable()
@@ -115,22 +115,21 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
             }
         }
 
-        def notificationsContainer = notifications? new IndexedContainer(notifications): notifications
-        notificationComboBox.setContainerDataSource(notificationsContainer )
+        notificationComboBox.setContainerDataSource(new IndexedContainer(notifications))
         notificationComboBox.setValue('all')
 
         // load the recepients combobox
         def recepientsInDb = meddela.database.getODB().getObjects(UniqueRecepient)
-        def recepients = ['all']
+        def recepients = ['all', 'not set']
         if (recepientsInDb) {
             for (recepient in recepientsInDb) {
-                recepients << recepient.recepient
+                if (recepient.recepient) recepients << recepient.recepient
             }
         }
 
-//        def recepientsContainer = recepients? new IndexedContainer(recepients): new IndexedContainer()
-//        recepientComboBox.setContainerDataSource(recepientsContainer)
+        recepientComboBox.setContainerDataSource(new IndexedContainer(recepients))
         recepientComboBox.setValue('all')
+        statusComboBox.addListener(this)
 
         // load the status combobox
         statusComboBox.setContainerDataSource(new IndexedContainer(['all', 'delivered', 'failed']))
@@ -157,7 +156,7 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
     }
 
     void showSentNotificationDetails(SentNotification sentNotification) {
-        if(!sentNotification) return
+        if (!sentNotification) return
 
         Window notificationDetailsWindow = new Window("Sent Notification: $sentNotification.notification.name")
         notificationDetailsWindow.setModal(true)
@@ -168,7 +167,7 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
         detailsLabel.setValue("""
         <b>recepient:</b> ${sentNotification.receiver}<br>
         <b>time sent:</b> ${sentNotification.time.format('dd-MMM-yyyy hh:mm')}<br>
-        <b>delivered:</b> ${sentNotification.delivered? 'yes' : 'failed'}
+        <b>delivered:</b> ${sentNotification.delivered ? 'yes' : 'failed'}
         <br><hr><br>
         ${sentNotification.content.replace('\n', '<br>')}
 
@@ -195,16 +194,26 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
         if (!notificationComboBox.getValue().equals('all'))
             andCriteria.add(Where.equal('notification.name', notificationComboBox.getValue()))
 
-        if (!recepientComboBox.getValue().equals('all'))
-            andCriteria.add(Where.equal('receiver', recepientComboBox.getValue()))
-
         if (!statusComboBox.getValue().equals('all'))
             andCriteria.add(Where.equal('delivered', statusComboBox.getValue().equals('delivered') ? true : false))
+
+        switch (recepientComboBox.value) {
+            case 'all':
+                break
+
+            case 'not set':
+                andCriteria.add(Where.isNull('receiver'))
+                break
+
+            default:
+                andCriteria.add(Where.equal('receiver', recepientComboBox.getValue()))
+        }
 
         Collection results
         meddela.database.runDbAction {odb ->
             results = odb.getObjects(new CriteriaQuery(SentNotification, andCriteria))
         }
+
 
         // reload the table
         BeanItemContainer container = resultsTable.containerDataSource
@@ -216,6 +225,5 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
             spacer.setValue('no sent notifications found')
         }
     }
-
 
 }

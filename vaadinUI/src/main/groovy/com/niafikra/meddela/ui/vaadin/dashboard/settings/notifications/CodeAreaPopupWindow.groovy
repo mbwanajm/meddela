@@ -78,7 +78,7 @@ class CodeAreaPopupWindow extends Window implements Button.ClickListener, CloseL
 
                 } else {
                     def bindings = GStringUtil.setUpDates()
-                    bindings[sql] = sql
+                    bindings['sql'] = sql
 
                     GroovyShell shell = new GroovyShell(new Binding(bindings))
                     results = shell.evaluate(aceEditor.value)
@@ -87,7 +87,7 @@ class CodeAreaPopupWindow extends Window implements Button.ClickListener, CloseL
 
             } catch (Exception e) {
                 resultsLabel.setContentMode(Label.CONTENT_PREFORMATTED)
-                resultsLabel.setValue(e.printStackTrace())
+                resultsLabel.setValue(e)
             }
         }
 

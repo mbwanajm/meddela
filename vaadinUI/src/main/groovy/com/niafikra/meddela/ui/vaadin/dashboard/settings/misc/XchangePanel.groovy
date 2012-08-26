@@ -59,7 +59,11 @@ class XchangePanel extends Panel implements Button.ClickListener, Upload.Succeed
 
         File file = new File(path)
         try {
-            meddela.xChangeService.importNotifications(file.text)
+            if(meddela.xChangeService.importNotifications(file.text)){
+                getWindow().showNotification("import successful")
+            }else {
+                getWindow().showNotification("import failed")
+            }
         } catch (Exception e){
             getWindow().showNotification(e.toString())
         }

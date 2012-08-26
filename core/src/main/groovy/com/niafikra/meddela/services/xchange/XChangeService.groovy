@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 import com.niafikra.meddela.data.DataSource
+import com.niafikra.meddela.services.ObjectDatabase
 
 /**
  * @author mbwana jaffari mbura
@@ -54,45 +55,39 @@ class XChangeService {
         Type collectionType = new TypeToken<Collection<Notification>>() {}.getType();
         def notifications = gson.fromJson(notificationsJSON, collectionType)
         if (notifications) {
-            def dataSources = []
+            def dataSources = [:]
 
+            // group notifications according to their datasources
             for (notification in notifications) {
-                if (!dataSources.contains(notification.dataSource)) dataSources << notification.dataSource
+                if (!dataSources[notification.dataSource]) dataSources[notification.dataSource] = []
+                dataSources[notification.dataSource] << notification
             }
 
-            meddela.database.runDbAction {ODB odb ->
-                // if a datasource already exists in the database then use that instead
-                for (dataSource in dataSources) {
+            return meddela.database.runDbAction {ODB odb ->
+                dataSources.each {dataSource, nots ->
+                    // if datasource exists in the database then update and use it instead
                     def results = meddela.database.getObjectsByProperty(DataSource, 'name', dataSource.name)
                     if (!results?.isEmpty()) {
                         DataSource dbDataSource = results.iterator().next()
+                        ObjectDatabase.deepCopy(dataSource, dbDataSource)
+                        dataSource = dbDataSource
+                    }
 
-                        // update the datasource in db with new info
-                        dbDataSource.description = dataSource.description
-                        dbDataSource.driver = dataSource.driver
-                        dbDataSource.password = dataSource.password
-                        dbDataSource.url = dataSource.url
-
-                        // make the notification use datasource in DB
-                        for (notification in notifications) {
-                            if (notification.dataSource == dataSource) notification.dataSource = dbDataSource
+                    // save the notifications, updating them if they exist in db
+                    notifications.each {notification ->
+                        notification.dataSource = dataSource
+                        results = meddela.database.getObjectsByProperty(Notification, 'name', notification.name)
+                        if (results?.isEmpty()) {
+                            meddela.notificationManager.addNotification(notification)
+                        } else {
+                            meddela.notificationManager.updateNotification(notification)
                         }
                     }
                 }
-
-                // save the notifications to the database
-                // if a notification already exists then update it instead.
-                for (notification in notifications){
-                    def results = meddela.database.getObjectsByProperty(Notification, 'name', notification.name)
-                    if(results?.isEmpty()){
-                        meddela.notificationManager.addNotification(notification)
-                    } else {
-                        meddela.notificationManager.updateNotification(notification)
-                    }
-                }
+                return true;
             }
         }
-
+        return false;
     }
 
 

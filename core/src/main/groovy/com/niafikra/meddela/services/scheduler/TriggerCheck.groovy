@@ -47,7 +47,7 @@ class TriggerCheck {
      */
     def checkSqlCondition = { Sql sql, Notification notification ->
         String query = GStringUtil.evaluateSqlAsGString(notification.trigger.sql)
-        sql.rows(query).size() > 0
+        return sql.rows(query)
     }
 
 }

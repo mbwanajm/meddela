@@ -18,4 +18,19 @@ interface Transport {
      * @return true if succesful false otherwise
      */
     boolean sendNotification(SentNotification sentNotification)
+
+    /**
+     * A set a configurations of which are to be shared on sending
+     * different notifications
+     * @return  a map of config name againsts its default value which
+     * can be changed by user
+     */
+    Map globalConfigurations()
+    /**
+     * A set a configurations of which are to be used on sending
+     * a specific notifications
+     * @return  a map of config name againsts its default value which
+     * can be changed by user
+     */
+    Map notificationConfigurations()
 }

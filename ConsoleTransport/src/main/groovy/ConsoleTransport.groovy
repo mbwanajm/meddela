@@ -31,4 +31,14 @@ class ConsoleTransport implements Transport {
         return true
 
     }
+
+    @Override
+    Map globalConfigurations() {
+        return new HashMap()
+    }
+
+    @Override
+    Map notificationConfigurations() {
+        return new HashMap()
+    }
 }

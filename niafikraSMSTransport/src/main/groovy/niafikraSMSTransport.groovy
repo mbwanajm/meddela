@@ -49,6 +49,16 @@ class niafikraSMSTransport implements Transport {
         return false
     }
 
+    @Override
+    Map globalConfigurations() {
+        return new HashMap()
+    }
+
+    @Override
+    Map notificationConfigurations() {
+        return new HashMap()
+    }
+
     def getSendSMSURL(String source, String phoneNumber, String content) {
         content = URLEncoder.encode(content)
         source = URLEncoder.encode(source)

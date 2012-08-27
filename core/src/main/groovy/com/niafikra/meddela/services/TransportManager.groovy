@@ -162,9 +162,13 @@ class TransportManager {
     boolean installTransportPlugin(String filename) {
         File pluginjar = new File(transportsPath + File.separator + filename)
         addTransport(pluginjar)
-        if (testTransport(filename.replace(".jar", ""))) {  //test if contain a meddela plugin
+        if (testTransport(filename.replace(".jar", ""))) {  //test if contain a meddela transport plugin
+
             TransportInfo transportinfo = new TransportInfo()
             transportinfo.name = filename.replace(".jar", "")
+           //initiate the global configurations for the transport
+            Transport transport = getTransport(transportinfo.name)
+            transportinfo.configurations = transport.globalConfigurations()
             saveTransportInfo(transportinfo)
             return true
         } else {

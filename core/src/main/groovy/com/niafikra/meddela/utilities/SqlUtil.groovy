@@ -36,7 +36,7 @@ class SqlUtil {
 
         } catch (Exception ex) {
             log.error("failed to connect to ${notification.dataSource.name} datasource", ex)
-            return false
+            return ex.getMessage()
 
         } finally {
             sql?.close()

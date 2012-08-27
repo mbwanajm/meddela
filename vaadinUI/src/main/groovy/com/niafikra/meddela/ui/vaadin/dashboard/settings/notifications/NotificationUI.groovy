@@ -3,12 +3,12 @@ package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
 import com.niafikra.meddela.data.Notification
 import com.niafikra.meddela.meddela
 import com.vaadin.ui.Button
-import com.vaadin.ui.HorizontalLayout
+
 import com.vaadin.ui.TabSheet
 import com.vaadin.ui.VerticalLayout
-import org.neodatis.odb.ODB
+
 import com.vaadin.ui.Window
-import org.neodatis.odb.impl.core.query.values.GroupByValuesQueryResultAction
+
 import org.vaadin.peter.buttongroup.ButtonGroup
 
 /**
@@ -20,7 +20,7 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
 
     NotificationBasicUI basicUI
     NotificationTrigerUI trigerUI
-    NotificationTemplateUI templateUI
+    NotificationsTemplateUI templateUI
     NotificationManagementUI managementUI
     Button save, delete
     boolean isNew
@@ -32,7 +32,7 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
         this.managementUI = managementUI
         basicUI = new NotificationBasicUI(notification, isNew)
         trigerUI = new NotificationTrigerUI(notification)
-        templateUI = new NotificationTemplateUI(notification, isNew)
+        templateUI = new NotificationsTemplateUI(notification,isNew)
 
         save = new Button("Save")
         delete = new Button("Delete")

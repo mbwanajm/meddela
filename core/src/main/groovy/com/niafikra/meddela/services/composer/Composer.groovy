@@ -136,8 +136,12 @@ class Composer {
                         if (row.keySet().contains(receiverProperty) && mergedResults[joinValue]) {
                             def existingReceiverProperty = mergedResults[joinValue][receiverProperty]
                             if (existingReceiverProperty) {
-                                mergedResults[joinValue][receiverProperty] =
-                                    "$existingReceiverProperty,${row[receiverProperty]}"
+                                // prevent a receiver from being used twice in the same notification
+                                if (!existingReceiverProperty.contains(row[receiverProperty])) {
+                                    mergedResults[joinValue][receiverProperty] =
+                                        "$existingReceiverProperty,${row[receiverProperty]}"
+                                }
+
                                 row.remove(receiverProperty)
                             }
                         }

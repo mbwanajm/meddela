@@ -35,7 +35,7 @@ class ComposerTest extends Specification {
         given:
         def composer = new Composer()
         def query1 = [[name: 'mbwana', id: 1], [name: 'boniface', id: 2]]
-        def query2 = [[hobby: 'programming', id: 1], [hobby: 'coding', id: 2], [hobby: 'music', id: 1]]
+        def query2 = [[hobby: 'programming', id: 1], [hobby: 'coding', id: 2], [hobby: 'music', id: 1], [hobby: 'music', id: 1]]
         def results = [query1, query2]
 
         when: 'composer is called with an array of maps and given the key to use as the merging value and another for receiver'

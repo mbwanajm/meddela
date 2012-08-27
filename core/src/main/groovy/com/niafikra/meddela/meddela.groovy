@@ -10,7 +10,8 @@ import com.niafikra.meddela.services.TransportManager
 import com.niafikra.meddela.services.composer.Composer
 import com.niafikra.meddela.services.NotificationManager
 import com.niafikra.meddela.services.scheduler.TriggerCheck
-import com.niafikra.meddela.services.xchange.XChangeService
+import com.niafikra.meddela.services.XChangeService
+import com.niafikra.meddela.services.ReportService
 
 /**
  * This class provides a facade to  the services that
@@ -22,15 +23,17 @@ import com.niafikra.meddela.services.xchange.XChangeService
  */
 class meddela {
     private static Logger log = Logger.getLogger(meddela.class)
-    static ObjectDatabase database                  // used to manipulate meddela's local db
-    static SchedulerService scheduler               // used to schedule tasks
-    static Composer composer;                       // used to compose notification messages
-    static TransportManager transportManager        // used to send out messages
-    static NotificationManager notificationManager  // used for CRUD actions on notifications
-    static String appPath                           // this path must be set by the object that initializes medella
+    static ObjectDatabase database                      // used to manipulate meddela's local db
+    static SchedulerService scheduler                   // used to schedule tasks
+    static Composer composer;                           // used to compose notification messages
+    static TransportManager transportManager            // used to send out messages
+    static NotificationManager notificationManager      // used for CRUD actions on notifications
+    static String appPath                               // this path must be set by the object that initializes medella
     static AuthenticationManager authenticationManager
-    static TriggerCheck triggerCheck                //used to check if the notification should be triggered
-    static XChangeService xChangeService            // used to export and import notifications
+    static TriggerCheck triggerCheck                    // used to check if the notification should be triggered
+    static XChangeService xChangeService                // used to export and import notifications
+    static ReportService reportService                  // used to get reports on sent notifications
+
     /**
      * Initialize medella
      *
@@ -50,6 +53,7 @@ class meddela {
             authenticationManager=new AuthenticationManager()
             triggerCheck=new TriggerCheck()
             xChangeService = new XChangeService();
+            reportService = new ReportService()
 
             log.info("meddella successsfully started ")
             return true

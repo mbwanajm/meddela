@@ -1,5 +1,6 @@
 package com.niafikra.meddela.data
 
+import com.niafikra.meddela.meddela
 /**
  * A comprises of all the information that can lead up to the
  * sending out of a notification
@@ -43,7 +44,8 @@ class Notification {
     HashMap getTansportCofiguration(String transport){
         HashMap confs= transportConfigurations.get(transport)
         if(!confs){
-            confs = new HashMap<String,HashMap>()
+            //init specific notif configurations
+            confs = meddela.transportManager.getTransport(transport).notificationConfigurations()
             transportConfigurations.put(transport,confs)
         }
         return confs

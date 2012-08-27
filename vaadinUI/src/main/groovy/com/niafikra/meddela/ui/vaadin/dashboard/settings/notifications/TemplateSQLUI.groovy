@@ -24,10 +24,9 @@ class TemplateSQLUI extends HorizontalLayout implements NotificationCodeArea, Bu
     TextField SQLNameField
     HashMap SQLSet = new HashMap()
 
-    TemplateSQLUI(Notification notification) {
+    TemplateSQLUI() {
         sqlSelect = new ListSelect("SQL")
         codeArea = new CodeArea('SQL')   //SQL Code
-        codeArea.notification = notification
        // codeArea.setCaption("SQL Code")
         SQLNameField = new TextField()
         SQLNameField.setInputPrompt("Enter Name of SQL")
@@ -47,7 +46,7 @@ class TemplateSQLUI extends HorizontalLayout implements NotificationCodeArea, Bu
         leftLay.setSpacing(true)
         sqlSelect.setWidth("100px")
         sqlSelect.setImmediate(true)
-        sqlSelect.setRows(6)
+        sqlSelect.setRows(12)
         leftLay.addComponent(sqlSelect)
         ButtonGroup footer = new ButtonGroup()
         footer.addButton(add)
@@ -68,7 +67,7 @@ class TemplateSQLUI extends HorizontalLayout implements NotificationCodeArea, Bu
         //panel.addComponent(codeArea)
        // codeArea.setMode(AceMode.sql)
         codeArea.setWidth("100%")
-        codeArea.setHeight("100px")
+        codeArea.setHeight("200px")
       //  codeArea.setTheme(AceTheme.tomorrow_night_eighties)
         rightLay.addComponent(codeArea)
         HorizontalLayout rightFooter = new HorizontalLayout()

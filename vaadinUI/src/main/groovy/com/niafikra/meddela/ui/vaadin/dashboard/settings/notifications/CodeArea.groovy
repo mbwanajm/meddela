@@ -15,7 +15,7 @@ class CodeArea extends AbstractCodeArea{
 
     @Override
     def execute(com.niafikra.meddela.data.Notification notification) {
-
+        if (!getCode()) return null
         switch(getType().toUpperCase()){
             case "GROOVY" :
                 notification.trigger.groovyCode=getCode()

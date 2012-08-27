@@ -20,14 +20,11 @@ abstract class AbstractCodeArea extends VerticalLayout implements NotificationCo
 
     AceEditor codeArea
     String type
-    private Button popOutButton;
-    Notification notification
 
     AbstractCodeArea(String type){
         super()
         this.type=type
         codeArea=new AceEditor()
-        popOutButton = new Button()
         build()
     }
 
@@ -35,13 +32,6 @@ abstract class AbstractCodeArea extends VerticalLayout implements NotificationCo
 
         setSpacing(true)
         setMargin(true)
-
-        popOutButton = new Button('expand')
-        popOutButton.setStyleName(Reindeer.BUTTON_SMALL)
-        popOutButton.addListener({getWindow().addWindow(new CodeAreaPopupWindow(codeArea, notification))} as Button.ClickListener)
-        addComponent(popOutButton)
-        setComponentAlignment(popOutButton, Alignment.TOP_RIGHT)
-
         codeArea.setWidth("100%")
         codeArea.setHeight("500px")
 
@@ -51,7 +41,6 @@ abstract class AbstractCodeArea extends VerticalLayout implements NotificationCo
             codeArea.setMode(AceMode.groovy)
 
         addComponent(codeArea)
-        // setComponentAlignment(testButton,Alignment.MIDDLE_RIGHT)
     }
 
 
@@ -70,9 +59,6 @@ abstract class AbstractCodeArea extends VerticalLayout implements NotificationCo
         codeArea.setValue(code)
     }
 
-    def setNotification(Notification notification){
-        this.notification = notification
-    }
 
 
 }

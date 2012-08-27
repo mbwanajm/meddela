@@ -21,6 +21,7 @@ import org.neodatis.odb.core.query.criteria.Where
 import org.neodatis.odb.core.query.criteria.And
 import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery
 import com.vaadin.ui.Window
+import com.niafikra.meddela.services.ReportService
 
 /**
  * This class allows the use to view the sent out notifications
@@ -108,7 +109,7 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
         // load the notifications combobox
         def notificationsInDb = meddela.database.getODB().getObjects(Notification)
 
-        def notifications = ['all']
+        def notifications = [ReportService.NOTIFICATION_ALL]
         if (notificationsInDb) {
             for (notification in notificationsInDb) {
                 notifications << notification.name
@@ -116,11 +117,11 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
         }
 
         notificationComboBox.setContainerDataSource(new IndexedContainer(notifications))
-        notificationComboBox.setValue('all')
+        notificationComboBox.setValue(ReportService.NOTIFICATION_ALL)
 
         // load the recepients combobox
         def recepientsInDb = meddela.database.getODB().getObjects(UniqueRecepient)
-        def recepients = ['all', 'not set']
+        def recepients = [ReportService.RECEIVER_ALL, ReportService.RECEIVER_NOT_SET]
         if (recepientsInDb) {
             for (recepient in recepientsInDb) {
                 if (recepient.recepient) recepients << recepient.recepient
@@ -128,12 +129,13 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
         }
 
         recepientComboBox.setContainerDataSource(new IndexedContainer(recepients))
-        recepientComboBox.setValue('all')
+        recepientComboBox.setValue(ReportService.RECEIVER_ALL)
         statusComboBox.addListener(this)
 
         // load the status combobox
-        statusComboBox.setContainerDataSource(new IndexedContainer(['all', 'delivered', 'failed']))
-        statusComboBox.setValue('all')
+        def stasuses =  [ReportService.STATUS_ALL, ReportService.STATUS_DELIVERED, ReportService.STATUS_FAILED]
+        statusComboBox.setContainerDataSource(new IndexedContainer(stasuses))
+        statusComboBox.setValue(ReportService.STATUS_ALL)
 
     }
 
@@ -184,36 +186,13 @@ class SentNotificationReportPanel extends VerticalLayout implements Property.Val
             return
         }
 
-        // Query db using the given filters
-        And andCriteria = Where.and()
-        def endDate = endDateField.value + 1
-        andCriteria
-                .add(Where.ge('time', startDateField.getValue().clearTime()))
-                .add(Where.lt('time', endDate.clearTime()))
-
-        if (!notificationComboBox.getValue().equals('all'))
-            andCriteria.add(Where.equal('notification.name', notificationComboBox.getValue()))
-
-        if (!statusComboBox.getValue().equals('all'))
-            andCriteria.add(Where.equal('delivered', statusComboBox.getValue().equals('delivered') ? true : false))
-
-        switch (recepientComboBox.value) {
-            case 'all':
-                break
-
-            case 'not set':
-                andCriteria.add(Where.isNull('receiver'))
-                break
-
-            default:
-                andCriteria.add(Where.equal('receiver', recepientComboBox.getValue()))
-        }
-
-        Collection results
-        meddela.database.runDbAction {odb ->
-            results = odb.getObjects(new CriteriaQuery(SentNotification, andCriteria))
-        }
-
+        def results = meddela.reportService.getSentNotifications(
+                notificationComboBox.getValue(),
+                startDateField.getValue(),
+                endDateField.getValue(),
+                recepientComboBox.getValue(),
+                statusComboBox.getValue()
+        )
 
         // reload the table
         BeanItemContainer container = resultsTable.containerDataSource

@@ -107,7 +107,10 @@ class DataSourcePanel extends HorizontalLayout implements Button.ClickListener, 
                 break
 
             case deleteButton:
-                if (list.value) runDbAction {odb -> odb.delete(list.value)}
+                if (list.value){
+                    def result = meddela.database.runDbAction{odb -> odb.delete(list.value)}
+                    showActionResultMessage(result)
+                }
                 break
 
             case saveButton:
@@ -123,34 +126,29 @@ class DataSourcePanel extends HorizontalLayout implements Button.ClickListener, 
     def saveDataSource() {
         dataSourceForm.commit()
         DataSource dataSource = dataSourceForm.getItemDataSource().getBean()
-        runDbAction {odb ->
-            if (newMode) {
-                odb.store(dataSource)
-                newMode = false
-                dataSourceForm.getField('name').setReadOnly(true)
+        def result
+        if (newMode) {
+            result = meddela.database.runDbAction { odb -> odb.store(dataSource)}
+            newMode = false
+            dataSourceForm.getField('name').setReadOnly(true)
 
-            } else {
-                DataSource dbDatasource=  meddela.getDatabase().getObjectByProperty(DataSource, 'name', dataSource.name)
-
-                dbDatasource.description = dataSource.description
-                dbDatasource.driver = dataSource.driver
-                dbDatasource.password = dataSource.password
-                dbDatasource.url = dbDatasource.url
-
-                odb.store(dbDatasource)
-            }
+        } else {
+            result = meddela.database.runDbAction { odb -> meddela.database.update(dataSource, 'name')}
         }
+
+         showActionResultMessage(result)
+
     }
 
-    void runDbAction(Closure action) {
-        if (meddela.database.runDbAction(action)) {
+    def showActionResultMessage(result){
+        if (result) {
             reloadList()
             getWindow().showNotification("Action succesful")
         } else {
             getWindow().showNotification("Action failed", Window.Notification.TYPE_ERROR_MESSAGE)
         }
-
     }
+
 
     void reloadList() {
         meddela.database.runDbAction {ODB odb ->

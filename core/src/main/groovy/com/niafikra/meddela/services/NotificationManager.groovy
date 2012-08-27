@@ -56,11 +56,8 @@ class NotificationManager {
      */
     boolean updateNotification(Notification notification) {
         meddela.database.runDbAction {ODB odb ->
-            // Manually copy each of the property from the new notification to the one in the db
-            def dbNotification = meddela.database.getObjectByProperty(Notification, 'name', notification.name)
-            notification = copy(notification, dbNotification)
+            meddela.database.update(notification, 'name')
 
-            odb.store(notification)
             if (notification.enabled) {
                 meddela.scheduler.reScheduleNotification(notification)
             } else {

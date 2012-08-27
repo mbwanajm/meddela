@@ -25,6 +25,7 @@ class ObjectDatabase {
     Logger log = Logger.getLogger(ObjectDatabase)
     ThreadLocal odbStore;
     ThreadLocal dbActionCounts; // can be used to check if its ok to close/commit odb
+    static def primitives = [Boolean.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class, Void.class, String.class]
 
     /**
      * The constructor when this creates the object database server
@@ -101,7 +102,7 @@ class ObjectDatabase {
         ODB odb = getODB()
         def actionCount = dbActionCounts.get()
         if (!actionCount) actionCount = 0
-        actionCount ++
+        dbActionCounts.set(++actionCount)
         try {
             return dbAction(odb)
 
@@ -110,8 +111,8 @@ class ObjectDatabase {
             return null
 
         } finally {
-            actionCount --
-            if(actionCount == 0 && !odb?.isClosed())  odb.close()
+            dbActionCounts.set(--actionCount)
+            if (actionCount == 0 && !odb?.isClosed()) odb.close()
 
         }
     }
@@ -129,18 +130,18 @@ class ObjectDatabase {
         ODB odb = getODB()
         def actionCount = dbActionCounts.get()
         if (!actionCount) actionCount = 0
-        actionCount ++
+        dbActionCounts.set(++actionCount)
         try {
             dbAction(odb)
-            if(actionCount == 1) odb.commit()
+            if (actionCount == 1) odb.commit()
             return true
         } catch (ODBRuntimeException ex) {
             odb.rollback()
             log.error("failed to execute a db action", ex)
             return false
         } finally {
-            actionCount --
-            if(actionCount == 0 && !odb?.isClosed()) odb.close()
+            dbActionCounts.set(--actionCount)
+            if (actionCount == 0 && !odb?.isClosed()) odb.close()
         }
     }
 
@@ -172,13 +173,13 @@ class ObjectDatabase {
     }
 
     /**
-    * Returns the first object which has the given value for the selected property
-    *
-    * @param objectClass the class of the object
-    * @param property the property to check
-    * @param value the value of the property to match
-    * @return
-    */
+     * Returns the first object which has the given value for the selected property
+     *
+     * @param objectClass the class of the object
+     * @param property the property to check
+     * @param value the value of the property to match
+     * @return
+     */
     public Object getObjectByProperty(Class objectClass, String property, Object value) {
         IQuery query = new CriteriaQuery(objectClass, Where.equal(property, value));
         query.setPolymorphic(true);
@@ -186,14 +187,14 @@ class ObjectDatabase {
         return getODB().getObjects(query).getFirst();
     }
 
-   /**
-    * Returns a collection of objects which have the given value for the selected property
-    *
-    * @param objectClass the class of the object
-    * @param property the property to check
-    * @param value the value of the property to match
-    * @return
-    */
+    /**
+     * Returns a collection of objects which have the given value for the selected property
+     *
+     * @param objectClass the class of the object
+     * @param property the property to check
+     * @param value the value of the property to match
+     * @return
+     */
     public Collection getObjectsByProperty(Class objectClass, String property, Object value) {
 
         return getODB().getObjects(new CriteriaQuery(objectClass,
@@ -201,15 +202,15 @@ class ObjectDatabase {
 
     }
 
-   /**
-    * Similar to SQL "in" statement, it returns all objects that have the given property
-    * with the value equal to atleast one of the objects in the collection in
-    *
-    * @param objectsClass
-    * @param property the property name
-    * @param inValues the possible values for an object
-    * @return
-    */
+    /**
+     * Similar to SQL "in" statement, it returns all objects that have the given property
+     * with the value equal to atleast one of the objects in the collection in
+     *
+     * @param objectsClass
+     * @param property the property name
+     * @param inValues the possible values for an object
+     * @return
+     */
     public Collection getObjectsWithPropertyIn(Class objectsClass, String property, Collection inValues) {
         Or orCriteria = Where.or();
         for (Object object : inValues) {
@@ -220,19 +221,19 @@ class ObjectDatabase {
 
     }
 
-   /**
-    * Returns a collection of objects that have all the given properties with the
-    * specified values,
-    * the properties and values are specified as a map where
-    * key-> property
-    * value -> the value the property should have
-    * The query is performed using AND, thus the returned collection
-    * has objects which have all the properties
-    *
-    * @param objectsClass
-    * @param propertiesToCheck
-    * @return
-    */
+    /**
+     * Returns a collection of objects that have all the given properties with the
+     * specified values,
+     * the properties and values are specified as a map where
+     * key-> property
+     * value -> the value the property should have
+     * The query is performed using AND, thus the returned collection
+     * has objects which have all the properties
+     *
+     * @param objectsClass
+     * @param propertiesToCheck
+     * @return
+     */
     public Collection getObjectsByPropertiesAND(Class objectsClass, Map<String, Object> propertiesToCheck) {
 
         And criteria = Where.and();
@@ -245,19 +246,19 @@ class ObjectDatabase {
 
     }
 
-   /**
-    * Returns a collection of objects that have on of the given properties with the
-    * specified values,
-    * the properties and values are specified as a map where
-    * key-> property
-    * value -> the value the property should have
-    * The query is performed using OR, thus the returned collection
-    * has objects which have at least on of the properties with the given value
-    *
-    * @param objectsClass
-    * @param propertiesToCheck
-    * @return
-    */
+    /**
+     * Returns a collection of objects that have on of the given properties with the
+     * specified values,
+     * the properties and values are specified as a map where
+     * key-> property
+     * value -> the value the property should have
+     * The query is performed using OR, thus the returned collection
+     * has objects which have at least on of the properties with the given value
+     *
+     * @param objectsClass
+     * @param propertiesToCheck
+     * @return
+     */
     public Collection getObjectsByPropertiesOR(Class objectsClass, Map<String, Object> propertiesToCheck) {
 
         And criteria = Where.and();
@@ -269,15 +270,15 @@ class ObjectDatabase {
         return getODB().getObjects(new CriteriaQuery(objectsClass, criteria));
     }
 
-   /**
-    * Use this method to get objects which contain other objects stored in neodatis
-    * and the comparison object is another object stored in neodatis
-    *
-    * @param objectClass
-    * @param property
-    * @param value
-    * @return
-    */
+    /**
+     * Use this method to get objects which contain other objects stored in neodatis
+     * and the comparison object is another object stored in neodatis
+     *
+     * @param objectClass
+     * @param property
+     * @param value
+     * @return
+     */
     public Collection getObjectsByPropertyExt(Class objectClass, String property, Object value) {
 
         IQuery query = getODB().criteriaQuery(objectClass, Where.equal(property, value));
@@ -285,11 +286,11 @@ class ObjectDatabase {
 
     }
 
-   /**
-    * Get a list of all object for a class strored in a DB
-    * @param clazz
-    * @return
-    */
+    /**
+     * Get a list of all object for a class strored in a DB
+     * @param clazz
+     * @return
+     */
     public Collection getAll(Class clazz) {
         ODB odb = getODB()
         try {
@@ -300,5 +301,43 @@ class ObjectDatabase {
         }
     }
 
+    /**
+     * Performs a deep copy of one object to another
+     *
+     * @param source
+     * @param destination
+     * @return
+     */
+    static def deepCopy(source, destination) {
+        source.properties.each { name, value ->
+            if (name != 'class' && name != 'metaClass') {
+                if (value == null || primitives.contains(value.class) || value instanceof Map || value instanceof Collection) {
+                    destination."$name" = value
+                } else if (destination."$name") {
+                    deepCopy(value, destination."$name")
+                } else {
+                    destination."$name" = value
+                }
+            }
+        }
+    }
+
+/**
+ * Updates an object by first reading it from db then setting its properties to match
+ * the one in db
+ *
+ * Note that this method automatically loads the object from the database updates it
+ * and sets its new properties. to read the object it needs a property to use as an id
+ *
+ * @param object
+ * @param idProperty
+ * @return false if it fails
+ */
+def update(Object object, String idProperty) {
+    ODB odb = getODB()
+    def dbObject = getObjectByProperty(object.class, idProperty, object."$idProperty")
+    deepCopy(object, dbObject)
+    return odb.store(dbObject)
+}
 
 }

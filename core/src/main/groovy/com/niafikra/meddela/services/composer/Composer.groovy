@@ -94,7 +94,9 @@ class Composer {
     def evaluateSQL(Notification notification) {
         def queryResults = []
         for (query in notification.template.sqls) {
-            def result = SqlUtil.runWithSqlConnection(notification) { Sql sql, Notification notif -> sql.rows(query.SQL) }
+            def result = SqlUtil.runWithSqlConnection(notification) { Sql sql, Notification notif ->
+                sql.rows(query.SQL)
+            }
             if (result) {
                 queryResults << result
             } else {

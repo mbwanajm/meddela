@@ -1,4 +1,4 @@
-package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
+package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.template
 
 import com.niafikra.meddela.data.Notification
 import com.vaadin.ui.*
@@ -8,17 +8,20 @@ import com.vaadin.ui.*
  * Date: 7/21/12
  * Time: 5:23 PM
  */
-class TemplateMessageUI extends VerticalLayout {
+class TemplateMessageUI extends VerticalLayout implements Button.ClickListener{
     ComboBox joiningBox, receiverBox
     TextArea messageBox
     Notification notification
+    TemplateCodeUI codeUI
 
-    TemplateMessageUI(Notification notification, boolean isNew) {
+    Button loadButton
+    TemplateMessageUI(Notification notification, boolean isNew,TemplateCodeUI codeUI) {
         this.notification = notification
         joiningBox = new ComboBox("Joining Property")
         receiverBox = new ComboBox("Receiver Field")
         messageBox = new TextArea("Message Template")
-
+        this.codeUI = codeUI
+        loadButton = new Button("Load Selectables")
         build()
         load()//fill the required values eg SQL code for test
     }
@@ -38,7 +41,7 @@ class TemplateMessageUI extends VerticalLayout {
     def build() {
         setSizeFull()
         setMargin(true)
-        setSpacing(true)
+       // setSpacing(true)
         FormLayout formLayout = new FormLayout()
         formLayout.addComponent(joiningBox)
         formLayout.addComponent(receiverBox)
@@ -48,7 +51,12 @@ class TemplateMessageUI extends VerticalLayout {
         messageBox.rows = 10
         formLayout.addComponent(messageBox)
         formLayout.setSpacing(true)
+        addComponent(loadButton)
+        loadButton.setWidth("200px")
+        setComponentAlignment(loadButton,Alignment.TOP_CENTER)
+        loadButton.addListener(this)
         addComponent(formLayout)
+        setExpandRatio(formLayout,1)
     }
 
     void fillSelectables(Object results) {
@@ -74,5 +82,16 @@ class TemplateMessageUI extends VerticalLayout {
             }
         } catch (Exception e) {}
         return columns
+    }
+
+    @Override
+    void buttonClick(Button.ClickEvent clickEvent) {
+        reloadSelectables()
+    }
+
+    def reloadSelectables() {
+        def results= codeUI.getTemplateVariables()
+        fillSelectables(results)
+        load()
     }
 }

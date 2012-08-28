@@ -1,7 +1,9 @@
-package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
+package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.template
 
 import com.niafikra.meddela.meddela
 import com.niafikra.meddela.utilities.SqlUtil
+import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.AbstractCodeArea
+import com.niafikra.meddela.data.Notification
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
  * Date: 7/22/12
@@ -17,5 +19,9 @@ class TemplateGroovyCodeArea extends AbstractCodeArea {
     def execute(com.niafikra.meddela.data.Notification notification) {
         notification.template.groovyCode = getCode()
         SqlUtil.runWithSqlConnection(notification, meddela.composer.runGroovyScript)
+    }
+
+    def getTemplateVariables(Notification notification){
+        return execute(notification)
     }
 }

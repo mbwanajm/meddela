@@ -1,4 +1,4 @@
-package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
+package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.template
 
 import com.niafikra.meddela.data.Template
 import com.niafikra.meddela.data.SQL
@@ -9,6 +9,8 @@ import com.niafikra.meddela.meddela
 
 import org.vaadin.peter.buttongroup.ButtonGroup
 import com.niafikra.meddela.data.Notification
+import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.NotificationCodeArea
+import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.CodeArea
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>
@@ -68,6 +70,7 @@ class TemplateSQLUI extends HorizontalLayout implements NotificationCodeArea, Bu
        // codeArea.setMode(AceMode.sql)
         codeArea.setWidth("100%")
         codeArea.setHeight("200px")
+        codeArea.codeArea.setSizeFull() //make the ace editor fill the provided region
       //  codeArea.setTheme(AceTheme.tomorrow_night_eighties)
         rightLay.addComponent(codeArea)
         HorizontalLayout rightFooter = new HorizontalLayout()
@@ -107,10 +110,15 @@ class TemplateSQLUI extends HorizontalLayout implements NotificationCodeArea, Bu
 
     @Override
     def execute(com.niafikra.meddela.data.Notification notification) {
-        HashSet sqlSet=new HashSet()
-        sqlSet.addAll(SQLSet.values())
-        notification.template.sqls =sqlSet
-        return meddela.composer.evaluateSQL(notification)
+        notification.trigger.sql=codeArea.getCode()
+        return meddela.triggerCheck.checkWithSQL(notification)
+    }
+
+    def getTemplateVariables(Notification notification){
+      HashSet sqlSet=new HashSet()
+      sqlSet.addAll(SQLSet.values())
+      notification.template.sqls =sqlSet
+      return meddela.composer.evaluateSQL(notification)
     }
 
     @Override

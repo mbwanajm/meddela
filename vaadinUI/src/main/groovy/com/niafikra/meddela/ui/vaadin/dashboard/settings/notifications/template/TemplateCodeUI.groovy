@@ -1,7 +1,8 @@
-package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
+package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.template
 
 import com.niafikra.meddela.data.Notification
-import java.sql.ResultSet
+
+import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.CodingTabSheet
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com,bonifacechacha@niafikra.com>
@@ -11,26 +12,24 @@ import java.sql.ResultSet
 class TemplateCodeUI extends CodingTabSheet{
 
     Notification notification
-    TemplateMessageUI messageUI
-    TemplateCodeUI(Notification notification,boolean isNew,TemplateMessageUI messageUI){
-        super()
+    TemplateCodeUI(Notification notification,boolean isNew){
+        super(notification)
         this.notification = notification
         this.sqlArea = new TemplateSQLUI()
-        this.messageUI = messageUI
         this.groovyArea = new TemplateGroovyCodeArea()
         build()
         load()
-        if(!isNew) {
+      /*  if(!isNew) {
             execute()
             messageUI.load()
-        }
+        }  */
     }
 
     def load() {
         sqlArea.setCode(notification.template.sqls)
         groovyArea.setCode(notification.template.groovyCode)
     }
-
+   /*
     @Override
     void onExecute() {
         def result = execute()
@@ -53,6 +52,13 @@ class TemplateCodeUI extends CodingTabSheet{
         messageUI.fillSelectables(results)
         return  results
 
+    }          */
+
+    def getTemplateVariables(){
+        def result = sqlArea.getTemplateVariables(notification)
+        if(result==null)
+            result = groovyArea.getTemplateVariables(notification)
+        return  result
     }
 
     def commit(){

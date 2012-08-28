@@ -26,6 +26,7 @@ interface Transport {
      * can be changed by user
      */
     Map globalConfigurations()
+
     /**
      * A set a configurations of which are to be used on sending
      * a specific notifications

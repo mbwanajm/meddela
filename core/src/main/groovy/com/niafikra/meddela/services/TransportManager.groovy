@@ -11,6 +11,7 @@ import groovy.io.FileType
 import com.niafikra.meddela.services.transport.TransporClasstLoader
 import com.niafikra.meddela.data.TransportInfo
 import org.apache.commons.io.FileUtils
+import org.apache.log4j.Logger
 
 /**
  * This class coordinates the delivering of notifications and saves
@@ -24,9 +25,11 @@ class TransportManager {
     HashMap loadedTransport = new HashMap()
     TransporClasstLoader transClassLoader
     String transportsPath
+    private static final Logger log = Logger.getLogger(TransportManager)
 
     TransportManager() {
         transportsPath = meddela.appPath + File.separator + "transport"
+        log.info("set transport plugin path as: $transportsPath")
         initTransportLoader()
     }
 
@@ -39,9 +42,13 @@ class TransportManager {
 
         File transDir = new File(transportsPath)
         if (transDir.exists()) {
+            log.info('transport plugin dir exists! yeah..')
             transDir.eachFile(FileType.FILES, { urls << it.toURL() })
         }
-        else transDir.mkdir()
+        else{
+            log.info("could not find transport plugin dir, hence creating one at $transportsPath" )
+            transDir.mkdir()
+        }
 
         urls << transDir.toURL()      //a little hack to initia a URL array
         transClassLoader = new TransporClasstLoader(urls.toArray(new URL[1]), this.class.classLoader)
@@ -116,7 +123,7 @@ class TransportManager {
             Transport transport = clazz.newInstance()
             return true//groovy truth
         } catch (Exception e) {
-            e.printStackTrace()
+            log.error("failed to test transport $name", e)
             return false
         }
     }
@@ -145,11 +152,22 @@ class TransportManager {
      * @return
      */
     def removeTransport(TransportInfo transportInfo) {
-
-        if (meddela.database.runDbAction {ODB odb -> odb.delete(transportInfo)}) {
-            File pluginjar = new File(transportsPath + File.separator + transportInfo.name + ".jar")
-            return FileUtils.deleteQuietly(pluginjar)
+        def result = meddela.database.runDbAction {ODB odb ->
+            def dbTransportInfo = meddela.database.getObjectByProperty(TransportInfo, 'name', transportInfo.name)
+            if(dbTransportInfo)
+                odb.delete(dbTransportInfo)
         }
+
+        if (result) {
+            File pluginjar = new File(transportsPath + File.separator + transportInfo.name + ".jar")
+            try {
+                pluginjar.delete()
+                return true
+            } catch (Exception ex) {
+                log.error("failed to delete ${transportInfo.name} plugin jar", ex)
+            }
+        }
+
         return false
     }
 
@@ -161,15 +179,17 @@ class TransportManager {
      */
     boolean installTransportPlugin(String filename) {
         File pluginjar = new File(transportsPath + File.separator + filename)
+        log.info("attempting to install transport plugin from ${pluginjar.absolutePath}")
         addTransport(pluginjar)
         if (testTransport(filename.replace(".jar", ""))) {  //test if contain a meddela transport plugin
 
             TransportInfo transportinfo = new TransportInfo()
             transportinfo.name = filename.replace(".jar", "")
-           //initiate the global configurations for the transport
+            //initiate the global configurations for the transport
             Transport transport = getTransport(transportinfo.name)
             transportinfo.configurations = transport.globalConfigurations()
             saveTransportInfo(transportinfo)
+            log.info("installed $transportinfo.name transport plugin succesfully")
             return true
         } else {
             FileUtils.deleteQuietly(pluginjar)

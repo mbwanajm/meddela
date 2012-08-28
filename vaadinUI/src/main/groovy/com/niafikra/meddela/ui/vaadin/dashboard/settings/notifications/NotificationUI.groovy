@@ -10,6 +10,9 @@ import com.vaadin.ui.VerticalLayout
 import com.vaadin.ui.Window
 
 import org.vaadin.peter.buttongroup.ButtonGroup
+import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.basic.NotificationBasicUI
+import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.trigger.NotificationTrigerUI
+import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.template.NotificationsTemplateUI
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com>

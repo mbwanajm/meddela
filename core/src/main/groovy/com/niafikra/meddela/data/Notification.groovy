@@ -13,7 +13,7 @@ class Notification {
     String name = ''
     String description = ''
     TransportInfo transport
-    HashMap<String,HashMap> transportConfigurations  =new HashMap()    //contains configurations for the transport it uses
+    HashMap<String,HashMap> transportConfigurations  = new HashMap()    //contains configurations for the transport it uses
                                                                        //key is the name of the transport and the map is the configurations for that transport as per this notification
     DataSource dataSource = new DataSource()    // the data source this notification belongs too.
     Trigger trigger = new Trigger()             // the trigger to check on the datasource, if it is satisfied then
@@ -49,5 +49,16 @@ class Notification {
             transportConfigurations.put(transport,confs)
         }
         return confs
+    }
+
+    /**
+     * Returns the set value for the given key for the current transport used
+     * by the notification
+     *
+     * @param valueKey
+     * @return
+     */
+    def getTransportConfigurationValue(String valueKey){
+        transportConfigurations[transport.name][valueKey]
     }
 }

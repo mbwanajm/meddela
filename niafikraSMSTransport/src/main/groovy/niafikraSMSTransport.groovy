@@ -29,7 +29,8 @@ class niafikraSMSTransport implements Transport {
             return false
         }
 
-        def smsURL = getSendSMSURL('niafikra', sentNotification.receiver, sentNotification.content)
+        def sender = sentNotification.notification.getTransportConfigurationValue('sender name')
+        def smsURL = getSendSMSURL(sender , sentNotification.receiver, sentNotification.content)
         def connection = new URL(smsURL).openConnection();
 
         if (connection.responseCode == 200) {
@@ -56,7 +57,7 @@ class niafikraSMSTransport implements Transport {
 
     @Override
     Map notificationConfigurations() {
-        return new HashMap()
+        return ['sender name': 'niafikra']
     }
 
     def getSendSMSURL(String source, String phoneNumber, String content) {

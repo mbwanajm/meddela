@@ -20,11 +20,14 @@ class ConsoleTransport implements Transport {
     @Override
     boolean sendNotification(SentNotification sentNotification) {
         if(sentNotification.receiver == null)   return false
+
         def msg = """
-        #### notification sent #############################
-            receiver: $sentNotification.receiver
-            content :
-            $sentNotification.content
+#### notification sent #############################
+sender: ${sentNotification.notification.getTransportConfigurationValue('sender')}
+receiver: $sentNotification.receiver
+content :
+$sentNotification.content
++++++ ${sentNotification.notification.transport.configurations['footer message']}
         """
 
         log.info(msg)
@@ -34,11 +37,11 @@ class ConsoleTransport implements Transport {
 
     @Override
     Map globalConfigurations() {
-        return new HashMap()
+        ['footer message': 'powered by meddela']
     }
 
     @Override
     Map notificationConfigurations() {
-        return new HashMap()
+        ['sender': 'meddela']
     }
 }

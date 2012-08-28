@@ -5,6 +5,11 @@ import org.neodatis.odb.core.query.criteria.Where
 import com.niafikra.meddela.meddela
 import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery
 import com.niafikra.meddela.data.SentNotification
+import org.neodatis.odb.ODB
+import org.neodatis.odb.core.query.IValuesQuery
+import org.neodatis.odb.impl.core.query.values.ValuesCriteriaQuery
+import org.neodatis.odb.core.query.criteria.ICriterion
+import org.neodatis.odb.Values
 
 /**
  * This class allows you to get reports on the sent notifications
@@ -29,10 +34,29 @@ class ReportService {
      * @param endDate
      * @param receiver
      * @param status
-     * @return
+     * @return Collection of notifications that satisfy the passed parameters
      */
     def getSentNotifications(String notificationName, Date startDate, Date endDate, String receiver, String status) {
-        // Query db using the given filters
+        ICriterion criteria = prepareCriteria(notificationName,startDate, endDate, receiver, status)
+        Collection results
+        meddela.database.runDbAction {odb ->
+            results = odb.getObjects(new CriteriaQuery(SentNotification, criteria))
+        }
+
+        return results
+    }
+
+    def getSentNotificationCount(String notificationName, Date startDate, Date endDate, String receiver, String status){
+        ICriterion criteria = prepareCriteria(notificationName, startDate, endDate, receiver, status)
+        Values values;
+        meddela.database.runDbAction {ODB odb ->
+            values = odb.getValues(new ValuesCriteriaQuery(SentNotification, criteria).count('count'))
+        }
+
+        return values?.first.getByAlias('count')
+    }
+
+    ICriterion prepareCriteria(String notificationName, Date startDate, Date endDate, String receiver, String status){
         And andCriteria = Where.and()
         endDate = endDate + 1
         andCriteria
@@ -57,11 +81,6 @@ class ReportService {
                 andCriteria.add(Where.equal('receiver', receiver))
         }
 
-        Collection results
-        meddela.database.runDbAction {odb ->
-            results = odb.getObjects(new CriteriaQuery(SentNotification, andCriteria))
-        }
-
-        return results
+        return andCriteria
     }
 }

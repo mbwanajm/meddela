@@ -1,4 +1,4 @@
-package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
+package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.template
 
 import com.niafikra.meddela.data.Notification
 import com.vaadin.ui.Accordion
@@ -16,8 +16,8 @@ class NotificationsTemplateUI extends VerticalLayout{
     boolean isNew
 
     NotificationsTemplateUI(Notification notification,boolean isNew){
-        messageUI = new TemplateMessageUI(notification,isNew)
-        codeUI = new TemplateCodeUI(notification,isNew,messageUI)
+        codeUI = new TemplateCodeUI(notification,isNew)
+        messageUI = new TemplateMessageUI(notification,isNew,codeUI)
         this.isNew = isNew
         build()
     }

@@ -36,9 +36,9 @@ class XChangeService {
 
         if (!notifications) return null
 
-        log.info('exporting ${notifications.size()} notifications..')
+        log.info("exporting ${notifications.size()} notifications..")
         String jsonRepresentation = gson.toJson(notifications)
-        log.info(jsonRepresentation)
+        log.info("${notifications.size()} notifications exported succesfully")
 
         return jsonRepresentation;
     }

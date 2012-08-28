@@ -1,4 +1,4 @@
-package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
+package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.trigger
 
 import com.vaadin.ui.ListSelect
 import com.vaadin.data.Property
@@ -23,7 +23,7 @@ class ScheduleField extends ListSelect implements Property.ValueChangeListener {
         setImmediate(true)
         setMultiSelect(true)
         setNullSelectionAllowed(false)
-        setHeight("150px")
+        setHeight("250px")
         setWidth("100px")
         addListener((Property.ValueChangeListener) this)
     }

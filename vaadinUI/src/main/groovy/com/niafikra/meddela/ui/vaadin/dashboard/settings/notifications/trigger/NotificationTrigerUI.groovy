@@ -1,10 +1,10 @@
-package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications;
+package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.trigger;
 
 
 import com.niafikra.meddela.data.Notification
-import com.vaadin.ui.Button
+
 import com.vaadin.ui.VerticalLayout
-import com.vaadin.ui.Window
+
 import com.vaadin.ui.Accordion
 
 /**

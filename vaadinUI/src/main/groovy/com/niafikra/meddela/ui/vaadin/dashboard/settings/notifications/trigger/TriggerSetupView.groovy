@@ -1,4 +1,4 @@
-package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
+package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.trigger
 
 import com.vaadin.ui.VerticalLayout
 import com.vaadin.ui.TextArea

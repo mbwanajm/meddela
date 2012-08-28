@@ -1,4 +1,4 @@
-package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
+package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.trigger
 
 import com.niafikra.meddela.data.Trigger
 import com.vaadin.data.Property
@@ -42,6 +42,8 @@ class ScheduleForm extends VerticalLayout implements Property.ValueChangeListene
     }
 
     def build() {
+        setMargin(true)
+
         HorizontalLayout fieldsLayout = new HorizontalLayout()
         scheduleStringField.setWidth("100%")
 

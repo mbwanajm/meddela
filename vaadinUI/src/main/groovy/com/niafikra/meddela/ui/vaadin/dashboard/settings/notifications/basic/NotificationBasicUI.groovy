@@ -1,4 +1,4 @@
-package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications
+package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.basic
 
 import com.vaadin.ui.FormLayout
 import com.vaadin.ui.ComboBox

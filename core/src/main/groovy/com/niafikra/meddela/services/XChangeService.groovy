@@ -1,4 +1,4 @@
-package com.niafikra.meddela.services.xchange
+package com.niafikra.meddela.services
 
 import com.google.gson.Gson
 import com.niafikra.meddela.meddela
@@ -9,7 +9,6 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
 import com.niafikra.meddela.data.DataSource
-import com.niafikra.meddela.services.ObjectDatabase
 
 /**
  * @author mbwana jaffari mbura

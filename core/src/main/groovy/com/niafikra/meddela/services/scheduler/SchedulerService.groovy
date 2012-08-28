@@ -30,9 +30,9 @@ class SchedulerService {
         meddela.database.runDbQuery {
             def notifications = meddela.database.getObjectsByProperty(Notification, 'enabled', true)
 
-            if(!notifications) return
+            if (!notifications) return
 
-            for (notification in notifications){
+            for (notification in notifications) {
                 scheduleNotification(notification)
             }
         }
@@ -81,7 +81,11 @@ class SchedulerService {
      * @param notification
      */
     void reScheduleNotification(Notification notification) {
-        scheduler.reschedule(notification.schedulerId, notification.trigger.schedule)
+        if (scheduler.getTask(notification.schedulerId)) {
+            scheduler.reschedule(notification.schedulerId, notification.trigger.schedule)
+        } else {
+            scheduleNotification(notification)
+        }
     }
 
     /**

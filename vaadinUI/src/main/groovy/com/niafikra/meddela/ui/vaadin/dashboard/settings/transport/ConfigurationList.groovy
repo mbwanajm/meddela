@@ -20,7 +20,7 @@ import com.vaadin.data.Property
  */
 class ConfigurationList extends VerticalLayout implements Button.ClickListener, Property.ValueChangeListener {
 
-    Button add, remove, apply
+    Button apply
     Table configurationList
     HashMap configurations
     String currentConf
@@ -29,9 +29,7 @@ class ConfigurationList extends VerticalLayout implements Button.ClickListener, 
 
     ConfigurationList(HashMap configurations) {
         this.configurations = configurations
-        add = new Button("new")
-        remove = new Button("remove")
-        apply = new Button("add")
+        apply = new Button("save")
 
         configurationList = new Table()
 
@@ -58,34 +56,24 @@ class ConfigurationList extends VerticalLayout implements Button.ClickListener, 
         configurationList.setContainerDataSource(container)
 
         confField.setInputPrompt("configuration")
+        confField.setEnabled(true)
         valueField.setInputPrompt("value")
-        confField.setWidth("200px")
+        //confField.setWidth("200px")
         valueField.setWidth("200px")
         confField.setNullRepresentation("")
         valueField.setNullRepresentation("")
         HorizontalLayout confPanelLay = new HorizontalLayout()
         confPanelLay.addComponent(confField)
         confPanelLay.addComponent(valueField)
+        confPanelLay.addComponent(apply)
         confPanelLay.setSpacing(true)
         confPanelLay.setMargin(true)
         addComponent(confPanelLay)
         setComponentAlignment(confPanelLay, Alignment.MIDDLE_CENTER)
 
-        add.setWidth("100px")
-        remove.setWidth("100px")
         apply.setWidth("100px")
-
-        add.addListener((Button.ClickListener) this)
-        remove.addListener((Button.ClickListener) this)
         apply.addListener((Button.ClickListener) this)
 
-        ButtonGroup footer = new ButtonGroup()
-        footer.addButton(add)
-        footer.addButton(remove)
-        footer.addButton(apply)
-
-        addComponent(footer)
-        setComponentAlignment(footer, Alignment.MIDDLE_CENTER)
 
     }
 
@@ -93,10 +81,7 @@ class ConfigurationList extends VerticalLayout implements Button.ClickListener, 
     @Override
     void buttonClick(Button.ClickEvent event) {
         Button pressedButton = event.getButton()
-
-        if (pressedButton.equals(add)) addConf()
-        else if (pressedButton.equals(remove)) removeConf()
-        else if (pressedButton.equals(apply)) applyConf()
+        if (pressedButton.equals(apply)) applyConf()
     }
 
     void applyConf() {
@@ -120,6 +105,8 @@ class ConfigurationList extends VerticalLayout implements Button.ClickListener, 
     }
 
     def clear() {
+        confField.setReadOnly(false)
+        confField.setEnabled(false)
         confField.setValue(null)
         valueField.setValue(null)
     }
@@ -142,9 +129,14 @@ class ConfigurationList extends VerticalLayout implements Button.ClickListener, 
     @Override
     void valueChange(Property.ValueChangeEvent event) {
         String conf = event.getProperty().getValue()
+        if(conf){
         currentConf = conf
+        confField.setEnabled(true)
+        confField.setReadOnly(false)
         confField.setValue(conf)
+        confField.setReadOnly(true)
         valueField.setValue(configurations.get(conf))
+        }else clear()
     }
 
     def commit() {

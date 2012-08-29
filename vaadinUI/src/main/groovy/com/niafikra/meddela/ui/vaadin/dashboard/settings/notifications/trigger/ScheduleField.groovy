@@ -55,7 +55,7 @@ class ScheduleField extends ListSelect implements Property.ValueChangeListener {
         if (value.toString().equalsIgnoreCase("every")) return "*"
         if (value.toString().equalsIgnoreCase("L")) return "last"
         if (value.toString().equalsIgnoreCase("*")) return "every"
-        else return value
+        return value
     }
 
     /**

@@ -36,12 +36,17 @@ $sentNotification.content
     }
 
     @Override
-    Map globalConfigurations() {
+    Map getGlobalConfigurations() {
         ['footer message': 'powered by meddela']
     }
 
     @Override
-    Map notificationConfigurations() {
+    Map getNotificationConfigurations() {
         ['sender': 'meddela']
+    }
+
+    @Override
+    String getMessage() {
+        return "<b>Thanks For Using Console Tranport ....<b><br/>&nbps<i>niafikra engineering<i>"
     }
 }

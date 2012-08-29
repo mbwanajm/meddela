@@ -187,7 +187,7 @@ class TransportManager {
             transportinfo.name = filename.replace(".jar", "")
             //initiate the global configurations for the transport
             Transport transport = getTransport(transportinfo.name)
-            transportinfo.configurations = transport.globalConfigurations()
+            transportinfo.configurations = transport.getGlobalConfigurations()
             saveTransportInfo(transportinfo)
             log.info("installed $transportinfo.name transport plugin succesfully")
             return true

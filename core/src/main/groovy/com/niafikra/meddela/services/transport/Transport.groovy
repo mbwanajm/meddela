@@ -25,7 +25,7 @@ interface Transport {
      * @return  a map of config name againsts its default value which
      * can be changed by user
      */
-    Map globalConfigurations()
+    Map getGlobalConfigurations()
 
     /**
      * A set a configurations of which are to be used on sending
@@ -33,5 +33,12 @@ interface Transport {
      * @return  a map of config name againsts its default value which
      * can be changed by user
      */
-    Map notificationConfigurations()
+    Map getNotificationConfigurations()
+
+    /**
+     * Return messages you wish users to see on using this transport
+     * @return  a message string which can also be an HTML formated text which will be shown when user
+     *            use this transport
+     */
+    String getMessage()
 }

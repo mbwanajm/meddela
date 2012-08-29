@@ -51,7 +51,7 @@ abstract class AbstractCodeArea extends VerticalLayout implements NotificationCo
 
     @Override
     Object getCode() {
-        return this.codeArea.getValue()
+        return this.codeArea.getValue().toString().trim()
     }
 
     @Override

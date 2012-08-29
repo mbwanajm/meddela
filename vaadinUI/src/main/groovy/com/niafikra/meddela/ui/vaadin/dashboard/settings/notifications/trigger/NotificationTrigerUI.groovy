@@ -18,9 +18,9 @@ class NotificationTrigerUI extends VerticalLayout{
     TrigerSetup trigerSetup
     Notification notification
 
-    NotificationTrigerUI(Notification notification) {
+    NotificationTrigerUI(Notification notification,boolean isNew) {
         this.notification = notification
-        scheduleForm = new ScheduleForm(notification.trigger)
+        scheduleForm = new ScheduleForm(notification.trigger,isNew)
         trigerSetup = new TrigerSetup(notification)
         build()
     }

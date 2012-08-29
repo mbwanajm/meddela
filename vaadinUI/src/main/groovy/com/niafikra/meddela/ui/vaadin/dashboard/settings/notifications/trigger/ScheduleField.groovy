@@ -53,6 +53,20 @@ class ScheduleField extends ListSelect implements Property.ValueChangeListener {
     Object getCRONValue(Object value) {
         if (value.toString().equalsIgnoreCase("last")) return "L"
         if (value.toString().equalsIgnoreCase("every")) return "*"
+        if (value.toString().equalsIgnoreCase("L")) return "last"
+        if (value.toString().equalsIgnoreCase("*")) return "every"
         else return value
+    }
+
+    /**
+     * Set value for the field which
+     * @param val comma separated string cron4j value
+     */
+    void setValue(String val){
+       def valList =[]
+       val.split("[,]").each {
+           valList << getCRONValue(it)
+       }
+       setValue(valList)
     }
 }

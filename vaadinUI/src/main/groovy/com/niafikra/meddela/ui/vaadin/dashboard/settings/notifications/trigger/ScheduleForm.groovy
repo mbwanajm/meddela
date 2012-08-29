@@ -28,7 +28,7 @@ class ScheduleForm extends VerticalLayout implements Property.ValueChangeListene
     /**
      * Create the form
      */
-    ScheduleForm(Trigger trigger) {
+    ScheduleForm(Trigger trigger,boolean isNew) {
         this.trigger = trigger
         scheduleStringField = new TextField("CRON Schedule String")
         footer = new HorizontalLayout()
@@ -38,7 +38,7 @@ class ScheduleForm extends VerticalLayout implements Property.ValueChangeListene
         hour = new ScheduleField("Hour", fields)
         minute = new ScheduleField("Minute", fields)
         build()
-        load()
+        if(!isNew)load()
     }
 
     def build() {
@@ -83,6 +83,12 @@ class ScheduleForm extends VerticalLayout implements Property.ValueChangeListene
 
     def load(){
         scheduleStringField.setValue(trigger.getSchedule())
+        String[] shedule =trigger.getSchedule().split("[ ]")
+        minute.setValue(shedule[0])
+        hour.setValue(shedule[1])
+        day.setValue(shedule[2])
+        month.setValue(shedule[3])
+        dayOfWeek.setValue(shedule[4])
     }
 
     def commit(){

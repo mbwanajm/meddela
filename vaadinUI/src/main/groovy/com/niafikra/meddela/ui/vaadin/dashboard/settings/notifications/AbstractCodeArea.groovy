@@ -33,7 +33,8 @@ abstract class AbstractCodeArea extends VerticalLayout implements NotificationCo
         setSpacing(true)
         setMargin(true)
         codeArea.setWidth("100%")
-        codeArea.setHeight("500px")
+        codeArea.setSizeFull()
+       // codeArea.setHeight("500px")
 
         if(type.equalsIgnoreCase("SQL"))
             codeArea.setMode(AceMode.sql)
@@ -41,6 +42,7 @@ abstract class AbstractCodeArea extends VerticalLayout implements NotificationCo
             codeArea.setMode(AceMode.groovy)
 
         addComponent(codeArea)
+        setSizeFull()
     }
 
 

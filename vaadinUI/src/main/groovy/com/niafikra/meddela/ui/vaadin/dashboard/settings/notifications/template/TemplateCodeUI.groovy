@@ -67,21 +67,7 @@ class TemplateCodeUI extends CodingTabSheet{
         }
         def content = "<hr/>"
         for (results in multiResults){
-        content += "<table><tr>"
-        def columnNames = results[0].keySet()
-        columnNames.each {
-            content += "<td> $it&nbsp&nbsp</td>"
-        }
-        content += "</tr>"
-
-        results.each { result ->
-            content += "<tr>"
-            columnNames.each { columnName ->
-                content += "<td> ${result[columnName]}&nbsp&nbsp</td>"
-            }
-            content += "</tr>"
-        }
-        content += "</table>"
+        content += super.getTableToShow(results,source)
         content+="<hr/><br/>"
         }
         return content

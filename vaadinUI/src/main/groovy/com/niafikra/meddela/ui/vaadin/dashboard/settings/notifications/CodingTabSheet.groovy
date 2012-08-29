@@ -82,6 +82,7 @@ abstract class CodingTabSheet extends VerticalLayout implements Button.ClickList
     void popUp() {
         Window popWindow = new Window("Coding Sheet")
         popWindow.addListener(this)
+        popWindow.setModal(true)
         popWindow.center()
         popWindow.setWidth("70%")
         popWindow.setHeight("90%")

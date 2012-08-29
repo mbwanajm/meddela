@@ -8,6 +8,12 @@ import org.neodatis.odb.ODB
 import com.niafikra.meddela.data.Notification
 import com.niafikra.meddela.services.ReportService
 import groovy.xml.MarkupBuilder
+import com.vaadin.ui.HorizontalLayout
+import com.vaadin.ui.GridLayout
+import com.vaadin.ui.Embedded
+import com.vaadin.terminal.ThemeResource
+import com.vaadin.ui.Button
+import com.vaadin.ui.themes.Reindeer
 
 /**
  * The home view
@@ -18,9 +24,9 @@ import groovy.xml.MarkupBuilder
  */
 class HomeView extends VerticalLayout {
     Label notificationsLabel = new Label()
+    Button reloadButton;
 
     HomeView() {
-        setSizeFull()
         setSpacing(true)
         setMargin(true)
 
@@ -28,33 +34,55 @@ class HomeView extends VerticalLayout {
     }
 
     def buildUI() {
+        HorizontalLayout topLayout = new HorizontalLayout()
+        topLayout.setWidth('100%')
+        addComponent(topLayout)
+        setComponentAlignment(topLayout, Alignment.TOP_CENTER)
+
+        VerticalLayout statsLayout = new VerticalLayout()
+        statsLayout.setSpacing(true)
+        statsLayout.setWidth('645px')
+        topLayout.addComponent(statsLayout)
+        topLayout.setComponentAlignment(statsLayout, Alignment.TOP_LEFT )
 
         notificationsLabel.setContentMode(Label.CONTENT_XHTML)
-        addComponent(notificationsLabel)
-        setComponentAlignment(notificationsLabel, Alignment.MIDDLE_CENTER)
+        statsLayout.addComponent(notificationsLabel)
+
+        reloadButton = new Button('get latest stats')
+        reloadButton.setStyleName(Reindeer.BUTTON_SMALL)
+        reloadButton.addListener({ renderStats(loadNotificationStats())} as Button.ClickListener)
+        statsLayout.addComponent(reloadButton)
+        statsLayout.setComponentAlignment(reloadButton, Alignment.BOTTOM_RIGHT)
+
+        Embedded logo = new Embedded()
+        logo.setSource(new ThemeResource('../meddela/images/logo.png'))
+        topLayout.addComponent(logo)
+        topLayout.setComponentAlignment(logo, Alignment.TOP_RIGHT)
+
+
         def notificationStats = loadNotificationStats()
         renderStats(notificationStats)
     }
 
     def renderStats(Collection stats) {
-        if(stats){
+        if (stats) {
             StringWriter writer = new StringWriter()
             def build = new MarkupBuilder(writer)
 
-            build.table('class':'stats_table'){
-                tr('class':'stats_header'){
+            build.table('class': 'stats_table') {
+                tr('class': 'stats_header') {
                     td()
                     td('this week')
                     td('this month')
                     td('all')
                 }
 
-                for(stat in stats){
-                    tr{
-                       td(stat.name)
-                       td(stat.weekCount)
-                       td(stat.monthCount)
-                       td(stat.allCount)
+                for (stat in stats) {
+                    tr {
+                        td('class': 'stats_name', stat.name)
+                        td('class': 'stats_detail', stat.weekCount)
+                        td('class': 'stats_detail', stat.monthCount)
+                        td('class': 'stats_detail', stat.allCount)
                     }
                 }
             }
@@ -82,7 +110,7 @@ class HomeView extends VerticalLayout {
                         ReportService.STATUS_DELIVERED
                 )
 
-                details ['monthCount'] = meddela.reportService.getSentNotificationCount(
+                details['monthCount'] = meddela.reportService.getSentNotificationCount(
                         notification.name,
                         new Date(today.year, today.month, 1),
                         today,
@@ -90,7 +118,7 @@ class HomeView extends VerticalLayout {
                         ReportService.STATUS_DELIVERED
                 )
 
-                details ['allCount'] = meddela.reportService.getSentNotificationCount(
+                details['allCount'] = meddela.reportService.getSentNotificationCount(
                         notification.name,
                         new Date(0),
                         today,

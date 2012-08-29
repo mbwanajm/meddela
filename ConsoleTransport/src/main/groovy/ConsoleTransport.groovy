@@ -47,6 +47,6 @@ $sentNotification.content
 
     @Override
     String getMessage() {
-        return "<b>Thanks For Using Console Tranport ....<b><br/><i>niafikra engineering<i>"
+        return "<b>Thanks For Using Console Tranport ....</b><br/><i>niafikra engineering<i>"
     }
 }

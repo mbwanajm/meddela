@@ -3,6 +3,7 @@ package com.niafikra.meddela.ui.vaadin.login
 import com.niafikra.meddela.ui.vaadin.UIManager
 import com.vaadin.event.ShortcutAction
 import com.vaadin.ui.*
+import com.vaadin.terminal.ThemeResource
 
 /**
  * This is the view when requesting user to login
@@ -25,10 +26,23 @@ class LoginView extends VerticalLayout implements Button.ClickListener {
     }
 
     def build() {
+        HorizontalLayout centeredLayout = new HorizontalLayout()
+        centeredLayout.setSpacing(true)
+        addComponent(centeredLayout)
+        setComponentAlignment(centeredLayout, Alignment.MIDDLE_CENTER)
+
+        VerticalLayout logoLayout = new VerticalLayout()
+        logoLayout.setHeight('142px')
+        logoLayout.setStyleName('login_logo')
+        Embedded logo = new Embedded()
+        logo.setSource(new ThemeResource('../meddela/images/logo.png'))
+        logoLayout.addComponent(logo)
+        logoLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER)
+        centeredLayout.addComponent(logoLayout)
 
         loginForm = getLoginForm()
-        addComponent(loginForm)
-        setComponentAlignment(loginForm, Alignment.MIDDLE_CENTER)
+        centeredLayout.addComponent(loginForm)
+
         setSizeFull()
 
     }

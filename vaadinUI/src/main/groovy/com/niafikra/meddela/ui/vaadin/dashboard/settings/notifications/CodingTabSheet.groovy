@@ -90,7 +90,7 @@ class CodingTabSheet extends VerticalLayout implements Button.ClickListener{
     }
 
     def formatOutput(Map result) {
-        StringBuffer out = new StringBuffer("Code Execution Output<br/>")
+        StringBuffer out = new StringBuffer("")
 
         if (!result) return "There is no any code to execute"
         if (result.size() == 2) out.append("<br/>Warning:YOU HAVE BOTH SQL AND GROOVY CODES ONLY SQL CODES WILL BE USED<br/>")

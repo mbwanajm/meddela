@@ -39,6 +39,7 @@ class Dashboard extends Window {
         setContent(mainLayout)
         mainLayout.addComponent(toolbar)
         mainLayout.addComponent(homeView)
+        mainLayout.setExpandRatio(homeView, 1)
     }
 
     def showSettingsView() {

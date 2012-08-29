@@ -22,7 +22,7 @@ import com.niafikra.meddela.data.Notification
 class CodingTabSheet extends VerticalLayout implements Button.ClickListener{
 
     TabSheet codeSheet
-    Button testButton,popButton
+    Button testButton;
     Label outputArea
     Panel outputPanel
     Notification notification
@@ -33,7 +33,6 @@ class CodingTabSheet extends VerticalLayout implements Button.ClickListener{
         this.notification = notification
         codeSheet = new TabSheet()
         testButton = new Button("Execute")
-        popButton = new Button("Popup")
         outputArea = new Label("",Label.CONTENT_XHTML)
         outputPanel=new Panel()
     }
@@ -42,16 +41,15 @@ class CodingTabSheet extends VerticalLayout implements Button.ClickListener{
        // codeSheet.setHeight("320px")
         codeSheet.setSizeFull()
         testButton.setWidth("200px")
-        popButton.setWidth("200px")
         outputPanel.setWidth("100%")
         outputPanel.setHeight("100px")
 
         addComponent(codeSheet)
-        ButtonGroup footer = new ButtonGroup()
+        /*ButtonGroup footer = new ButtonGroup()
         footer.addButton(testButton)
-        footer.addButton(popButton)
-        addComponent(footer)
-        setComponentAlignment(footer,Alignment.MIDDLE_CENTER)
+        footer.addButton(popButton) */
+        addComponent(testButton)
+        setComponentAlignment(testButton,Alignment.MIDDLE_CENTER)
         outputPanel.addComponent(outputArea)
         addComponent(outputPanel)
 
@@ -92,7 +90,7 @@ class CodingTabSheet extends VerticalLayout implements Button.ClickListener{
     }
 
     def formatOutput(Map result) {
-        StringBuffer out = new StringBuffer("Code Execution Output<br/>")
+        StringBuffer out = new StringBuffer("")
 
         if (!result) return "There is no any code to execute"
         if (result.size() == 2) out.append("<br/>Warning:YOU HAVE BOTH SQL AND GROOVY CODES ONLY SQL CODES WILL BE USED<br/>")

@@ -45,7 +45,7 @@ class Notification {
         HashMap confs= transportConfigurations.get(transport)
         if(!confs){
             //init specific notif configurations
-            confs = meddela.transportManager.getTransport(transport).notificationConfigurations()
+            confs = meddela.transportManager.getTransport(transport).getNotificationConfigurations()
             transportConfigurations.put(transport,confs)
         }
         return confs

@@ -62,7 +62,7 @@ class niafikraSMSTransport implements Transport {
 
     @Override
     String getMessage() {
-        return "<b>Thanks For Using SMS Tranport ....<b><br/><i>niafikra engineering<i>"
+        return "<b>niafikra SMS Tranport ....</b><br/><i>niafikra engineering<i>"
     }
 
     def getSendSMSURL(String source, String phoneNumber, String content) {

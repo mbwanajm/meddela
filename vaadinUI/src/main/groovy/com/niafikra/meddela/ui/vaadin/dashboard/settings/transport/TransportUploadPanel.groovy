@@ -18,6 +18,7 @@ import com.vaadin.ui.Alignment
 import com.vaadin.data.Property
 import com.vaadin.data.util.BeanItemContainer
 import com.niafikra.meddela.data.TransportInfo
+import com.vaadin.ui.Label
 
 /**
  * niafikra engineering
@@ -32,6 +33,7 @@ Property.ValueChangeListener, Button.ClickListener {
     Upload transportUpload;
     ListSelect transportList;
     ConfigurationList transportConfigs
+    Label transportMessageLabel
     Button save, remove
     Panel configPanel
 
@@ -39,6 +41,7 @@ Property.ValueChangeListener, Button.ClickListener {
         transportUpload = new Upload("Upload Transport Plugin jar", new UploadReceiver(meddela.transportManager.transportsPath))
         transportList = new ListSelect("Available Transport Plugins")
         transportConfigs = new ConfigurationList(null)
+        transportMessageLabel = new Label("No Transport Selected",Label.CONTENT_XHTML)
         save = new Button("Save")
         remove = new Button("Remove")
         build()
@@ -79,6 +82,11 @@ Property.ValueChangeListener, Button.ClickListener {
         configPanel.setStyleName(Reindeer.PANEL_LIGHT)
         configPanel.setSizeFull()
         transportInfoLay.addComponent(configPanel)
+
+        Panel messagePanel = new Panel()
+        messagePanel.addComponent(transportMessageLabel)
+        transportInfoLay.addComponent(messagePanel)
+
         Panel uploadingPanel = new Panel("Add Transport Plugin")
         uploadingPanel.setSizeFull()
         transportUpload.setWidth("50%")
@@ -128,6 +136,7 @@ Property.ValueChangeListener, Button.ClickListener {
         TransportInfo transportInfo = event.getProperty().value
         configPanel.setCaption(transportInfo.toString()+" ,"+"Transport Plugin Configurations")
         transportConfigs.setConfigurations(transportInfo.configurations)
+        transportMessageLabel.setValue(meddela.transportManager.getTransport(transportInfo.name)?.message)
     }
 
     @Override

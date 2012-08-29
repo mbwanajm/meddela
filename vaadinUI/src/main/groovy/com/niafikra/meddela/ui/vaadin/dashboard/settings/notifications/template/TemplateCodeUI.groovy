@@ -12,6 +12,7 @@ import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.CodingTab
 class TemplateCodeUI extends CodingTabSheet{
 
     Notification notification
+    boolean isNew
     TemplateCodeUI(Notification notification,boolean isNew){
         super(notification)
         this.notification = notification
@@ -19,10 +20,7 @@ class TemplateCodeUI extends CodingTabSheet{
         this.groovyArea = new TemplateGroovyCodeArea()
         build()
         load()
-      /*  if(!isNew) {
-            execute()
-            messageUI.load()
-        }  */
+        this.isNew = isNew
     }
 
     def load() {
@@ -64,5 +62,10 @@ class TemplateCodeUI extends CodingTabSheet{
     def commit(){
         notification.template.sqls = sqlArea.getCode()
         notification.template.groovyCode = groovyArea.getCode()
+    }
+
+    @Override
+    CodingTabSheet getNewInstance() {
+        return new TemplateCodeUI(notification,isNew)
     }
 }

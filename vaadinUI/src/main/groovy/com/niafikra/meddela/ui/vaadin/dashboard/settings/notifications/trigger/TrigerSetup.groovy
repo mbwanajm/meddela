@@ -39,6 +39,10 @@ class TrigerSetup extends CodingTabSheet {
         super.build()
     }
 
+    @Override
+    CodingTabSheet getNewInstance() {
+        return new TrigerSetup(notification)
+    }
 
     def commit() {
         notification.trigger.setSql(sqlSetupView.code)

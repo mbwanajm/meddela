@@ -9,6 +9,7 @@ import com.vaadin.ui.Alignment
 import com.vaadin.ui.Panel
 import com.vaadin.ui.Label
 import com.niafikra.meddela.data.Notification
+import com.vaadin.ui.Window
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com,bonifacechacha@niafikra.com>
@@ -19,10 +20,10 @@ import com.niafikra.meddela.data.Notification
  * contains place holder for groovy scripts and SQL code alongside the execute and ouput area
  *
  */
-class CodingTabSheet extends VerticalLayout implements Button.ClickListener{
+abstract class CodingTabSheet extends VerticalLayout implements Button.ClickListener,Window.CloseListener{
 
     TabSheet codeSheet
-    Button testButton;
+    Button testButton,popButton
     Label outputArea
     Panel outputPanel
     Notification notification
@@ -33,6 +34,7 @@ class CodingTabSheet extends VerticalLayout implements Button.ClickListener{
         this.notification = notification
         codeSheet = new TabSheet()
         testButton = new Button("Execute")
+        popButton = new Button("Pop Up")
         outputArea = new Label("",Label.CONTENT_XHTML)
         outputPanel=new Panel()
     }
@@ -41,15 +43,16 @@ class CodingTabSheet extends VerticalLayout implements Button.ClickListener{
        // codeSheet.setHeight("320px")
         codeSheet.setSizeFull()
         testButton.setWidth("200px")
+        popButton.setWidth("200px")
         outputPanel.setWidth("100%")
         outputPanel.setHeight("100px")
 
         addComponent(codeSheet)
-        /*ButtonGroup footer = new ButtonGroup()
+        ButtonGroup footer = new ButtonGroup()
         footer.addButton(testButton)
-        footer.addButton(popButton) */
-        addComponent(testButton)
-        setComponentAlignment(testButton,Alignment.MIDDLE_CENTER)
+        footer.addButton(popButton)
+        addComponent(footer)
+        setComponentAlignment(footer,Alignment.MIDDLE_CENTER)
         outputPanel.addComponent(outputArea)
         addComponent(outputPanel)
 
@@ -60,6 +63,7 @@ class CodingTabSheet extends VerticalLayout implements Button.ClickListener{
         codeSheet.addTab(groovyArea,"GROOVY")
 
         testButton.addListener(this)
+        popButton.addListener(this)
         setExpandRatio(codeSheet,1)
         setSizeFull()
     }
@@ -76,8 +80,20 @@ class CodingTabSheet extends VerticalLayout implements Button.ClickListener{
     }
 
     void popUp() {
-
+        Window popWindow = new Window("Coding Sheet")
+        popWindow.addListener(this)
+        popWindow.setModal(true)
+        popWindow.center()
+        popWindow.setWidth("70%")
+        popWindow.setHeight("90%")
+        CodingTabSheet popSheet =getNewInstance()
+        ((ButtonGroup)popSheet.popButton.getParent()).removeButton(popSheet.popButton)
+        popSheet.copyValues(this)
+        popWindow.setContent(popSheet)
+        getWindow().addWindow(popWindow)
     }
+
+    abstract CodingTabSheet getNewInstance()
 
     void onExecute() {
         def result = execute()
@@ -150,5 +166,15 @@ class CodingTabSheet extends VerticalLayout implements Button.ClickListener{
         return result
     }
 
+    def copyValues(CodingTabSheet another){
+        this.sqlArea.setCode(another.sqlArea.getCode())
+        this.groovyArea.setCode(another.groovyArea.getCode())
+    }
 
+    @Override
+    void windowClose(Window.CloseEvent e) {
+        Window popWindow=e.getWindow()
+        CodingTabSheet tabSheet=popWindow.getContent()
+        this.copyValues(tabSheet)
+    }
 }

@@ -134,16 +134,15 @@ abstract class CodingTabSheet extends VerticalLayout implements Button.ClickList
     }
 
     def getMessageToShow(Object result,String source) {
-        try{
+
         if (result instanceof Collection)
             return getTableToShow(result,source)
-        }catch (Exception e){
 
-        }
         return result
     }
 
     def getTableToShow(Object results,String source) {
+        try{
         def content = "<table><tr>"
         def columnNames = results[0].keySet()
         columnNames.each {
@@ -159,6 +158,14 @@ abstract class CodingTabSheet extends VerticalLayout implements Button.ClickList
             content += "</tr>"
         }
         content += "</table>"
+        return content
+        }catch (Exception e){
+          //in case fails in creating a table
+            return """
+                    <font color="orange">failed creating table because :${e.getMessage()}</font><br/>
+                     ${results}
+                   """
+        }
     }
 
     def getResult(def result) {

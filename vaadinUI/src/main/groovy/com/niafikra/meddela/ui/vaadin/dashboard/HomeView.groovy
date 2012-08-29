@@ -14,6 +14,7 @@ import com.vaadin.ui.Embedded
 import com.vaadin.terminal.ThemeResource
 import com.vaadin.ui.Button
 import com.vaadin.ui.themes.Reindeer
+import com.vaadin.ui.Panel
 
 /**
  * The home view
@@ -39,8 +40,9 @@ class HomeView extends VerticalLayout {
         addComponent(topLayout)
         setComponentAlignment(topLayout, Alignment.TOP_CENTER)
 
-        VerticalLayout statsLayout = new VerticalLayout()
-        statsLayout.setSpacing(true)
+        Panel statsLayout = new Panel()
+        statsLayout.setStyleName(Reindeer.PANEL_LIGHT)
+        statsLayout.content.setSpacing(true)
         statsLayout.setWidth('645px')
         topLayout.addComponent(statsLayout)
         topLayout.setComponentAlignment(statsLayout, Alignment.TOP_LEFT )
@@ -52,7 +54,7 @@ class HomeView extends VerticalLayout {
         reloadButton.setStyleName(Reindeer.BUTTON_SMALL)
         reloadButton.addListener({ renderStats(loadNotificationStats())} as Button.ClickListener)
         statsLayout.addComponent(reloadButton)
-        statsLayout.setComponentAlignment(reloadButton, Alignment.BOTTOM_RIGHT)
+        statsLayout.content.setComponentAlignment(reloadButton, Alignment.BOTTOM_RIGHT)
 
         Embedded logo = new Embedded()
         logo.setSource(new ThemeResource('../meddela/images/logo.png'))

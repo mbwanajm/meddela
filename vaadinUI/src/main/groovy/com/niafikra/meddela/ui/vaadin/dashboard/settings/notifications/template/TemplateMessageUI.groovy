@@ -23,10 +23,11 @@ class TemplateMessageUI extends VerticalLayout implements Button.ClickListener{
         this.codeUI = codeUI
         loadButton = new Button("Load Selectables")
         build()
-        load()//fill the required values eg SQL code for test
+        if(!isNew) load()//fill the required values eg SQL code for test
     }
 
     def load() {
+        reloadSelectables()
         messageBox.setValue(notification.getTemplate().template)
         joiningBox.setValue(notification.template.joiningProperty)
         receiverBox.setValue(notification.template.receiverProperty)
@@ -92,6 +93,5 @@ class TemplateMessageUI extends VerticalLayout implements Button.ClickListener{
     def reloadSelectables() {
         def results= codeUI.getTemplateVariables()
         fillSelectables(results)
-        load()
     }
 }

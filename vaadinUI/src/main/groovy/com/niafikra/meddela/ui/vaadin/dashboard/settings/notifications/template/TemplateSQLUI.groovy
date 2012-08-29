@@ -110,7 +110,11 @@ class TemplateSQLUI extends HorizontalLayout implements NotificationCodeArea, Bu
 
     @Override
     def execute(com.niafikra.meddela.data.Notification notification) {
-        notification.trigger.sql=codeArea.getCode()
+        notification.trigger.sql=codeArea.getCode().toString().trim()
+        if(notification.trigger.sql.isEmpty()){
+            if(!getCode().isEmpty()) return "No SQl Selected to Execute"
+            else return null
+        }
         return meddela.triggerCheck.checkWithSQL(notification)
     }
 

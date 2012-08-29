@@ -3,6 +3,8 @@ package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.template
 import com.niafikra.meddela.data.Notification
 
 import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.CodingTabSheet
+import com.vaadin.ui.Window
+import groovy.sql.GroovyRowResult
 
 /**
  * Author: Boniface Chacha <bonifacechacha@gmail.com,bonifacechacha@niafikra.com>
@@ -51,6 +53,39 @@ class TemplateCodeUI extends CodingTabSheet{
         return  results
 
     }          */
+
+    def getTableToShow(Object multiResults,String source) {
+        if(multiResults.isEmpty())
+            return super.getTableToShow(multiResults,source)
+        if(!(multiResults[0] instanceof Collection)  )
+        {
+            if(source.equalsIgnoreCase("groovy"))
+            getWindow().showNotification(
+                    "Results returned by your codes are not in the required format"
+                    ,Window.Notification.TYPE_WARNING_MESSAGE)
+            return super.getTableToShow(multiResults,source)
+        }
+        def content = "<hr/>"
+        for (results in multiResults){
+        content += "<table><tr>"
+        def columnNames = results[0].keySet()
+        columnNames.each {
+            content += "<td> $it&nbsp&nbsp</td>"
+        }
+        content += "</tr>"
+
+        results.each { result ->
+            content += "<tr>"
+            columnNames.each { columnName ->
+                content += "<td> ${result[columnName]}&nbsp&nbsp</td>"
+            }
+            content += "</tr>"
+        }
+        content += "</table>"
+        content+="<hr/><br/>"
+        }
+        return content
+    }
 
     def getTemplateVariables(){
         def result = sqlArea.getTemplateVariables(notification)

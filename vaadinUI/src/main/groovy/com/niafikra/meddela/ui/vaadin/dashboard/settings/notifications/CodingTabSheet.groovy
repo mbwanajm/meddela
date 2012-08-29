@@ -109,12 +109,12 @@ abstract class CodingTabSheet extends VerticalLayout implements Button.ClickList
         StringBuffer out = new StringBuffer("")
 
         if (!result) return "There is no any code to execute"
-        if (result.size() == 2) out.append("<br/>Warning:YOU HAVE BOTH SQL AND GROOVY CODES ONLY SQL CODES WILL BE USED<br/>")
+        if (result.size() == 2) out.append('<font color="orange">Warning:YOU HAVE BOTH SQL AND GROOVY CODES ONLY SQL CODES WILL BE USED</font><br/>')
 
         if (result["sql"])
-            out.append("SQL:<br/>").append(getMessageToShow(result.get("sql")))
+            out.append("<b>SQL:</b><br/>").append(getMessageToShow(result.get("sql"),"sql"))
         if (result["groovy"])
-            out.append("<br/>GROOVY:<br/>").append(getMessageToShow(result.get("groovy")))
+            out.append("<br/><b>GROOVY:</b><br/>").append(getMessageToShow(result.get("groovy"),"groovy"))
         return out
 
     }
@@ -133,13 +133,17 @@ abstract class CodingTabSheet extends VerticalLayout implements Button.ClickList
         return results
     }
 
-    def getMessageToShow(Object result) {
-        if (result instanceof ArrayList)
-            return getTableToShow(result)
-        else return result
+    def getMessageToShow(Object result,String source) {
+        try{
+        if (result instanceof Collection)
+            return getTableToShow(result,source)
+        }catch (Exception e){
+
+        }
+        return result
     }
 
-    def getTableToShow(Object results) {
+    def getTableToShow(Object results,String source) {
         def content = "<table><tr>"
         def columnNames = results[0].keySet()
         columnNames.each {

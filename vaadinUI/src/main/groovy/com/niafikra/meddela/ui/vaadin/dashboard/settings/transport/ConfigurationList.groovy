@@ -56,7 +56,7 @@ class ConfigurationList extends VerticalLayout implements Button.ClickListener, 
         configurationList.setContainerDataSource(container)
 
         confField.setInputPrompt("configuration")
-        confField.setEnabled(true)
+        confField.setEnabled(false)
         valueField.setInputPrompt("value")
         //confField.setWidth("200px")
         valueField.setWidth("200px")

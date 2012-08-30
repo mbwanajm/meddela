@@ -59,11 +59,11 @@ class TemplateCodeUI extends CodingTabSheet{
             return super.getTableToShow(multiResults,source)
         if(!(multiResults[0] instanceof Collection)  )
         {
+            def msg =''
             if(source.equalsIgnoreCase("groovy"))
-            getWindow().showNotification(
-                    "Results returned by your codes are not in the required format"
-                    ,Window.Notification.TYPE_WARNING_MESSAGE)
-            return super.getTableToShow(multiResults,source)
+                msg +='<font color="orange">Warning:RESULTS RETURNED BY YOUR GROOVY CODES ARE NOT IN THE REQUIRED FORMAT</font><br/>'
+                msg += super.getTableToShow(multiResults,source)
+            return msg
         }
         def content = "<hr/>"
         for (results in multiResults){

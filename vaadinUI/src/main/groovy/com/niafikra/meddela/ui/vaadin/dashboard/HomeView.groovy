@@ -58,6 +58,7 @@ class HomeView extends VerticalLayout {
 
         Embedded logo = new Embedded()
         logo.setSource(new ThemeResource('../meddela/images/logo.png'))
+        logo.setWidth('134px')
         topLayout.addComponent(logo)
         topLayout.setComponentAlignment(logo, Alignment.TOP_RIGHT)
 

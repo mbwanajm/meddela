@@ -27,7 +27,7 @@ class LoginView extends VerticalLayout implements Button.ClickListener {
     }
 
     def build() {
-        loginMsgLabel = new Label("<b>Welcome To meddela</b>",Label.CONTENT_XHTML)
+        loginMsgLabel = new Label('<b><font size="2">Welcome To meddela</font></b>',Label.CONTENT_XHTML)
 
         HorizontalLayout centeredLayout = new HorizontalLayout()
         centeredLayout.setSpacing(true)
@@ -103,7 +103,7 @@ class LoginView extends VerticalLayout implements Button.ClickListener {
         if(result)
             loginMsgLabel.setValue('<font color="green">Login Successfully, Please Wait ....</font>')
         else
-            loginMsgLabel.setValue('<font color="red">Incorrect Username or Password!</font>')
+            loginMsgLabel.setValue('<font color="#d23838" size="1">Incorrect Username or Password!</font>')
 
     }
 }

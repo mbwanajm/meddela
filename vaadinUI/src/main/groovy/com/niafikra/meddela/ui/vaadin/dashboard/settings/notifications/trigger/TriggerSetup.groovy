@@ -1,9 +1,7 @@
 package com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.trigger
 
-import com.vaadin.ui.TabSheet
-import com.niafikra.meddela.data.Trigger
 import com.niafikra.meddela.data.Notification
-import com.vaadin.ui.Window
+
 import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.CodingTabSheet
 import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.NotificationCodeArea
 import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.CodeArea
@@ -13,11 +11,11 @@ import com.niafikra.meddela.ui.vaadin.dashboard.settings.notifications.CodeArea
  * Date: 7/21/12
  * Time: 1:17 PM
  */
-class TrigerSetup extends CodingTabSheet {
+class TriggerSetup extends CodingTabSheet {
 
     NotificationCodeArea sqlSetupView, groovySetupView
 
-    TrigerSetup(Notification notification) {
+    TriggerSetup(Notification notification) {
         super(notification)
         sqlSetupView = new CodeArea("SQL")
 
@@ -41,7 +39,7 @@ class TrigerSetup extends CodingTabSheet {
 
     @Override
     CodingTabSheet getNewInstance() {
-        return new TrigerSetup(notification)
+        return new TriggerSetup(notification)
     }
 
     def commit() {

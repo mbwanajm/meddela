@@ -53,15 +53,16 @@ class UIManager {
     }
 
 
-    void login(String username,String password) {
+    boolean login(String username,String password) {
         def result = Controller.meddela.getAuthenticationManager()
                 .authenticate(username,password)
         if (result) {
             //set as current user
             application.currentUser = Controller.meddela.getAuthenticationManager().authExist(username)
             showDashBoard()
+            return true
         } else{
-            dashboard.showNotification("Incorrect Username or Password!",Window.Notification.TYPE_WARNING_MESSAGE)
+            return false
         }
     }
 

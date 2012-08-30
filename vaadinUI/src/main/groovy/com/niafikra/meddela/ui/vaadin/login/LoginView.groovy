@@ -19,6 +19,7 @@ class LoginView extends VerticalLayout implements Button.ClickListener {
     PasswordField passwordField
     Button loginButton
     UIManager uiManager
+    Label loginMsgLabel
 
     LoginView(UIManager uiManager) {
         this.uiManager = uiManager
@@ -26,13 +27,15 @@ class LoginView extends VerticalLayout implements Button.ClickListener {
     }
 
     def build() {
+        loginMsgLabel = new Label("<b>Welcome To meddela</b>",Label.CONTENT_XHTML)
+
         HorizontalLayout centeredLayout = new HorizontalLayout()
         centeredLayout.setSpacing(true)
         addComponent(centeredLayout)
         setComponentAlignment(centeredLayout, Alignment.MIDDLE_CENTER)
 
         VerticalLayout logoLayout = new VerticalLayout()
-        logoLayout.setHeight('142px')
+        logoLayout.setHeight('170px')
         logoLayout.setStyleName('login_logo')
         Embedded logo = new Embedded()
         logo.setSource(new ThemeResource('../meddela/images/logo.png'))
@@ -53,7 +56,7 @@ class LoginView extends VerticalLayout implements Button.ClickListener {
     def getLoginForm() {
         VerticalLayout loginForm = new VerticalLayout()
         loginForm.setWidth("400px")
-        loginForm.setHeight("140px")
+        loginForm.setHeight("170px")
         loginForm.setStyleName("loginForm")
         loginForm.setSpacing(true)
         loginForm.setMargin(true)
@@ -83,7 +86,9 @@ class LoginView extends VerticalLayout implements Button.ClickListener {
         loginButton.addListener(this)
         loginButton.setClickShortcut(ShortcutAction.KeyCode.ENTER)
       //  loginButton.addStyleName("primary")
-
+        loginMsgLabel.setWidth("250px")
+        loginForm.addComponent(loginMsgLabel)
+        loginForm.setComponentAlignment(loginMsgLabel,Alignment.MIDDLE_RIGHT)
         loginForm.addComponent(userBoxLay)
         loginForm.addComponent(passBoxLay)
         loginForm.addComponent(loginButton)
@@ -94,6 +99,11 @@ class LoginView extends VerticalLayout implements Button.ClickListener {
 
     @Override
     void buttonClick(Button.ClickEvent event) {
-        uiManager.login(userField.getValue().toString(), passwordField.getValue().toString())
+        def result=uiManager.login(userField.getValue().toString(), passwordField.getValue().toString())
+        if(result)
+            loginMsgLabel.setValue('<font color="green">Login Successfully, Please Wait ....</font>')
+        else
+            loginMsgLabel.setValue('<font color="red">Incorrect Username or Password!</font>')
+
     }
 }

@@ -33,7 +33,8 @@ class TriggerCheckTask implements Runnable {
 
         // if for some reason the read notification is null log and leave immediately
         if (!notifications || notifications?.isEmpty()) {
-            log.warn("we have a scheduled trigger check but no trigger information in db, panicking!")
+            log.warn("we have a scheduled trigger check but no trigger information in db, disabling the trigger check!")
+            meddela.scheduler.scheduler.deschedule(id)
             return
         }
 

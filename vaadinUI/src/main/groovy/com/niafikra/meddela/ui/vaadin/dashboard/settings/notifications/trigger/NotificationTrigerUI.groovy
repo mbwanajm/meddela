@@ -15,13 +15,13 @@ import com.vaadin.ui.Accordion
 class NotificationTrigerUI extends VerticalLayout{
 
     ScheduleForm scheduleForm
-    TrigerSetup trigerSetup
+    TriggerSetup trigerSetup
     Notification notification
 
     NotificationTrigerUI(Notification notification,boolean isNew) {
         this.notification = notification
         scheduleForm = new ScheduleForm(notification.trigger,isNew)
-        trigerSetup = new TrigerSetup(notification)
+        trigerSetup = new TriggerSetup(notification)
         build()
     }
 
@@ -31,7 +31,7 @@ class NotificationTrigerUI extends VerticalLayout{
 
         Accordion holder =new Accordion()
         holder.addTab(scheduleForm,"Schedule")
-        holder.addTab(trigerSetup,"Triger")
+        holder.addTab(trigerSetup,"Trigger")
         addComponent(holder)
         holder.setSizeFull()
         setSizeFull()

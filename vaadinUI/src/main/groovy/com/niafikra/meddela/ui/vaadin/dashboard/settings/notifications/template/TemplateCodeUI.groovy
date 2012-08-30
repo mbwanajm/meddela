@@ -75,7 +75,7 @@ class TemplateCodeUI extends CodingTabSheet{
 
     def getTemplateVariables(){
         def result = sqlArea.getTemplateVariables(notification)
-        if(result==null)
+        if(!result)
             result = groovyArea.getTemplateVariables(notification)
         return  result
     }

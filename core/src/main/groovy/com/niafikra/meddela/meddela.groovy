@@ -50,8 +50,8 @@ class meddela {
             transportManager = new TransportManager()
             composer = new Composer()
             notificationManager = new NotificationManager()
-            authenticationManager=new AuthenticationManager()
-            triggerCheck=new TriggerCheck()
+            authenticationManager = new AuthenticationManager()
+            triggerCheck = new TriggerCheck()
             xChangeService = new XChangeService();
             reportService = new ReportService()
 
@@ -64,22 +64,23 @@ class meddela {
     }
 
     static def initLog() {
-      /*
-        String pathToSettings = new StringBuilder(appPath)
-                .append(File.separator).append("config")
-                .append(File.separator).append("log4j.properties")
-                .toString();  */
-        Properties props=new Properties()
-        props.put("log4j.rootLogger","info, A, R")
-        props.put("log4j.appender.A" ,"org.apache.log4j.ConsoleAppender")
-        props.put "log4j.appender.A.layout","org.apache.log4j.PatternLayout"
-        props.put("log4j.appender.A.layout.ConversionPattern","%d %-5p %c - %m%n")
-        props.put("log4j.appender.R","org.apache.log4j.RollingFileAppender")
-        props.put("log4j.appender.R.File"," meddela.log")
-        props.put("log4j.appender.R.MaxFileSize","100KB")
-        props.put("log4j.appender.R.MaxBackupIndex",1)
-        props.put("log4j.appender.R.layout","org.apache.log4j.PatternLayout")
-        props.put("log4j.appender.R.layout.ConversionPattern","%d %-5p %c - %m%n")
+        /*
+String pathToSettings = new StringBuilder(appPath)
+      .append(File.separator).append("config")
+      .append(File.separator).append("log4j.properties")
+      .toString();  */
+        def logFile = System.getProperty("user.home") + File.separator + "meddela" + File.separator + "meddela.log"
+        Properties props = new Properties()
+        props.put("log4j.rootLogger", "info, A, R")
+        props.put("log4j.appender.A", "org.apache.log4j.ConsoleAppender")
+        props.put "log4j.appender.A.layout", "org.apache.log4j.PatternLayout"
+        props.put("log4j.appender.A.layout.ConversionPattern", "%d %-5p %c - %m%n")
+        props.put("log4j.appender.R", "org.apache.log4j.RollingFileAppender")
+        props.put("log4j.appender.R.File", logFile)
+        props.put("log4j.appender.R.MaxFileSize", "100KB")
+        props.put("log4j.appender.R.MaxBackupIndex", 1)
+        props.put("log4j.appender.R.layout", "org.apache.log4j.PatternLayout")
+        props.put("log4j.appender.R.layout.ConversionPattern", "%d %-5p %c - %m%n")
 
         PropertyConfigurator.configure(props);
     }

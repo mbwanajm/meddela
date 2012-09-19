@@ -5,10 +5,8 @@ import com.vaadin.ui.HorizontalLayout
 import com.vaadin.ui.Upload
 import com.vaadin.ui.ListSelect
 import com.niafikra.meddela.meddela
-import groovy.io.FileType
 import com.vaadin.ui.Window
 import com.vaadin.ui.Panel
-import java.nio.file.Files
 import org.apache.commons.io.FileUtils
 import com.niafikra.meddela.services.TransportManager
 import com.vaadin.ui.themes.Reindeer

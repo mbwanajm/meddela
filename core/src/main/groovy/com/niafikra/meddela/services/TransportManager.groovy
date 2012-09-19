@@ -8,10 +8,12 @@ import org.neodatis.odb.ODB
 import com.niafikra.meddela.data.Notification
 import com.niafikra.meddela.data.UniqueRecepient
 import groovy.io.FileType
-import com.niafikra.meddela.services.transport.TransporClasstLoader
+
 import com.niafikra.meddela.data.TransportInfo
 import org.apache.commons.io.FileUtils
 import org.apache.log4j.Logger
+
+import com.niafikra.meddela.services.transport.TransportClassLoader
 
 /**
  * This class coordinates the delivering of notifications and saves
@@ -23,12 +25,12 @@ import org.apache.log4j.Logger
  */
 class TransportManager {
     HashMap loadedTransport = new HashMap()
-    TransporClasstLoader transClassLoader
+    TransportClassLoader transClassLoader
     String transportsPath
     private static final Logger log = Logger.getLogger(TransportManager)
 
     TransportManager() {
-        transportsPath = meddela.appPath + File.separator + "transport"
+        transportsPath =  System.getProperty("user.home") + File.separator + "meddela"+ File.separator + "transport"
         log.info("set transport plugin path as: $transportsPath")
         initTransportLoader()
     }
@@ -51,7 +53,7 @@ class TransportManager {
         }
 
         urls << transDir.toURL()      //a little hack to initia a URL array
-        transClassLoader = new TransporClasstLoader(urls.toArray(new URL[1]), this.class.classLoader)
+        transClassLoader = new TransportClassLoader(urls.toArray(new URL[1]), this.class.classLoader)
 
     }
 

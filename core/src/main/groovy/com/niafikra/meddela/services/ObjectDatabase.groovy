@@ -11,6 +11,7 @@ import org.neodatis.odb.core.query.IQuery
 import org.neodatis.odb.core.query.criteria.Or
 import org.neodatis.odb.core.query.criteria.And
 import org.neodatis.odb.core.query.criteria.Where
+import com.niafikra.meddela.meddela
 
 /**
  * ObjectDatabase provides a data store for storing and retrieving objects from
@@ -40,10 +41,16 @@ class ObjectDatabase {
      * @return
      */
     void init() {
+        // check if home meddela directory exists and create it if note
+        def meddelaDir = System.getProperty("user.home") + File.separator + "meddela"
+        File file = new File(meddelaDir)
+        if(!file.exists()) file.mkdir()
+
+        def dbFile = meddelaDir + File.separator + "meddela.data"
 
         // create and open server on port 2012
         odbServer = ODBFactory.openServer(2012)
-        odbServer.addBase("meddela", "meddela")
+        odbServer.addBase("meddela", dbFile)
 
         // Automatically reconnect objects in a session
         OdbConfiguration.autoReconnectObjectsToSession = true;

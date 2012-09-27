@@ -47,6 +47,7 @@ class SchedulerService {
      * @return true if succesfull, false otherwise
      */
     boolean scheduleNotification(Notification notification) {
+        if(!notification.isEnabled()) return
         try {
             TriggerCheckTask triggerCheckTask = new TriggerCheckTask();
             def id = scheduler.schedule(notification.trigger.schedule, triggerCheckTask)

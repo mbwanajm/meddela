@@ -30,7 +30,7 @@ class TransportManager {
     private static final Logger log = Logger.getLogger(TransportManager)
 
     TransportManager() {
-        transportsPath =  System.getProperty("user.home") + File.separator + "meddela"+ File.separator + "transport"
+        transportsPath = System.getProperty("user.home") + File.separator + "meddela" + File.separator + "transport"
         log.info("set transport plugin path as: $transportsPath")
         initTransportLoader()
     }
@@ -47,8 +47,8 @@ class TransportManager {
             log.info('transport plugin dir exists! yeah..')
             transDir.eachFile(FileType.FILES, { urls << it.toURL() })
         }
-        else{
-            log.info("could not find transport plugin dir, hence creating one at $transportsPath" )
+        else {
+            log.info("could not find transport plugin dir, hence creating one at $transportsPath")
             transDir.mkdir()
         }
 
@@ -145,7 +145,15 @@ class TransportManager {
      * @return
      */
     def saveTransportInfo(TransportInfo transportInfo) {
-        return meddela.database.runDbAction {ODB odb -> odb.store(transportInfo)}
+
+        return meddela.database.runDbAction {ODB odb ->
+            def results = meddela.database.getObjectsByProperty(TransportInfo, 'name', transportInfo.name)
+            if (results) {
+                meddela.database.update(transportInfo, 'name')
+            } else {
+                odb.store(transportInfo)
+            }
+        }
     }
 
     /**
@@ -156,7 +164,7 @@ class TransportManager {
     def removeTransport(TransportInfo transportInfo) {
         def result = meddela.database.runDbAction {ODB odb ->
             def dbTransportInfo = meddela.database.getObjectByProperty(TransportInfo, 'name', transportInfo.name)
-            if(dbTransportInfo)
+            if (dbTransportInfo)
                 odb.delete(dbTransportInfo)
         }
 

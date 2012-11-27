@@ -38,14 +38,15 @@ class meddela {
      * Initialize medella
      *
      * @param pathToApp is the path to where medella is running from
+     * @param dbFileName filename to use as the datastore
      * @return true if medella starts succesfully false otherwise
      */
-    static boolean init(String pathToApp) {
+    static boolean init(String pathToApp, String dbFileName) {
         appPath = pathToApp
         initLog()
 
         try {
-            database = new ObjectDatabase()
+            database = new ObjectDatabase(dbFileName)
             scheduler = new SchedulerService()
             transportManager = new TransportManager()
             composer = new Composer()

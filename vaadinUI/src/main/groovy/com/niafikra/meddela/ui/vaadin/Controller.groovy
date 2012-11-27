@@ -28,7 +28,7 @@ class Controller implements ServletContextListener {
 
         setPath(servletContextEvent.servletContext.getRealPath(""))
         meddela = new meddela()
-        meddela.init(appPathExt)
+        meddela.init(appPathExt, 'meddela.data')
         addDefaultUsers()
     }
 

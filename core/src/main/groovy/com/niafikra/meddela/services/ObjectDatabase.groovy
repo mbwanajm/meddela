@@ -32,21 +32,21 @@ class ObjectDatabase {
      * The constructor when this creates the object database server
      *
      */
-    ObjectDatabase() {
-        init()
+    ObjectDatabase(String dbFileName) {
+        init(dbFileName)
     }
 
     /**
      * Initialize the object database
      * @return
      */
-    void init() {
+    void init(String dbFileName) {
         // check if home meddela directory exists and create it if note
         def meddelaDir = System.getProperty("user.home") + File.separator + "meddela"
         File file = new File(meddelaDir)
         if(!file.exists()) file.mkdir()
 
-        def dbFile = meddelaDir + File.separator + "meddela.data"
+        def dbFile = meddelaDir + File.separator + dbFileName
 
         // create and open server on port 2012
         odbServer = ODBFactory.openServer(2012)

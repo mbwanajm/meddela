@@ -11,6 +11,7 @@ import org.neodatis.odb.core.query.IQuery
 import org.neodatis.odb.core.query.criteria.Or
 import org.neodatis.odb.core.query.criteria.And
 import org.neodatis.odb.core.query.criteria.Where
+import com.niafikra.meddela.meddela
 
 /**
  * ObjectDatabase provides a data store for storing and retrieving objects from
@@ -43,7 +44,7 @@ class ObjectDatabase {
 
         // create and open server on port 2012
         odbServer = ODBFactory.openServer(2012)
-        odbServer.addBase("meddela", "meddela")
+        odbServer.addBase("meddela", meddela.appPath + File.separator + "meddela.neodatis")
 
         // Automatically reconnect objects in a session
         OdbConfiguration.autoReconnectObjectsToSession = true;
@@ -333,11 +334,11 @@ class ObjectDatabase {
  * @param idProperty
  * @return false if it fails
  */
-def update(Object object, String idProperty) {
-    ODB odb = getODB()
-    def dbObject = getObjectByProperty(object.class, idProperty, object."$idProperty")
-    deepCopy(object, dbObject)
-    return odb.store(dbObject)
-}
+    def update(Object object, String idProperty) {
+        ODB odb = getODB()
+        def dbObject = getObjectByProperty(object.class, idProperty, object."$idProperty")
+        deepCopy(object, dbObject)
+        return odb.store(dbObject)
+    }
 
 }

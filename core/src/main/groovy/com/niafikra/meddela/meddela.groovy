@@ -75,7 +75,7 @@ class meddela {
         props.put "log4j.appender.A.layout","org.apache.log4j.PatternLayout"
         props.put("log4j.appender.A.layout.ConversionPattern","%d %-5p %c - %m%n")
         props.put("log4j.appender.R","org.apache.log4j.RollingFileAppender")
-        props.put("log4j.appender.R.File"," meddela.log")
+        props.put("log4j.appender.R.File",meddela.appPath+File.separator+"meddela.log")
         props.put("log4j.appender.R.MaxFileSize","100KB")
         props.put("log4j.appender.R.MaxBackupIndex",1)
         props.put("log4j.appender.R.layout","org.apache.log4j.PatternLayout")

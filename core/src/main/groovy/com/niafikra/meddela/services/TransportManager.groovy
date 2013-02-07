@@ -43,7 +43,10 @@ class TransportManager {
         File transDir = new File(transportsPath)
         if (transDir.exists()) {
             log.info('transport plugin dir exists! yeah..')
-            transDir.eachFile(FileType.FILES, { urls << it.toURL() })
+            transDir.eachFile(FileType.FILES, {
+                urls << it.toURL()
+                log.info("loaded transport at :${it}")
+            })
         }
         else{
             log.info("could not find transport plugin dir, hence creating one at $transportsPath" )

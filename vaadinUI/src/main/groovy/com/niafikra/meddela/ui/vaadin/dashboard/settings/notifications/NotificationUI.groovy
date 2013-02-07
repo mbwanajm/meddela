@@ -34,8 +34,8 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
         this.notification = notification
         this.managementUI = managementUI
         basicUI = new NotificationBasicUI(notification, isNew)
-        trigerUI = new NotificationTrigerUI(notification,isNew)
-        templateUI = new NotificationsTemplateUI(notification,isNew)
+        trigerUI = new NotificationTrigerUI(notification, isNew)
+        templateUI = new NotificationsTemplateUI(notification, isNew)
 
         save = new Button("Save")
         delete = new Button("Delete")
@@ -79,11 +79,14 @@ class NotificationUI extends VerticalLayout implements Button.ClickListener {
         if (event.getButton().equals(save)) {
             if (saveNotification())
                 getWindow().showNotification("notification saved successfully", Window.Notification.TYPE_HUMANIZED_MESSAGE)
-            else getWindow().showNotification("notification failed to be saved", Window.Notification.TYPE_ERROR_MESSAGE)
+            else
+                getWindow().showNotification("notification failed to be saved", Window.Notification.TYPE_ERROR_MESSAGE)
         } else if (event.getButton().equals(delete)) {
             if (deleteNotification())
                 getWindow().showNotification("notification deleted successfully", Window.Notification.TYPE_HUMANIZED_MESSAGE)
-            else getWindow().showNotification("notification failed to be deleted", Window.Notification.TYPE_ERROR_MESSAGE)
+            else
+                getWindow().showNotification("notification failed to be deleted", Window.Notification.TYPE_ERROR_MESSAGE)
+
         }
         managementUI.loadNotificationList()
     }

@@ -3,6 +3,7 @@ package com.niafikra.meddela.services
 import com.niafikra.meddela.data.Notification
 import com.niafikra.meddela.meddela
 import org.neodatis.odb.ODB
+import com.niafikra.meddela.data.SentNotification
 
 /**
  * This object can be used to add notifications,
@@ -41,6 +42,8 @@ class NotificationManager {
             if (readNotification.template) odb.delete(readNotification.template)
             if (readNotification.trigger) odb.delete(readNotification.trigger)
             if (readNotification.transport) odb.delete(readNotification.transport)
+            def sentNotifications = meddela.database.getObjectsByPropertyExt(SentNotification, "notification", notification);
+            if (sentNotifications != null) sentNotifications.each {odb.delete(it)}
             odb.delete(readNotification)
         }
     }

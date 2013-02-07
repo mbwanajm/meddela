@@ -38,20 +38,21 @@ class meddela {
      * Initialize medella
      *
      * @param pathToApp is the path to where medella is running from
+     * @param dbFileName filename to use as the datastore
      * @return true if medella starts succesfully false otherwise
      */
-    static boolean init(String pathToApp) {
+    static boolean init(String pathToApp, String dbFileName) {
         appPath = pathToApp
         initLog()
 
         try {
-            database = new ObjectDatabase()
+            database = new ObjectDatabase(dbFileName)
             scheduler = new SchedulerService()
             transportManager = new TransportManager()
             composer = new Composer()
             notificationManager = new NotificationManager()
-            authenticationManager=new AuthenticationManager()
-            triggerCheck=new TriggerCheck()
+            authenticationManager = new AuthenticationManager()
+            triggerCheck = new TriggerCheck()
             xChangeService = new XChangeService();
             reportService = new ReportService()
 
@@ -64,22 +65,23 @@ class meddela {
     }
 
     static def initLog() {
-      /*
-        String pathToSettings = new StringBuilder(appPath)
-                .append(File.separator).append("config")
-                .append(File.separator).append("log4j.properties")
-                .toString();  */
-        Properties props=new Properties()
-        props.put("log4j.rootLogger","info, A, R")
-        props.put("log4j.appender.A" ,"org.apache.log4j.ConsoleAppender")
-        props.put "log4j.appender.A.layout","org.apache.log4j.PatternLayout"
-        props.put("log4j.appender.A.layout.ConversionPattern","%d %-5p %c - %m%n")
-        props.put("log4j.appender.R","org.apache.log4j.RollingFileAppender")
-        props.put("log4j.appender.R.File",meddela.appPath+File.separator+"meddela.log")
-        props.put("log4j.appender.R.MaxFileSize","100KB")
-        props.put("log4j.appender.R.MaxBackupIndex",1)
-        props.put("log4j.appender.R.layout","org.apache.log4j.PatternLayout")
-        props.put("log4j.appender.R.layout.ConversionPattern","%d %-5p %c - %m%n")
+        /*
+String pathToSettings = new StringBuilder(appPath)
+      .append(File.separator).append("config")
+      .append(File.separator).append("log4j.properties")
+      .toString();  */
+        def logFile = System.getProperty("user.home") + File.separator + "meddela" + File.separator + "meddela.log"
+        Properties props = new Properties()
+        props.put("log4j.rootLogger", "info, A, R")
+        props.put("log4j.appender.A", "org.apache.log4j.ConsoleAppender")
+        props.put "log4j.appender.A.layout", "org.apache.log4j.PatternLayout"
+        props.put("log4j.appender.A.layout.ConversionPattern", "%d %-5p %c - %m%n")
+        props.put("log4j.appender.R", "org.apache.log4j.RollingFileAppender")
+        props.put("log4j.appender.R.File", logFile)
+        props.put("log4j.appender.R.MaxFileSize", "100KB")
+        props.put("log4j.appender.R.MaxBackupIndex", 1)
+        props.put("log4j.appender.R.layout", "org.apache.log4j.PatternLayout")
+        props.put("log4j.appender.R.layout.ConversionPattern", "%d %-5p %c - %m%n")
 
         PropertyConfigurator.configure(props);
     }

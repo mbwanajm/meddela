@@ -39,6 +39,7 @@ class LoginView extends VerticalLayout implements Button.ClickListener {
         logoLayout.setStyleName('login_logo')
         Embedded logo = new Embedded()
         logo.setSource(new ThemeResource('../meddela/images/logo.png'))
+        logo.setWidth('134px')
         logoLayout.addComponent(logo)
         logoLayout.setComponentAlignment(logo, Alignment.MIDDLE_CENTER)
         centeredLayout.addComponent(logoLayout)

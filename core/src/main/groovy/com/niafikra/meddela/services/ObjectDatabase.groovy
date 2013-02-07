@@ -32,19 +32,25 @@ class ObjectDatabase {
      * The constructor when this creates the object database server
      *
      */
-    ObjectDatabase() {
-        init()
+    ObjectDatabase(String dbFileName) {
+        init(dbFileName)
     }
 
     /**
      * Initialize the object database
      * @return
      */
-    void init() {
+    void init(String dbFileName) {
+        // check if home meddela directory exists and create it if note
+        def meddelaDir = System.getProperty("user.home") + File.separator + "meddela"
+        File file = new File(meddelaDir)
+        if(!file.exists()) file.mkdir()
+
+        def dbFile = meddelaDir + File.separator + dbFileName
 
         // create and open server on port 2012
         odbServer = ODBFactory.openServer(2012)
-        odbServer.addBase("meddela", meddela.appPath + File.separator + "meddela.neodatis")
+        odbServer.addBase("meddela", dbFile)
 
         // Automatically reconnect objects in a session
         OdbConfiguration.autoReconnectObjectsToSession = true;
@@ -334,11 +340,11 @@ class ObjectDatabase {
  * @param idProperty
  * @return false if it fails
  */
-    def update(Object object, String idProperty) {
-        ODB odb = getODB()
-        def dbObject = getObjectByProperty(object.class, idProperty, object."$idProperty")
-        deepCopy(object, dbObject)
-        return odb.store(dbObject)
-    }
+def update(Object object, String idProperty) {
+    ODB odb = getODB()
+    def dbObject = getObjectByProperty(object.class, idProperty, object."$idProperty")
+    deepCopy(object, dbObject)
+    return odb.store(dbObject)
+}
 
 }

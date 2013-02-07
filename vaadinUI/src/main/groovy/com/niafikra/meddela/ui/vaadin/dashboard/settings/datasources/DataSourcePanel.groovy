@@ -164,7 +164,8 @@ class DataSourcePanel extends HorizontalLayout implements Button.ClickListener, 
         def notification = new meddelaNotification()
         notification.setDataSource(dataSourceForm.getItemDataSource().getBean())
 
-        if (SqlUtil.runWithSqlConnection(notification) {sql, notif -> true}) {  // if all goes well we get true
+        def result = SqlUtil.runWithSqlConnection(notification) {sql, notif -> true}
+        if (result instanceof Boolean) {  // if all goes well we get true
             getWindow().showNotification("Connected Succesfully")
         } else {
             getWindow().showNotification("Connection test failed", Window.Notification.TYPE_ERROR_MESSAGE)

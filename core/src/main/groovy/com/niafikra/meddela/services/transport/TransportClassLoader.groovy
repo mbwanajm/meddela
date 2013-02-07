@@ -7,9 +7,9 @@ package com.niafikra.meddela.services.transport
  * Date: 8/1/12
  * Time: 6:34 AM
  */
-class TransporClasstLoader extends URLClassLoader{
+class TransportClassLoader extends URLClassLoader{
 
-    TransporClasstLoader(URL[] urls,ClassLoader classLoader) {
+    TransportClassLoader(URL[] urls,ClassLoader classLoader) {
         super(urls,classLoader)
     }
 

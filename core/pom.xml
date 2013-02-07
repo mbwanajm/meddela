@@ -22,11 +22,6 @@
 	</repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.20</version>
-        </dependency>
 
         <dependency>
             <groupId>log4j</groupId>
@@ -46,6 +41,11 @@
             <version>1.9.30.689</version>
         </dependency>
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.21</version>
+        </dependency>
 
         <!--  Gson: Java to Json conversion -->
         <dependency>

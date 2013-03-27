@@ -1,6 +1,5 @@
 package com.niafikra.meddela.utilities
 
-import com.niafikra.meddela.utilities.GStringUtil
 import spock.lang.Specification
 
 /**
@@ -24,22 +23,6 @@ class GStringUtilTest extends Specification{
 
     }
 
-    def "extract arguments from a gstring"(){
-        def text = '''
-        $one two
-        $three
-        ${skipMe}
-        ha ha
-        '''
-        when:
-        def result = GStringUtil.extractBindings(text)
-
-        then:
-        result.size() == 2
-        result['one'] == ''
-        result['three'] == ''
-
-    }
 
     /**
      * Helper method that calculates today's date, first day of Month and last day of month

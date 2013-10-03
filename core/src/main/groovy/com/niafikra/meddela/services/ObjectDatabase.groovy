@@ -1,17 +1,12 @@
 package com.niafikra.meddela.services
 
-import org.neodatis.odb.ODBServer
-import org.neodatis.odb.ODBFactory
 import org.apache.log4j.Logger
-import org.neodatis.odb.ODB
-import org.neodatis.odb.OdbConfiguration
-import org.neodatis.odb.ODBRuntimeException
-import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery
+import org.neodatis.odb.*
 import org.neodatis.odb.core.query.IQuery
-import org.neodatis.odb.core.query.criteria.Or
 import org.neodatis.odb.core.query.criteria.And
+import org.neodatis.odb.core.query.criteria.Or
 import org.neodatis.odb.core.query.criteria.Where
-import com.niafikra.meddela.meddela
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery
 
 /**
  * ObjectDatabase provides a data store for storing and retrieving objects from
@@ -44,7 +39,7 @@ class ObjectDatabase {
         // check if home meddela directory exists and create it if note
         def meddelaDir = System.getProperty("user.home") + File.separator + "meddela"
         File file = new File(meddelaDir)
-        if(!file.exists()) file.mkdir()
+        if (!file.exists()) file.mkdir()
 
         def dbFile = meddelaDir + File.separator + dbFileName
 
@@ -329,22 +324,22 @@ class ObjectDatabase {
         }
     }
 
-/**
- * Updates an object by first reading it from db then setting its properties to match
- * the one in db
- *
- * Note that this method automatically loads the object from the database updates it
- * and sets its new properties. to read the object it needs a property to use as an id
- *
- * @param object
- * @param idProperty
- * @return false if it fails
- */
-def update(Object object, String idProperty) {
-    ODB odb = getODB()
-    def dbObject = getObjectByProperty(object.class, idProperty, object."$idProperty")
-    deepCopy(object, dbObject)
-    return odb.store(dbObject)
-}
+    /**
+     * Updates an object by first reading it from db then setting its properties to match
+     * the one in db
+     *
+     * Note that this method automatically loads the object from the database updates it
+     * and sets its new properties. to read the object it needs a property to use as an id
+     *
+     * @param object
+     * @param idProperty
+     * @return false if it fails
+     */
+    def update(Object object, String idProperty) {
+        ODB odb = getODB()
+        def dbObject = getObjectByProperty(object.class, idProperty, object."$idProperty")
+        deepCopy(object, dbObject)
+        return odb.store(dbObject)
+    }
 
 }

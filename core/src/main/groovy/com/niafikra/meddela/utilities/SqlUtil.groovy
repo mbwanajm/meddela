@@ -29,7 +29,7 @@ class SqlUtil {
                     notification.dataSource.url,
                     notification.dataSource.username,
                     notification.dataSource.password,
-                    notification.dataSource.driver,
+                    notification.dataSource.driver
             )
             return closure(sql, notification )
 

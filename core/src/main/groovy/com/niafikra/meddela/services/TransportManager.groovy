@@ -1,19 +1,16 @@
 package com.niafikra.meddela.services
 
-import com.niafikra.meddela.data.SentNotification
-import com.niafikra.meddela.services.transport.Transport
-
-import com.niafikra.meddela.meddela
-import org.neodatis.odb.ODB
 import com.niafikra.meddela.data.Notification
-import com.niafikra.meddela.data.UniqueRecepient
-import groovy.io.FileType
-
+import com.niafikra.meddela.data.SentNotification
 import com.niafikra.meddela.data.TransportInfo
+import com.niafikra.meddela.data.UniqueRecepient
+import com.niafikra.meddela.meddela
+import com.niafikra.meddela.services.transport.Transport
+import com.niafikra.meddela.services.transport.TransportClassLoader
+import groovy.io.FileType
 import org.apache.commons.io.FileUtils
 import org.apache.log4j.Logger
-
-import com.niafikra.meddela.services.transport.TransportClassLoader
+import org.neodatis.odb.ODB
 
 /**
  * This class coordinates the delivering of notifications and saves
@@ -49,8 +46,7 @@ class TransportManager {
                 urls << it.toURL()
                 log.info("loaded transport at :${it}")
             })
-        }
-        else {
+        } else {
             log.info("could not find transport plugin dir, hence creating one at $transportsPath")
             transDir.mkdir()
         }
@@ -149,10 +145,14 @@ class TransportManager {
      */
     def saveTransportInfo(TransportInfo transportInfo) {
 
-        return meddela.database.runDbAction {ODB odb ->
+        return meddela.database.runDbAction { ODB odb ->
             def results = meddela.database.getObjectsByProperty(TransportInfo, 'name', transportInfo.name)
             if (results) {
-                meddela.database.update(transportInfo, 'name')
+                TransportInfo dbObject = results.next()
+                transportInfo.configurations.each { key, value ->
+                    dbObject.configurations[key] = value
+                }
+                odb.store(dbObject)
             } else {
                 odb.store(transportInfo)
             }
@@ -165,7 +165,7 @@ class TransportManager {
      * @return
      */
     def removeTransport(TransportInfo transportInfo) {
-        def result = meddela.database.runDbAction {ODB odb ->
+        def result = meddela.database.runDbAction { ODB odb ->
             def dbTransportInfo = meddela.database.getObjectByProperty(TransportInfo, 'name', transportInfo.name)
             if (dbTransportInfo)
                 odb.delete(dbTransportInfo)
